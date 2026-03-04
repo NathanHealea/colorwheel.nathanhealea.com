@@ -11,6 +11,10 @@ interface ColorWheelProps {
   pan: { x: number; y: number }
   onZoomChange: (zoom: number) => void
   onPanChange: (pan: { x: number; y: number }) => void
+  selectedPaint: ProcessedPaint | null
+  hoveredPaint: ProcessedPaint | null
+  onSelectPaint: (paint: ProcessedPaint | null) => void
+  onHoverPaint: (paint: ProcessedPaint | null) => void
 }
 
 const MIN_ZOOM = 0.4
@@ -35,11 +39,22 @@ function buildHueRingPath(startDeg: number, endDeg: number, innerR: number, oute
   return `M ${x1} ${y1} A ${outerR} ${outerR} 0 0 0 ${x2} ${y2} L ${x3} ${y3} A ${innerR} ${innerR} 0 0 1 ${x4} ${y4} Z`
 }
 
-export default function ColorWheel({ processedPaints, zoom, pan, onZoomChange, onPanChange }: ColorWheelProps) {
+export default function ColorWheel({
+  processedPaints,
+  zoom,
+  pan,
+  onZoomChange,
+  onPanChange,
+  selectedPaint,
+  hoveredPaint,
+  onSelectPaint,
+  onHoverPaint,
+}: ColorWheelProps) {
   const svgRef = useRef<SVGSVGElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const dragStart = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null)
   const touchStart = useRef<{ dist: number; zoom: number; mid: { x: number; y: number } } | null>(null)
+  const dragDistance = useRef(0)
 
   // ViewBox derived from zoom and pan
   const totalSize = (WHEEL_RADIUS + RING_WIDTH + 40) * 2
@@ -193,6 +208,7 @@ export default function ColorWheel({ processedPaints, zoom, pan, onZoomChange, o
     (e: React.MouseEvent) => {
       if (e.button !== 0) return
       setIsDragging(true)
+      dragDistance.current = 0
       dragStart.current = { x: e.clientX, y: e.clientY, panX: pan.x, panY: pan.y }
     },
     [pan],
@@ -203,6 +219,7 @@ export default function ColorWheel({ processedPaints, zoom, pan, onZoomChange, o
       if (!isDragging || !dragStart.current) return
       const dx = e.clientX - dragStart.current.x
       const dy = e.clientY - dragStart.current.y
+      dragDistance.current = Math.sqrt(dx * dx + dy * dy)
       const svg = svgRef.current
       if (!svg) return
       const rect = svg.getBoundingClientRect()
@@ -304,6 +321,16 @@ export default function ColorWheel({ processedPaints, zoom, pan, onZoomChange, o
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
+      <defs>
+        <filter id="paint-glow">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
       {/* Segment background wedges */}
       <g>{segmentWedges}</g>
 
@@ -318,17 +345,56 @@ export default function ColorWheel({ processedPaints, zoom, pan, onZoomChange, o
 
       {/* Paint dots */}
       <g>
-        {processedPaints.map((paint, i) => (
+        {processedPaints.map((paint) => (
           <circle
-            key={`${paint.brand}-${paint.name}-${i}`}
+            key={paint.id}
             cx={paint.x}
             cy={paint.y}
             r={DOT_RADIUS}
             fill={paint.hex}
             stroke="rgba(0,0,0,0.5)"
             strokeWidth={1}
+            className="cursor-pointer"
+            onPointerEnter={() => onHoverPaint(paint)}
+            onPointerLeave={() => onHoverPaint(null)}
+            onClick={(e) => {
+              if (dragDistance.current > 3) return
+              e.stopPropagation()
+              onSelectPaint(paint.id === selectedPaint?.id ? null : paint)
+            }}
           />
         ))}
+      </g>
+
+      {/* Hover and selection overlay layer */}
+      <g>
+        {/* Selected paint dashed ring */}
+        {selectedPaint && (
+          <circle
+            cx={selectedPaint.x}
+            cy={selectedPaint.y}
+            r={DOT_RADIUS + 4}
+            fill="none"
+            stroke="white"
+            strokeWidth={2}
+            strokeDasharray="4 2"
+            pointerEvents="none"
+          />
+        )}
+
+        {/* Hovered paint glow */}
+        {hoveredPaint && (
+          <circle
+            cx={hoveredPaint.x}
+            cy={hoveredPaint.y}
+            r={DOT_RADIUS * 1.4}
+            fill={hoveredPaint.hex}
+            stroke="rgba(255,255,255,0.8)"
+            strokeWidth={1.5}
+            filter="url(#paint-glow)"
+            pointerEvents="none"
+          />
+        )}
       </g>
 
       {/* Paint labels at zoom > 2x */}
@@ -336,13 +402,13 @@ export default function ColorWheel({ processedPaints, zoom, pan, onZoomChange, o
         <g>
           {processedPaints
             .filter((p) => isInView(p.x, p.y))
-            .map((paint, i) => (
+            .map((paint) => (
               <text
-                key={`label-${paint.brand}-${paint.name}-${i}`}
+                key={`label-${paint.id}`}
                 x={paint.x + DOT_RADIUS + 3}
                 y={paint.y + 1}
                 fill="white"
-                fontSize={8 / Math.max(1, zoom *.5)}
+                fontSize={8 / Math.max(1, zoom * 0.5)}
                 fontFamily="system-ui, sans-serif"
                 paintOrder="stroke"
                 stroke="rgba(0,0,0,0.7)"
