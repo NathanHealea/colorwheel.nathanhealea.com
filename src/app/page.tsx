@@ -16,7 +16,7 @@ export default function Home() {
 
   const uniqueColorCount = useMemo(
     () => new Set(paints.map((p) => p.hex.toLowerCase())).size,
-    [paints],
+    [],
   );
 
   // null = user hasn't toggled yet, derive from screen size
