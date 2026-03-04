@@ -1,4 +1,4 @@
-import type { Brand, Paint, PaintEntry } from '@types/paint'
+import type { Brand, Paint, PaintEntry } from '@/types/paint'
 
 import brandsData from './brands.json'
 import armyPainterData from './paints/army-painter.json'
