@@ -138,7 +138,7 @@ export default function ColorWheel({ paints, zoom, pan, onZoomChange, onPanChang
   )
 
   // Segment labels — horizontal, colored to match their section, scale with zoom
-  const labelFontSize = 14 / Math.max(zoom, 1)
+  const labelFontSize = 14
   const segmentLabels = useMemo(
     () =>
       COLOR_SEGMENTS.map((seg) => {
@@ -365,7 +365,7 @@ export default function ColorWheel({ paints, zoom, pan, onZoomChange, onPanChang
                 x={paint.x + DOT_RADIUS + 3}
                 y={paint.y + 1}
                 fill="white"
-                fontSize={8}
+                fontSize={8 / Math.max(1, zoom *.5)}
                 fontFamily="system-ui, sans-serif"
                 paintOrder="stroke"
                 stroke="rgba(0,0,0,0.7)"
