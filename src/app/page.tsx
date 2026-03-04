@@ -54,6 +54,18 @@ export default function Home() {
           isOpen={effectiveSidebarOpen}
           onClose={() => setSidebarOpen(false)}
         >
+          {/* Brand Ring Toggle */}
+          <section>
+            <label className="flex cursor-not-allowed items-center justify-between">
+              <span className="text-xs font-semibold uppercase text-base-content/60">
+                Brand Ring
+              </span>
+              <input type="checkbox" className="toggle toggle-sm" disabled />
+            </label>
+          </section>
+
+          <div className="divider" />
+
           {/* Brand Filter */}
           <section>
             <h3 className="mb-2 text-xs font-semibold uppercase text-base-content/60">
@@ -78,18 +90,6 @@ export default function Home() {
                 </label>
               ))}
             </div>
-          </section>
-
-          <div className="divider" />
-
-          {/* Brand Ring Toggle */}
-          <section>
-            <label className="flex cursor-not-allowed items-center justify-between">
-              <span className="text-xs font-semibold uppercase text-base-content/60">
-                Brand Ring
-              </span>
-              <input type="checkbox" className="toggle toggle-sm" disabled />
-            </label>
           </section>
 
           <div className="divider" />
