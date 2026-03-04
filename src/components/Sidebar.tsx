@@ -1,43 +1,45 @@
-'use client'
+"use client";
 
-import { CloseButton, Dialog, DialogPanel } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { useEffect, useState } from 'react'
+import { CloseButton, Dialog, DialogPanel } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useSyncExternalStore } from "react";
 
 interface SidebarProps {
-  isOpen: boolean
-  onClose: () => void
-  children: React.ReactNode
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
 }
 
-function useIsDesktop() {
-  const [isDesktop, setIsDesktop] = useState(false)
+const DESKTOP_MQ = "(min-width: 768px)";
 
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)')
-    setIsDesktop(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
+function subscribeToMediaQuery(callback: () => void) {
+  const mq = window.matchMedia(DESKTOP_MQ);
+  mq.addEventListener("change", callback);
+  return () => mq.removeEventListener("change", callback);
+}
 
-  return isDesktop
+function getIsDesktop() {
+  return window.matchMedia(DESKTOP_MQ).matches;
+}
+
+export function useIsDesktop() {
+  return useSyncExternalStore(subscribeToMediaQuery, getIsDesktop, () => false);
 }
 
 export default function Sidebar({ isOpen, onClose, children }: SidebarProps) {
-  const isDesktop = useIsDesktop()
+  const isDesktop = useIsDesktop();
 
   // Desktop: side-by-side flex panel
   if (isDesktop) {
     return (
       <aside
-        className={`flex-shrink-0 overflow-hidden border-r border-base-300 bg-base-200 transition-all duration-300 ${isOpen ? 'w-80' : 'w-0'}`}
+        className={`flex-shrink-0 overflow-hidden border-r border-base-300 bg-base-200 transition-all duration-300 ${isOpen ? "w-80" : "w-0"}`}
       >
         <div className="flex h-full w-80 flex-col">
           <div className="flex-1 overflow-y-auto p-4">{children}</div>
         </div>
       </aside>
-    )
+    );
   }
 
   // Mobile: HeadlessUI Dialog overlay
@@ -60,5 +62,5 @@ export default function Sidebar({ isOpen, onClose, children }: SidebarProps) {
         </div>
       </DialogPanel>
     </Dialog>
-  )
+  );
 }
