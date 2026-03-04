@@ -81,6 +81,28 @@ export default function ColorWheel({ paints, zoom, pan, onZoomChange, onPanChang
     return arcs
   }, [])
 
+  // Segment background wedges — translucent pie slices matching each color
+  const segmentWedges = useMemo(() => {
+    const toRad = (deg: number) => (deg * Math.PI) / 180
+    return COLOR_SEGMENTS.map((seg) => {
+      const color = hslToHex(seg.midAngle, 1, 0.5)
+      // Handle wrap-around for Red (330° to 30°)
+      const start = seg.hueStart
+      const end = seg.hueEnd < seg.hueStart ? seg.hueEnd + 360 : seg.hueEnd
+      const startRad = toRad(start)
+      const endRad = toRad(end)
+      const r = WHEEL_RADIUS
+      const largeArc = end - start > 180 ? 1 : 0
+      const x1 = r * Math.cos(startRad)
+      const y1 = -r * Math.sin(startRad)
+      const x2 = r * Math.cos(endRad)
+      const y2 = -r * Math.sin(endRad)
+      // Sweep flag 0 = counter-clockwise in SVG (which is clockwise in our hue direction)
+      const d = `M 0 0 L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 0 ${x2} ${y2} Z`
+      return <path key={seg.name} d={d} fill={color} fillOpacity={0.08} stroke="none" />
+    })
+  }, [])
+
   // Segment divider lines
   const dividerLines = useMemo(
     () =>
@@ -291,6 +313,9 @@ export default function ColorWheel({ paints, zoom, pan, onZoomChange, onPanChang
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
+      {/* Segment background wedges */}
+      <g>{segmentWedges}</g>
+
       {/* Hue ring */}
       <g>{hueRingArcs}</g>
 
