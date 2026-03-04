@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { Bars3Icon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
@@ -13,6 +13,11 @@ export default function Home() {
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const isDesktop = useIsDesktop();
   const [sidebarOpen, setSidebarOpen] = useState<boolean | null>(null);
+
+  const uniqueColorCount = useMemo(
+    () => new Set(paints.map((p) => p.hex.toLowerCase())).size,
+    [paints],
+  );
 
   // null = user hasn't toggled yet, derive from screen size
   const effectiveSidebarOpen = sidebarOpen ?? isDesktop;
@@ -45,6 +50,7 @@ export default function Home() {
 
         <div className="navbar-end w-auto justify-end gap-2">
           <span className="badge badge-sm">{paints.length} paints</span>
+          <span className="badge badge-sm">{uniqueColorCount} colors</span>
           <span className="badge badge-sm">{brands.length} brands</span>
         </div>
       </nav>
