@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react'
 
 import ColorWheel from '@/components/ColorWheel'
-import { brands, paints } from '@/data/index'
+import { paints } from '@/data/index'
 
 export default function Home() {
   const [zoom, setZoom] = useState(1)
