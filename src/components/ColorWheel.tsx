@@ -81,25 +81,38 @@ export default function ColorWheel({ paints, zoom, pan, onZoomChange, onPanChang
     return arcs
   }, [])
 
-  // Segment background wedges — translucent pie slices matching each color
+  // Segment background wedges — light (inner) → normal (mid) → dark (outer)
   const segmentWedges = useMemo(() => {
     const toRad = (deg: number) => (deg * Math.PI) / 180
-    return COLOR_SEGMENTS.map((seg) => {
-      const color = hslToHex(seg.midAngle, 1, 0.5)
-      // Handle wrap-around for Red (330° to 30°)
+    const opacity = 0.1
+    // Three concentric bands per segment
+    const bands: { innerR: number; outerR: number; lightness: number }[] = [
+      { innerR: 0, outerR: WHEEL_RADIUS / 3, lightness: 0.75 },
+      { innerR: WHEEL_RADIUS / 3, outerR: (WHEEL_RADIUS * 2) / 3, lightness: 0.5 },
+      { innerR: (WHEEL_RADIUS * 2) / 3, outerR: WHEEL_RADIUS, lightness: 0.25 },
+    ]
+    return COLOR_SEGMENTS.flatMap((seg) => {
       const start = seg.hueStart
       const end = seg.hueEnd < seg.hueStart ? seg.hueEnd + 360 : seg.hueEnd
       const startRad = toRad(start)
       const endRad = toRad(end)
-      const r = WHEEL_RADIUS
       const largeArc = end - start > 180 ? 1 : 0
-      const x1 = r * Math.cos(startRad)
-      const y1 = -r * Math.sin(startRad)
-      const x2 = r * Math.cos(endRad)
-      const y2 = -r * Math.sin(endRad)
-      // Sweep flag 0 = counter-clockwise in SVG (which is clockwise in our hue direction)
-      const d = `M 0 0 L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 0 ${x2} ${y2} Z`
-      return <path key={seg.name} d={d} fill={color} fillOpacity={0.08} stroke="none" />
+
+      return bands.map((band, bi) => {
+        const color = hslToHex(seg.midAngle, 1, band.lightness)
+        if (band.innerR === 0) {
+          // Innermost band: pie slice from center
+          const x1 = band.outerR * Math.cos(startRad)
+          const y1 = -band.outerR * Math.sin(startRad)
+          const x2 = band.outerR * Math.cos(endRad)
+          const y2 = -band.outerR * Math.sin(endRad)
+          const d = `M 0 0 L ${x1} ${y1} A ${band.outerR} ${band.outerR} 0 ${largeArc} 0 ${x2} ${y2} Z`
+          return <path key={`${seg.name}-${bi}`} d={d} fill={color} fillOpacity={opacity} stroke="none" />
+        }
+        // Ring band: annular wedge
+        const d = buildHueRingPath(start, end, band.innerR, band.outerR)
+        return <path key={`${seg.name}-${bi}`} d={d} fill={color} fillOpacity={opacity} stroke="none" />
+      })
     })
   }, [])
 
