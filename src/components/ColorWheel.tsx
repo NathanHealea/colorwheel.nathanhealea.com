@@ -137,7 +137,8 @@ export default function ColorWheel({ paints, zoom, pan, onZoomChange, onPanChang
     [],
   )
 
-  // Segment labels — horizontal, colored to match their section
+  // Segment labels — horizontal, colored to match their section, scale with zoom
+  const labelFontSize = 14 / Math.max(zoom, 1)
   const segmentLabels = useMemo(
     () =>
       COLOR_SEGMENTS.map((seg) => {
@@ -153,7 +154,7 @@ export default function ColorWheel({ paints, zoom, pan, onZoomChange, onPanChang
             y={y}
             fill={color}
             fillOpacity={0.7}
-            fontSize={14}
+            fontSize={labelFontSize}
             fontWeight={600}
             textAnchor="middle"
             dominantBaseline="central"
@@ -162,7 +163,7 @@ export default function ColorWheel({ paints, zoom, pan, onZoomChange, onPanChang
           </text>
         )
       }),
-    [],
+    [labelFontSize],
   )
 
   // Check if a point is within the current viewBox (for label culling)
