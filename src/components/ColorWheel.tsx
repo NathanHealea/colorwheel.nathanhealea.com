@@ -102,7 +102,7 @@ export default function ColorWheel({ paints, zoom, pan, onZoomChange, onPanChang
     [],
   )
 
-  // Segment labels
+  // Segment labels — horizontal, colored to match their section
   const segmentLabels = useMemo(
     () =>
       COLOR_SEGMENTS.map((seg) => {
@@ -110,19 +110,18 @@ export default function ColorWheel({ paints, zoom, pan, onZoomChange, onPanChang
         const labelR = WHEEL_RADIUS + RING_WIDTH + 20
         const x = labelR * Math.cos(rad)
         const y = -labelR * Math.sin(rad)
-        // Rotate text so it reads outward
-        const rotation = -seg.midAngle
+        const color = hslToHex(seg.midAngle, 1, 0.5)
         return (
           <text
             key={seg.name}
             x={x}
             y={y}
-            fill="rgba(255,255,255,0.6)"
+            fill={color}
+            fillOpacity={0.7}
             fontSize={14}
-            fontWeight={500}
+            fontWeight={600}
             textAnchor="middle"
             dominantBaseline="central"
-            transform={`rotate(${rotation}, ${x}, ${y})`}
           >
             {seg.name}
           </text>
