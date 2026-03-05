@@ -2,11 +2,13 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-import type { PaintGroup } from '@/types/paint';
+import { brands } from '@/data/index';
+import type { Brand, PaintGroup } from '@/types/paint';
 import { COLOR_SEGMENTS, hslToHex, RING_WIDTH, SEGMENT_BOUNDARIES, WHEEL_RADIUS } from '@/utils/colorUtils';
 
 interface ColorWheelProps {
   paintGroups: PaintGroup[];
+  brandFilter: Set<string>;
   zoom: number;
   pan: { x: number; y: number };
   onZoomChange: (zoom: number) => void;
@@ -15,20 +17,89 @@ interface ColorWheelProps {
   hoveredGroup: PaintGroup | null;
   onGroupClick: (group: PaintGroup | null) => void;
   onHoverGroup: (group: PaintGroup | null) => void;
+  showBrandRing: boolean;
 }
 
 const MIN_ZOOM = 0.4;
 const MAX_ZOOM = 8;
 const DOT_RADIUS = 5;
 
+function BrandRingArcs({
+  group,
+  r,
+  cx,
+  cy,
+}: {
+  group: PaintGroup
+  r: number
+  cx: number
+  cy: number
+}) {
+  const uniqueBrands = useMemo(() => {
+    const seen = new Map<string, Brand>()
+    for (const paint of group.paints) {
+      if (!seen.has(paint.brand)) {
+        const brand = brands.find((b) => b.id === paint.brand)
+        if (brand) seen.set(paint.brand, brand)
+      }
+    }
+    return Array.from(seen.values())
+  }, [group.paints])
+
+  const innerR = r + 1
+  const outerR = r + 2.5
+  const segmentAngle = 360 / uniqueBrands.length
+
+  return (
+    <g transform={`translate(${cx}, ${cy})`} pointerEvents='none'>
+      {uniqueBrands.map((brand, i) => {
+        const startDeg = i * segmentAngle
+        const endDeg = startDeg + segmentAngle
+        // Full 360° arc is degenerate (start === end point), split into two halves
+        if (segmentAngle === 360) {
+          return (
+            <g key={brand.id}>
+              <path
+                d={buildHueRingPath(0, 180, innerR, outerR)}
+                fill={brand.color}
+                stroke='rgba(0,0,0,0.3)'
+                strokeWidth={0.5}
+              />
+              <path
+                d={buildHueRingPath(180, 360 - 0.01, innerR, outerR)}
+                fill={brand.color}
+                stroke='rgba(0,0,0,0.3)'
+                strokeWidth={0.5}
+              />
+            </g>
+          )
+        }
+        return (
+          <path
+            key={brand.id}
+            d={buildHueRingPath(startDeg, endDeg, innerR, outerR)}
+            fill={brand.color}
+            stroke='rgba(0,0,0,0.3)'
+            strokeWidth={0.5}
+          />
+        )
+      })}
+    </g>
+  )
+}
+
 function PaintDot({
   group,
   isSelected,
+  showBrandRing,
+  dimmed,
   onHover,
   onClick,
 }: {
   group: PaintGroup
   isSelected: boolean
+  showBrandRing: boolean
+  dimmed: boolean
   onHover: (group: PaintGroup | null) => void
   onClick: (group: PaintGroup) => void
 }) {
@@ -37,18 +108,21 @@ function PaintDot({
   const r = isMulti ? DOT_RADIUS + 2 : DOT_RADIUS
 
   return (
-    <g>
+    <g opacity={dimmed ? 0.15 : 1}>
       {isSelected && (
         <circle
           cx={rep.x}
           cy={rep.y}
-          r={r + 4}
+          r={showBrandRing ? r + 4 : r + 2.5}
           fill='none'
           stroke='white'
           strokeWidth={2}
           strokeDasharray='4,2'
           pointerEvents='none'
         />
+      )}
+      {showBrandRing && (
+        <BrandRingArcs group={group} r={r} cx={rep.x} cy={rep.y} />
       )}
       <circle
         cx={rep.x}
@@ -109,6 +183,7 @@ function buildHueRingPath(startDeg: number, endDeg: number, innerR: number, oute
 
 export default function ColorWheel({
   paintGroups,
+  brandFilter,
   zoom,
   pan,
   onZoomChange,
@@ -117,6 +192,7 @@ export default function ColorWheel({
   hoveredGroup,
   onGroupClick,
   onHoverGroup,
+  showBrandRing,
 }: ColorWheelProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -396,19 +472,23 @@ export default function ColorWheel({
 
       {/* Paint dots (one per group) */}
       <g>
-        {paintGroups.map((group) => (
-          <PaintDot
-            key={group.key}
-            group={group}
-            isSelected={selectedGroup?.key === group.key}
-
-            onHover={onHoverGroup}
-            onClick={(g) => {
-              if (dragDistance.current > 3) return
-              onGroupClick(g)
-            }}
-          />
-        ))}
+        {paintGroups.map((group) => {
+          const dimmed = brandFilter.size > 0 && !group.paints.some((p) => brandFilter.has(p.brand))
+          return (
+            <PaintDot
+              key={group.key}
+              group={group}
+              isSelected={selectedGroup?.key === group.key}
+              showBrandRing={showBrandRing}
+              dimmed={dimmed}
+              onHover={onHoverGroup}
+              onClick={(g) => {
+                if (dragDistance.current > 3) return
+                onGroupClick(g)
+              }}
+            />
+          )
+        })}
       </g>
 
       {/* Labels layer — rendered on top of all dots */}
