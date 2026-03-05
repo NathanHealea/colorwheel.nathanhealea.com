@@ -322,8 +322,8 @@ export default function ColorWheel({
     const wedges = getSchemeWedges(hsl.h, colorScheme)
     return wedges.map((wedge, i) => {
       // Handle wrap-around: if startDeg > endDeg, it wraps past 0°
-      let start = wedge.startDeg
-      let end = wedge.endDeg
+      const start = wedge.startDeg
+      const end = wedge.endDeg
       if (start > end) {
         // Split into two arcs: start→360 and 0→end
         return (
