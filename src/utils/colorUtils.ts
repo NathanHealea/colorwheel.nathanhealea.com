@@ -90,41 +90,38 @@ export function hueDistance(h1: number, h2: number): number {
   return d > 180 ? 360 - d : d;
 }
 
-/** Filter paints matching the given color scheme relative to a reference hue */
-export function getSchemeMatches(referenceHue: number, allPaints: { hex: string }[], scheme: string): boolean[] {
-  if (scheme === 'none') return allPaints.map(() => false);
-
-  return allPaints.map((paint) => {
-    const hsl = hexToHsl(paint.hex);
-    const dist = hueDistance(referenceHue, hsl.h);
-    switch (scheme) {
-      case 'complementary':
-        return dist > 155;
-      case 'split-complementary':
-        return dist >= 120 && dist <= 180;
-      case 'analogous':
-        return dist < 45;
-      default:
-        return false;
-    }
-  });
+/** Check if a paint matches the active color scheme relative to the selected paint */
+export function isMatchingScheme(paintHue: number, selectedHue: number, scheme: string): boolean {
+  if (scheme === 'none') return true;
+  const d = hueDistance(selectedHue, paintHue);
+  if (scheme === 'complementary') return d > 155;
+  if (scheme === 'split') return d > 120 && d < 180;
+  if (scheme === 'analogous') return d < 45;
+  return true;
 }
 
-/** Get angular wedge ranges for a scheme overlay on the wheel */
-export function getSchemeWedges(hue: number, scheme: string): { startDeg: number; endDeg: number }[] {
-  const norm = (deg: number) => ((deg % 360) + 360) % 360;
+/** Wedge descriptor for scheme overlays on the wheel */
+export interface SchemeWedge {
+  center: number;
+  span: number;
+  color: string;
+}
 
-  switch (scheme) {
-    case 'complementary':
-      return [{ startDeg: norm(hue + 155), endDeg: norm(hue - 155) }];
-    case 'split-complementary':
-      return [
-        { startDeg: norm(hue + 120), endDeg: norm(hue + 180) },
-        { startDeg: norm(hue - 180), endDeg: norm(hue - 120) },
-      ];
-    case 'analogous':
-      return [{ startDeg: norm(hue - 45), endDeg: norm(hue + 45) }];
-    default:
-      return [];
+/** Get narrow indicator wedges for a scheme overlay on the wheel */
+export function getSchemeWedges(hue: number, scheme: string): SchemeWedge[] {
+  const wedges: SchemeWedge[] = [{ center: hue, span: 22, color: '#fff' }];
+
+  if (scheme === 'complementary') {
+    wedges.push({ center: (hue + 180) % 360, span: 22, color: '#fff' });
   }
+  if (scheme === 'split') {
+    wedges.push({ center: (hue + 150) % 360, span: 22, color: '#ff4' });
+    wedges.push({ center: (hue + 210) % 360, span: 22, color: '#ff4' });
+  }
+  if (scheme === 'analogous') {
+    wedges.push({ center: (hue - 30 + 360) % 360, span: 22, color: '#ff4' });
+    wedges.push({ center: (hue + 30) % 360, span: 22, color: '#ff4' });
+  }
+
+  return wedges;
 }

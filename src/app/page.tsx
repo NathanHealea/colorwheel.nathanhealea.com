@@ -10,7 +10,7 @@ import DetailPanel from '@/components/DetailPanel';
 import Sidebar, { useIsDesktop } from '@/components/Sidebar';
 import { brands, paints } from '@/data/index';
 import type { ColorScheme, PaintGroup, ProcessedPaint } from '@/types/paint';
-import { getSchemeMatches, hexToHsl, paintToWheelPosition, WHEEL_RADIUS } from '@/utils/colorUtils';
+import { hexToHsl, isMatchingScheme, paintToWheelPosition, WHEEL_RADIUS } from '@/utils/colorUtils';
 
 export default function Home() {
   const [zoom, setZoom] = useState(1);
@@ -81,14 +81,21 @@ export default function Home() {
     [paintGroups, brandFilter, isFiltered, uniqueColorCount],
   );
 
+  const isSchemeMatching = useCallback(
+    (paint: ProcessedPaint) => {
+      if (!selectedPaint || colorScheme === 'none') return true;
+      if (paint.id === selectedPaint.id) return true;
+      const selectedHsl = hexToHsl(selectedPaint.hex);
+      const paintHsl = hexToHsl(paint.hex);
+      return isMatchingScheme(paintHsl.h, selectedHsl.h, colorScheme);
+    },
+    [selectedPaint, colorScheme],
+  );
+
   const schemeMatches = useMemo<ProcessedPaint[]>(() => {
     if (colorScheme === 'none' || !selectedPaint) return [];
-    const hsl = hexToHsl(selectedPaint.hex);
-    const matches = getSchemeMatches(hsl.h, processedPaints, colorScheme);
-    return processedPaints.filter((_, i) => matches[i]);
-  }, [colorScheme, selectedPaint, processedPaints]);
-
-  const schemeMatchIds = useMemo(() => new Set(schemeMatches.map((p) => p.id)), [schemeMatches]);
+    return processedPaints.filter((p) => p.id !== selectedPaint.id && isSchemeMatching(p));
+  }, [colorScheme, selectedPaint, processedPaints, isSchemeMatching]);
 
   const handleBrandFilter = useCallback((id: string) => {
     setBrandFilter((prev) => {
@@ -230,21 +237,23 @@ export default function Home() {
             <div className='flex flex-wrap gap-1'>
               {(
                 [
-                  { label: 'None', value: 'none' },
+                  { label: 'No Scheme', value: 'none' },
                   { label: 'Complementary', value: 'complementary' },
-                  { label: 'Split-Comp', value: 'split-complementary' },
+                  { label: 'Split Complementary', value: 'split' },
                   { label: 'Analogous', value: 'analogous' },
                 ] as const
               ).map(({ label, value }) => (
                 <button
                   key={value}
                   className={`btn btn-sm ${colorScheme === value ? 'btn-active' : ''}`}
-                  disabled={!selectedPaint}
                   onClick={() => setColorScheme(value)}>
                   {label}
                 </button>
               ))}
             </div>
+            {colorScheme !== 'none' && !selectedPaint && (
+              <p className='mt-1 text-xs text-base-content/40'>Click a paint to see its {colorScheme} colors</p>
+            )}
           </section>
 
           <div className='divider' />
@@ -262,7 +271,7 @@ export default function Home() {
               brands={brands}
               matches={schemeMatches}
               hasSearch={false}
-              scheme={colorScheme === 'none' ? 'None' : colorScheme}
+              scheme={colorScheme}
             />
           </section>
         </Sidebar>
@@ -282,7 +291,7 @@ export default function Home() {
             showBrandRing={showBrandRing}
             colorScheme={colorScheme}
             selectedPaint={selectedPaint}
-            schemeMatchIds={schemeMatchIds}
+            isSchemeMatching={isSchemeMatching}
           />
 
           {/* Reset button */}

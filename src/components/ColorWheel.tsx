@@ -28,7 +28,7 @@ interface ColorWheelProps {
   showBrandRing: boolean;
   colorScheme: ColorScheme;
   selectedPaint: ProcessedPaint | null;
-  schemeMatchIds: Set<string>;
+  isSchemeMatching: (paint: ProcessedPaint) => boolean;
 }
 
 const MIN_ZOOM = 0.4;
@@ -109,7 +109,7 @@ function PaintDot({
   const r = isMulti ? DOT_RADIUS + 2 : DOT_RADIUS;
 
   return (
-    <g opacity={dimmed ? 0.15 : 1}>
+    <g opacity={dimmed ? 0.06 : 1}>
       {isSelected && (
         <circle
           cx={rep.x}
@@ -194,7 +194,7 @@ export default function ColorWheel({
   showBrandRing,
   colorScheme,
   selectedPaint,
-  schemeMatchIds,
+  isSchemeMatching,
 }: ColorWheelProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -303,33 +303,47 @@ export default function ColorWheel({
     [labelFontSize],
   );
 
-  // Scheme wedge overlays
+  // Scheme wedge overlays — narrow indicator wedges at key angles
   const schemeWedges = useMemo(() => {
     if (colorScheme === 'none' || !selectedPaint) return null;
     const hsl = hexToHsl(selectedPaint.hex);
     const wedges = getSchemeWedges(hsl.h, colorScheme);
-    return wedges.map((wedge, i) => {
-      // Handle wrap-around: if startDeg > endDeg, it wraps past 0°
-      const start = wedge.startDeg;
-      const end = wedge.endDeg;
+    const elements: React.ReactElement[] = [];
+    wedges.forEach((wedge, i) => {
+      const start = (((wedge.center - wedge.span) % 360) + 360) % 360;
+      const end = (((wedge.center + wedge.span) % 360) + 360) % 360;
       if (start > end) {
-        // Split into two arcs: start→360 and 0→end
-        return (
-          <g key={i}>
-            <path
-              d={buildHueRingPath(start, 360 - 0.01, 0, WHEEL_RADIUS)}
-              fill='white'
-              fillOpacity={0.08}
-              stroke='none'
-            />
-            <path d={buildHueRingPath(0, end, 0, WHEEL_RADIUS)} fill='white' fillOpacity={0.08} stroke='none' />
-          </g>
+        elements.push(
+          <path
+            key={`${i}a`}
+            d={buildHueRingPath(start, 360 - 0.01, 0, WHEEL_RADIUS)}
+            fill={wedge.color}
+            fillOpacity={0.15}
+            stroke='none'
+          />,
+        );
+        elements.push(
+          <path
+            key={`${i}b`}
+            d={buildHueRingPath(0, end, 0, WHEEL_RADIUS)}
+            fill={wedge.color}
+            fillOpacity={0.15}
+            stroke='none'
+          />,
+        );
+      } else {
+        elements.push(
+          <path
+            key={i}
+            d={buildHueRingPath(start, end, 0, WHEEL_RADIUS)}
+            fill={wedge.color}
+            fillOpacity={0.15}
+            stroke='none'
+          />,
         );
       }
-      return (
-        <path key={i} d={buildHueRingPath(start, end, 0, WHEEL_RADIUS)} fill='white' fillOpacity={0.08} stroke='none' />
-      );
     });
+    return elements;
   }, [colorScheme, selectedPaint]);
 
   // Convert client coordinates to SVG coordinates
@@ -508,7 +522,7 @@ export default function ColorWheel({
       <g>
         {paintGroups.map((group) => {
           const brandDimmed = brandFilter.size > 0 && !group.paints.some((p) => brandFilter.has(p.brand));
-          const schemeDimmed = schemeMatchIds.size > 0 && !group.paints.some((p) => schemeMatchIds.has(p.id));
+          const schemeDimmed = !group.paints.some(isSchemeMatching);
           const dimmed = brandDimmed || schemeDimmed;
           return (
             <PaintDot
