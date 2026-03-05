@@ -110,7 +110,7 @@ function PaintDot({
         <circle
           cx={rep.x}
           cy={rep.y}
-          r={r + 4}
+          r={showBrandRing ? r + 4 : r + 2.5}
           fill='none'
           stroke='white'
           strokeWidth={2}
