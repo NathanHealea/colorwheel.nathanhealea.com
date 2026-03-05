@@ -303,8 +303,8 @@ export default function Home() {
               group={displayGroup}
               selectedPaint={hoveredGroup ? null : selectedPaint}
               onSelectPaint={(paint) => {
-                if (displayGroup) handleSelectPaintFromGroup(paint, displayGroup)
-                else handleSelectSearchResult(paint)
+                if (isSearching) handleSelectSearchResult(paint)
+                else if (displayGroup) handleSelectPaintFromGroup(paint, displayGroup)
               }}
               onBack={() => setSelectedPaint(null)}
               brands={brands}
