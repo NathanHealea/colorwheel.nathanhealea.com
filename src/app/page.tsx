@@ -234,18 +234,23 @@ export default function Home() {
           {/* Color Scheme Mode */}
           <section>
             <h3 className='mb-2 text-xs font-semibold uppercase text-base-content/60'>Color Scheme</h3>
-            <div className='flex flex-wrap gap-1'>
+            <div className='flex flex-col gap-1'>
               {(
                 [
-                  { label: 'No Scheme', value: 'none' },
-                  { label: 'Complementary', value: 'complementary' },
-                  { label: 'Split Complementary', value: 'split' },
-                  { label: 'Analogous', value: 'analogous' },
+                  { label: 'No Scheme', value: 'none', color: '#888' },
+                  { label: 'Complementary', value: 'complementary', color: '#4fc3f7' },
+                  { label: 'Split Complementary', value: 'split', color: '#ffee58' },
+                  { label: 'Analogous', value: 'analogous', color: '#81c784' },
                 ] as const
-              ).map(({ label, value }) => (
+              ).map(({ label, value, color }) => (
                 <button
                   key={value}
-                  className={`btn btn-sm ${colorScheme === value ? 'btn-active' : ''}`}
+                  className='btn btn-sm justify-start'
+                  style={
+                    colorScheme === value
+                      ? { backgroundColor: color, borderColor: color, color: '#fff' }
+                      : { borderColor: color, color }
+                  }
                   onClick={() => setColorScheme(value)}>
                   {label}
                 </button>
