@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { Bars3Icon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
+import BrandLegend from '@/components/BrandLegend';
 import ColorWheel from '@/components/ColorWheel';
 import DetailPanel from '@/components/DetailPanel';
 import Sidebar, { useIsDesktop } from '@/components/Sidebar';
@@ -42,6 +43,15 @@ export default function Home() {
       }),
     [],
   );
+
+  const brandPaintCounts = useMemo(() => {
+    const counts = new Map<string, number>()
+    brands.forEach((b) => counts.set(b.id, 0))
+    processedPaints.forEach((p) => {
+      counts.set(p.brand, (counts.get(p.brand) ?? 0) + 1)
+    })
+    return counts
+  }, [processedPaints])
 
   const paintGroups = useMemo<PaintGroup[]>(() => {
     const map = new Map<string, ProcessedPaint[]>()
@@ -129,6 +139,14 @@ export default function Home() {
               <span className='text-xs font-semibold uppercase text-base-content/60'>Brand Ring</span>
               <input type='checkbox' className='toggle toggle-sm' disabled />
             </label>
+          </section>
+
+          <div className='divider' />
+
+          {/* Brand Legend */}
+          <section>
+            <h3 className='mb-2 text-xs font-semibold uppercase text-base-content/60'>Brands</h3>
+            <BrandLegend brands={brands} paintCounts={brandPaintCounts} />
           </section>
 
           <div className='divider' />
