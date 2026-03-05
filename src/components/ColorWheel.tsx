@@ -17,6 +17,7 @@ import {
 interface ColorWheelProps {
   paintGroups: PaintGroup[];
   brandFilter: Set<string>;
+  searchMatchIds: Set<string>;
   zoom: number;
   pan: { x: number; y: number };
   onZoomChange: (zoom: number) => void;
@@ -94,6 +95,8 @@ function PaintDot({
   isSelected,
   showBrandRing,
   dimmed,
+  schemeDimmed,
+  searchHighlight,
   onHover,
   onClick,
 }: {
@@ -101,6 +104,8 @@ function PaintDot({
   isSelected: boolean;
   showBrandRing: boolean;
   dimmed: boolean;
+  schemeDimmed: boolean;
+  searchHighlight: boolean;
   onHover: (group: PaintGroup | null) => void;
   onClick: (group: PaintGroup) => void;
 }) {
@@ -109,7 +114,19 @@ function PaintDot({
   const r = isMulti ? DOT_RADIUS + 2 : DOT_RADIUS;
 
   return (
-    <g opacity={dimmed ? 0.06 : 1}>
+    <g opacity={dimmed ? (schemeDimmed ? 0.06 : 0.15) : 1}>
+      {searchHighlight && !dimmed && (
+        <circle
+          cx={rep.x}
+          cy={rep.y}
+          r={r + 3}
+          fill='none'
+          stroke='#facc15'
+          strokeWidth={2}
+          filter='url(#search-glow)'
+          pointerEvents='none'
+        />
+      )}
       {isSelected && (
         <circle
           cx={rep.x}
@@ -183,6 +200,7 @@ function buildHueRingPath(startDeg: number, endDeg: number, innerR: number, oute
 export default function ColorWheel({
   paintGroups,
   brandFilter,
+  searchMatchIds,
   zoom,
   pan,
   onZoomChange,
@@ -503,6 +521,16 @@ export default function ColorWheel({
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}>
+      <defs>
+        <filter id='search-glow' x='-50%' y='-50%' width='200%' height='200%'>
+          <feGaussianBlur in='SourceGraphic' stdDeviation='2' result='blur' />
+          <feMerge>
+            <feMergeNode in='blur' />
+            <feMergeNode in='SourceGraphic' />
+          </feMerge>
+        </filter>
+      </defs>
+
       {/* Segment background wedges */}
       <g>{segmentWedges}</g>
 
@@ -521,9 +549,10 @@ export default function ColorWheel({
       {/* Paint dots (one per group) */}
       <g>
         {paintGroups.map((group) => {
-          const brandDimmed = brandFilter.size > 0 && !group.paints.some((p) => brandFilter.has(p.brand));
+          const matchesBrand = brandFilter.size === 0 || group.paints.some((p) => brandFilter.has(p.brand));
+          const matchesSearch = searchMatchIds.size === 0 || group.paints.some((p) => searchMatchIds.has(p.id));
           const schemeDimmed = !group.paints.some(isSchemeMatching);
-          const dimmed = brandDimmed || schemeDimmed;
+          const dimmed = !matchesBrand || !matchesSearch || schemeDimmed;
           return (
             <PaintDot
               key={group.key}
@@ -531,6 +560,8 @@ export default function ColorWheel({
               isSelected={selectedGroup?.key === group.key}
               showBrandRing={showBrandRing}
               dimmed={dimmed}
+              schemeDimmed={schemeDimmed}
+              searchHighlight={searchMatchIds.size > 0 && matchesSearch}
               onHover={onHoverGroup}
               onClick={(g) => {
                 if (dragDistance.current > 3) return;
