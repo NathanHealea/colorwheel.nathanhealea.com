@@ -54,6 +54,25 @@ function BrandRingArcs({
       {uniqueBrands.map((brand, i) => {
         const startDeg = i * segmentAngle
         const endDeg = startDeg + segmentAngle
+        // Full 360° arc is degenerate (start === end point), split into two halves
+        if (segmentAngle === 360) {
+          return (
+            <g key={brand.id}>
+              <path
+                d={buildHueRingPath(0, 180, innerR, outerR)}
+                fill={brand.color}
+                stroke='rgba(0,0,0,0.3)'
+                strokeWidth={0.5}
+              />
+              <path
+                d={buildHueRingPath(180, 360 - 0.01, innerR, outerR)}
+                fill={brand.color}
+                stroke='rgba(0,0,0,0.3)'
+                strokeWidth={0.5}
+              />
+            </g>
+          )
+        }
         return (
           <path
             key={brand.id}
