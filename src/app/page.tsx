@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { Bars3Icon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
@@ -66,13 +66,11 @@ export default function Home() {
     }))
   }, [filteredPaints])
 
-  // Clear selection when filter changes and selected group is no longer visible
-  useEffect(() => {
-    if (selectedGroup && !paintGroups.some((g) => g.key === selectedGroup.key)) {
-      setSelectedGroup(null)
-      setSelectedPaint(null)
-    }
-  }, [paintGroups, selectedGroup])
+  const handleBrandFilter = useCallback((id: string) => {
+    setBrandFilter(id)
+    setSelectedGroup(null)
+    setSelectedPaint(null)
+  }, [])
 
   const handleReset = useCallback(() => {
     setZoom(1)
@@ -159,7 +157,7 @@ export default function Home() {
             <div className='flex flex-col gap-1'>
               <button
                 className={`btn btn-sm justify-start ${brandFilter === 'all' ? 'btn-active' : 'btn-ghost'}`}
-                onClick={() => setBrandFilter('all')}>
+                onClick={() => handleBrandFilter('all')}>
                 All Brands
               </button>
               {brands.map((brand) => (
@@ -169,7 +167,7 @@ export default function Home() {
                   style={brandFilter === brand.id
                     ? { backgroundColor: brand.color, borderColor: brand.color, color: '#fff' }
                     : { borderColor: brand.color, color: brand.color }}
-                  onClick={() => setBrandFilter(brand.id)}>
+                  onClick={() => handleBrandFilter(brand.id)}>
                   {brand.icon} {brand.name}
                 </button>
               ))}
