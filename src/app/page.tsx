@@ -174,7 +174,10 @@ export default function Home() {
             <h3 className='mb-2 text-xs font-semibold uppercase text-base-content/60'>Brand Filter</h3>
             <div className='flex flex-col gap-1'>
               <button
-                className={`btn btn-sm justify-start ${!isFiltered ? 'btn-active' : 'btn-ghost'}`}
+                className='btn btn-sm justify-start'
+                style={!isFiltered
+                  ? { backgroundColor: '#888', borderColor: '#888', color: '#fff' }
+                  : { borderColor: '#888', color: '#888' }}
                 onClick={() => handleBrandFilter('all')}>
                 All Brands
               </button>
