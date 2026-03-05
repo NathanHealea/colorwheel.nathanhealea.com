@@ -9,8 +9,8 @@ import ColorWheel from '@/components/ColorWheel';
 import DetailPanel from '@/components/DetailPanel';
 import Sidebar, { useIsDesktop } from '@/components/Sidebar';
 import { brands, paints } from '@/data/index';
-import type { PaintGroup, ProcessedPaint } from '@/types/paint';
-import { hexToHsl, paintToWheelPosition, WHEEL_RADIUS } from '@/utils/colorUtils';
+import type { ColorScheme, PaintGroup, ProcessedPaint } from '@/types/paint';
+import { getSchemeMatches, hexToHsl, paintToWheelPosition, WHEEL_RADIUS } from '@/utils/colorUtils';
 
 export default function Home() {
   const [zoom, setZoom] = useState(1);
@@ -22,6 +22,7 @@ export default function Home() {
   const [hoveredGroup, setHoveredGroup] = useState<PaintGroup | null>(null)
   const [showBrandRing, setShowBrandRing] = useState(false)
   const [brandFilter, setBrandFilter] = useState<Set<string>>(new Set())
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('none')
 
   const uniqueColorCount = useMemo(
     () => new Set(paints.map((p) => p.hex.toLowerCase())).size,
@@ -86,6 +87,18 @@ export default function Home() {
     [paintGroups, brandFilter, isFiltered, uniqueColorCount],
   )
 
+  const schemeMatches = useMemo<ProcessedPaint[]>(() => {
+    if (colorScheme === 'none' || !selectedPaint) return []
+    const hsl = hexToHsl(selectedPaint.hex)
+    const matches = getSchemeMatches(hsl.h, processedPaints, colorScheme)
+    return processedPaints.filter((_, i) => matches[i])
+  }, [colorScheme, selectedPaint, processedPaints])
+
+  const schemeMatchIds = useMemo(
+    () => new Set(schemeMatches.map((p) => p.id)),
+    [schemeMatches],
+  )
+
   const handleBrandFilter = useCallback((id: string) => {
     setBrandFilter((prev) => {
       if (id === 'all') return new Set()
@@ -111,11 +124,13 @@ export default function Home() {
       if (!group) {
         setSelectedGroup(null)
         setSelectedPaint(null)
+        setColorScheme('none')
         return
       }
       if (selectedGroup?.key === group.key) {
         setSelectedGroup(null)
         setSelectedPaint(null)
+        setColorScheme('none')
       } else if (group.paints.length === 1) {
         setSelectedGroup(group)
         setSelectedPaint(group.rep)
@@ -221,9 +236,18 @@ export default function Home() {
           <section>
             <h3 className='mb-2 text-xs font-semibold uppercase text-base-content/60'>Color Scheme</h3>
             <div className='flex flex-wrap gap-1'>
-              {['None', 'Complementary', 'Split-Comp', 'Analogous'].map((mode) => (
-                <button key={mode} className='btn btn-sm' disabled>
-                  {mode}
+              {([
+                { label: 'None', value: 'none' },
+                { label: 'Complementary', value: 'complementary' },
+                { label: 'Split-Comp', value: 'split-complementary' },
+                { label: 'Analogous', value: 'analogous' },
+              ] as const).map(({ label, value }) => (
+                <button
+                  key={value}
+                  className={`btn btn-sm ${colorScheme === value ? 'btn-active' : ''}`}
+                  disabled={!selectedPaint}
+                  onClick={() => setColorScheme(value)}>
+                  {label}
                 </button>
               ))}
             </div>
@@ -242,9 +266,9 @@ export default function Home() {
               }}
               onBack={() => setSelectedPaint(null)}
               brands={brands}
-              matches={[]}
+              matches={schemeMatches}
               hasSearch={false}
-              scheme="None"
+              scheme={colorScheme === 'none' ? 'None' : colorScheme}
             />
           </section>
         </Sidebar>
@@ -262,6 +286,9 @@ export default function Home() {
             onGroupClick={handleGroupClick}
             onHoverGroup={setHoveredGroup}
             showBrandRing={showBrandRing}
+            colorScheme={colorScheme}
+            selectedPaint={selectedPaint}
+            schemeMatchIds={schemeMatchIds}
           />
 
           {/* Reset button */}
