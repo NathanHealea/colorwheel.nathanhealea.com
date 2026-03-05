@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Bars3Icon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
@@ -19,6 +19,7 @@ export default function Home() {
   const [selectedGroup, setSelectedGroup] = useState<PaintGroup | null>(null)
   const [selectedPaint, setSelectedPaint] = useState<ProcessedPaint | null>(null)
   const [hoveredGroup, setHoveredGroup] = useState<PaintGroup | null>(null)
+  const [brandFilter, setBrandFilter] = useState<string>('all')
 
   const uniqueColorCount = useMemo(
     () => new Set(paints.map((p) => p.hex.toLowerCase())).size,
@@ -43,9 +44,16 @@ export default function Home() {
     [],
   );
 
+  const filteredPaints = useMemo(
+    () => brandFilter === 'all'
+      ? processedPaints
+      : processedPaints.filter((p) => p.brand === brandFilter),
+    [processedPaints, brandFilter],
+  )
+
   const paintGroups = useMemo<PaintGroup[]>(() => {
     const map = new Map<string, ProcessedPaint[]>()
-    processedPaints.forEach((p) => {
+    filteredPaints.forEach((p) => {
       const key = p.hex.toLowerCase()
       const list = map.get(key) ?? []
       list.push(p)
@@ -56,7 +64,15 @@ export default function Home() {
       paints,
       rep: paints[0],
     }))
-  }, [processedPaints])
+  }, [filteredPaints])
+
+  // Clear selection when filter changes and selected group is no longer visible
+  useEffect(() => {
+    if (selectedGroup && !paintGroups.some((g) => g.key === selectedGroup.key)) {
+      setSelectedGroup(null)
+      setSelectedPaint(null)
+    }
+  }, [paintGroups, selectedGroup])
 
   const handleReset = useCallback(() => {
     setZoom(1)
@@ -115,8 +131,12 @@ export default function Home() {
         </div>
 
         <div className='navbar-end w-auto justify-end gap-2'>
-          <span className='badge badge-sm'>{paints.length} paints</span>
-          <span className='badge badge-sm'>{uniqueColorCount} colors</span>
+          <span className='badge badge-sm'>
+            {brandFilter === 'all' ? paints.length : `${filteredPaints.length} / ${paints.length}`} paints
+          </span>
+          <span className='badge badge-sm'>
+            {brandFilter === 'all' ? uniqueColorCount : `${paintGroups.length} / ${uniqueColorCount}`} colors
+          </span>
           <span className='badge badge-sm'>{brands.length} brands</span>
         </div>
       </nav>
@@ -136,14 +156,22 @@ export default function Home() {
           {/* Brand Filter */}
           <section>
             <h3 className='mb-2 text-xs font-semibold uppercase text-base-content/60'>Brand Filter</h3>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-1'>
+              <button
+                className={`btn btn-sm justify-start ${brandFilter === 'all' ? 'btn-active' : 'btn-ghost'}`}
+                onClick={() => setBrandFilter('all')}>
+                All Brands
+              </button>
               {brands.map((brand) => (
-                <label key={brand.id} className='flex cursor-not-allowed items-center gap-2'>
-                  <input type='checkbox' className='checkbox checkbox-sm' checked disabled readOnly />
-                  <span className='text-sm'>
-                    {brand.icon} {brand.name}
-                  </span>
-                </label>
+                <button
+                  key={brand.id}
+                  className='btn btn-sm justify-start'
+                  style={brandFilter === brand.id
+                    ? { backgroundColor: brand.color, borderColor: brand.color, color: '#fff' }
+                    : { borderColor: brand.color, color: brand.color }}
+                  onClick={() => setBrandFilter(brand.id)}>
+                  {brand.icon} {brand.name}
+                </button>
               ))}
             </div>
           </section>
