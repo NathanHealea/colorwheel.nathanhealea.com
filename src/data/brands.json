@@ -3,24 +3,28 @@
     "id": "citadel",
     "name": "Citadel",
     "icon": "⚔️",
-    "types": ["Base", "Layer", "Edge", "Contrast"]
+    "types": ["Base", "Layer", "Edge", "Contrast"],
+    "color": "#1E56A0"
   },
   {
     "id": "army-painter",
     "name": "Army Painter",
     "icon": "🛡️",
-    "types": ["Warpaints", "Speedpaint"]
+    "types": ["Warpaints", "Speedpaint"],
+    "color": "#C62828"
   },
   {
     "id": "vallejo",
     "name": "Vallejo",
     "icon": "🎯",
-    "types": ["Game Color"]
+    "types": ["Game Color"],
+    "color": "#F9A825"
   },
   {
     "id": "green-stuff-world",
     "name": "Green Stuff World",
     "icon": "🧪",
-    "types": ["Acrylic"]
+    "types": ["Acrylic"],
+    "color": "#2E7D32"
   }
 ]

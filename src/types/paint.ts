@@ -11,6 +11,7 @@ export interface Brand {
   name: string;
   icon: string;
   types: string[];
+  color: string;
 }
 
 /** Processed paint with brand info attached */
