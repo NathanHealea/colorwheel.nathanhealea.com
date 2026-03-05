@@ -2,7 +2,7 @@
 
 **Epic:** Color Wheel Visualization
 **Type:** Bug
-**Status:** Todo
+**Status:** In Progress
 
 ## Summary
 
@@ -14,13 +14,13 @@ When two or more paints share the same (or very similar) hue and lightness, they
 
 ## Acceptance Criteria
 
-- [ ] Paints at the same wheel position are grouped into a single indicator
-- [ ] Grouped indicators display a count badge showing the number of paints
-- [ ] Clicking a grouped indicator shows a list of all paints in that group in the sidebar
-- [ ] Selecting a paint from the group list shows its full color details
-- [ ] Single-paint indicators (no overlap) behave as normal dots with no badge
-- [ ] At zoom > 2x, grouped paints show a single label (e.g., "Abaddon Black +2") instead of stacked overlapping labels
-- [ ] Hovering over overlapping paints does not flicker — the hover glow and sidebar preview are stable
+- [x] Paints at the same wheel position are grouped into a single indicator
+- [x] Grouped indicators display a count badge showing the number of paints
+- [x] Clicking a grouped indicator shows a list of all paints in that group in the sidebar
+- [x] Selecting a paint from the group list shows its full color details
+- [x] Single-paint indicators (no overlap) behave as normal dots with no badge
+- [x] At zoom > 2x, grouped paints show a single label (e.g., "Abaddon Black +2") instead of stacked overlapping labels
+- [x] Hovering over overlapping paints does not flicker — the hover glow and sidebar preview are stable
 
 ## Reference
 
