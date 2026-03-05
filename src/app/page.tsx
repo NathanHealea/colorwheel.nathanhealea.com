@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from 'react';
 
-import { Bars3Icon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 import BrandLegend from '@/components/BrandLegend';
 import ColorWheel from '@/components/ColorWheel';
@@ -22,6 +22,7 @@ export default function Home() {
   const [hoveredGroup, setHoveredGroup] = useState<PaintGroup | null>(null)
   const [showBrandRing, setShowBrandRing] = useState(false)
   const [brandFilter, setBrandFilter] = useState<Set<string>>(new Set())
+  const [searchQuery, setSearchQuery] = useState('')
 
   const uniqueColorCount = useMemo(
     () => new Set(paints.map((p) => p.hex.toLowerCase())).size,
@@ -70,21 +71,47 @@ export default function Home() {
     }))
   }, [processedPaints])
 
+  const searchResults = useMemo<ProcessedPaint[]>(() => {
+    const q = searchQuery.trim().toLowerCase()
+    if (!q) return []
+    return processedPaints.filter((p) => {
+      const brandName = brands.find((b) => b.id === p.brand)?.name ?? ''
+      return (
+        p.name.toLowerCase().includes(q) ||
+        p.hex.toLowerCase().includes(q) ||
+        brandName.toLowerCase().includes(q)
+      )
+    })
+  }, [processedPaints, searchQuery])
+
+  const searchMatchIds = useMemo(
+    () => new Set(searchResults.map((p) => p.id)),
+    [searchResults],
+  )
+
+  const isSearching = searchQuery.trim().length > 0
+
   const isFiltered = brandFilter.size > 0
 
-  const filteredPaintCount = useMemo(
-    () => !isFiltered
-      ? paints.length
-      : processedPaints.filter((p) => brandFilter.has(p.brand)).length,
-    [processedPaints, brandFilter, isFiltered],
-  )
+  const filteredPaintCount = useMemo(() => {
+    if (!isFiltered && !isSearching) return paints.length
+    return processedPaints.filter((p) => {
+      const matchesBrand = !isFiltered || brandFilter.has(p.brand)
+      const matchesSearch = !isSearching || searchMatchIds.has(p.id)
+      return matchesBrand && matchesSearch
+    }).length
+  }, [processedPaints, brandFilter, isFiltered, isSearching, searchMatchIds])
 
-  const filteredColorCount = useMemo(
-    () => !isFiltered
-      ? uniqueColorCount
-      : paintGroups.filter((g) => g.paints.some((p) => brandFilter.has(p.brand))).length,
-    [paintGroups, brandFilter, isFiltered, uniqueColorCount],
-  )
+  const filteredColorCount = useMemo(() => {
+    if (!isFiltered && !isSearching) return uniqueColorCount
+    return paintGroups.filter((g) =>
+      g.paints.some((p) => {
+        const matchesBrand = !isFiltered || brandFilter.has(p.brand)
+        const matchesSearch = !isSearching || searchMatchIds.has(p.id)
+        return matchesBrand && matchesSearch
+      }),
+    ).length
+  }, [paintGroups, brandFilter, isFiltered, isSearching, searchMatchIds, uniqueColorCount])
 
   const handleBrandFilter = useCallback((id: string) => {
     setBrandFilter((prev) => {
@@ -153,7 +180,28 @@ export default function Home() {
         <div className='navbar-center flex-1 px-3'>
           <label className='input input-sm w-full max-w-sm'>
             <MagnifyingGlassIcon className='size-4 opacity-50' />
-            <input type='text' placeholder='Search paints...' disabled />
+            <input
+              type='text'
+              placeholder='Search paints...'
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value)
+                setSelectedGroup(null)
+                setSelectedPaint(null)
+              }}
+            />
+            {searchQuery && (
+              <button
+                className='btn btn-circle btn-ghost btn-xs'
+                onClick={() => {
+                  setSearchQuery('')
+                  setSelectedGroup(null)
+                  setSelectedPaint(null)
+                }}
+                aria-label='Clear search'>
+                <XMarkIcon className='size-3' />
+              </button>
+            )}
           </label>
         </div>
 
