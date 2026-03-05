@@ -238,6 +238,9 @@ export default function Home() {
             colors
           </span>
           <span className='badge badge-sm'>{brands.length} brands</span>
+          {isSearching && (
+            <span className='badge badge-warning badge-sm'>{searchResults.length} matches</span>
+          )}
         </div>
       </nav>
 
