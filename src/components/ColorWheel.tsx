@@ -2,19 +2,19 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-import type { ProcessedPaint } from '@/types/paint';
+import type { PaintGroup } from '@/types/paint';
 import { COLOR_SEGMENTS, hslToHex, RING_WIDTH, SEGMENT_BOUNDARIES, WHEEL_RADIUS } from '@/utils/colorUtils';
 
 interface ColorWheelProps {
-  processedPaints: ProcessedPaint[];
+  paintGroups: PaintGroup[];
   zoom: number;
   pan: { x: number; y: number };
   onZoomChange: (zoom: number) => void;
   onPanChange: (pan: { x: number; y: number }) => void;
-  selectedPaint: ProcessedPaint | null;
-  hoveredPaint: ProcessedPaint | null;
-  onSelectPaint: (paint: ProcessedPaint | null) => void;
-  onHoverPaint: (paint: ProcessedPaint | null) => void;
+  selectedGroup: PaintGroup | null;
+  hoveredGroup: PaintGroup | null;
+  onGroupClick: (group: PaintGroup | null) => void;
+  onHoverGroup: (group: PaintGroup | null) => void;
 }
 
 const MIN_ZOOM = 0.4;
@@ -40,15 +40,15 @@ function buildHueRingPath(startDeg: number, endDeg: number, innerR: number, oute
 }
 
 export default function ColorWheel({
-  processedPaints,
+  paintGroups,
   zoom,
   pan,
   onZoomChange,
   onPanChange,
-  selectedPaint,
-  hoveredPaint,
-  onSelectPaint,
-  onHoverPaint,
+  selectedGroup,
+  hoveredGroup,
+  onGroupClick,
+  onHoverGroup,
 }: ColorWheelProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -346,37 +346,67 @@ export default function ColorWheel({
       {/* Segment labels */}
       <g>{segmentLabels}</g>
 
-      {/* Paint dots */}
+      {/* Paint dots (one per group) */}
       <g>
-        {processedPaints.map((paint) => (
-          <circle
-            key={paint.id}
-            cx={paint.x}
-            cy={paint.y}
-            r={DOT_RADIUS}
-            fill={paint.hex}
-            stroke='rgba(0,0,0,0.5)'
-            strokeWidth={1}
-            className='cursor-pointer'
-            onPointerEnter={() => onHoverPaint(paint)}
-            onPointerLeave={() => onHoverPaint(null)}
-            onClick={(e) => {
-              if (dragDistance.current > 3) return;
-              e.stopPropagation();
-              onSelectPaint(paint.id === selectedPaint?.id ? null : paint);
-            }}
-          />
-        ))}
+        {paintGroups.map((group) => {
+          const { rep } = group
+          const isMulti = group.paints.length > 1
+          const r = isMulti ? DOT_RADIUS + 2 : DOT_RADIUS
+          return (
+            <g key={group.key}>
+              <circle
+                cx={rep.x}
+                cy={rep.y}
+                r={r}
+                fill={rep.hex}
+                stroke='rgba(0,0,0,0.5)'
+                strokeWidth={1}
+                className='cursor-pointer'
+                onPointerEnter={() => onHoverGroup(group)}
+                onPointerLeave={() => onHoverGroup(null)}
+                onClick={(e) => {
+                  if (dragDistance.current > 3) return
+                  e.stopPropagation()
+                  onGroupClick(group)
+                }}
+              />
+              {isMulti && (
+                <>
+                  <circle
+                    cx={rep.x + r * 0.7}
+                    cy={rep.y - r * 0.7}
+                    r={4}
+                    fill='#f0c040'
+                    stroke='#000'
+                    strokeWidth={0.5}
+                    pointerEvents='none'
+                  />
+                  <text
+                    x={rep.x + r * 0.7}
+                    y={rep.y - r * 0.7 + 0.5}
+                    textAnchor='middle'
+                    dominantBaseline='middle'
+                    fill='#000'
+                    fontSize={5}
+                    fontWeight={800}
+                    pointerEvents='none'>
+                    {group.paints.length}
+                  </text>
+                </>
+              )}
+            </g>
+          )
+        })}
       </g>
 
       {/* Hover and selection overlay layer */}
       <g>
-        {/* Selected paint dashed ring */}
-        {selectedPaint && (
+        {/* Selected group dashed ring */}
+        {selectedGroup && (
           <circle
-            cx={selectedPaint.x}
-            cy={selectedPaint.y}
-            r={DOT_RADIUS + 4}
+            cx={selectedGroup.rep.x}
+            cy={selectedGroup.rep.y}
+            r={(selectedGroup.paints.length > 1 ? DOT_RADIUS + 2 : DOT_RADIUS) + 4}
             fill='none'
             stroke='white'
             strokeWidth={2}
@@ -385,13 +415,13 @@ export default function ColorWheel({
           />
         )}
 
-        {/* Hovered paint glow */}
-        {hoveredPaint && (
+        {/* Hovered group glow */}
+        {hoveredGroup && (
           <circle
-            cx={hoveredPaint.x}
-            cy={hoveredPaint.y}
-            r={DOT_RADIUS * 1.4}
-            fill={hoveredPaint.hex}
+            cx={hoveredGroup.rep.x}
+            cy={hoveredGroup.rep.y}
+            r={(hoveredGroup.paints.length > 1 ? DOT_RADIUS + 2 : DOT_RADIUS) * 1.4}
+            fill={hoveredGroup.rep.hex}
             stroke='rgba(255,255,255,0.8)'
             strokeWidth={1.5}
             filter='url(#paint-glow)'
@@ -403,22 +433,28 @@ export default function ColorWheel({
       {/* Paint labels at zoom > 2x */}
       {zoom > LABEL_ZOOM_THRESHOLD && (
         <g>
-          {processedPaints
-            .filter((p) => isInView(p.x, p.y))
-            .map((paint) => (
-              <text
-                key={`label-${paint.id}`}
-                x={paint.x + DOT_RADIUS + 3}
-                y={paint.y + 1}
-                fill='white'
-                fontSize={8 / Math.max(1, zoom * 0.5)}
-                fontFamily='system-ui, sans-serif'
-                paintOrder='stroke'
-                stroke='rgba(0,0,0,0.7)'
-                strokeWidth={2}>
-                {paint.name}
-              </text>
-            ))}
+          {paintGroups
+            .filter((g) => isInView(g.rep.x, g.rep.y))
+            .map((group) => {
+              const label =
+                group.paints.length > 1
+                  ? `${group.rep.name} +${group.paints.length - 1}`
+                  : group.rep.name
+              return (
+                <text
+                  key={`label-${group.key}`}
+                  x={group.rep.x + DOT_RADIUS + 3}
+                  y={group.rep.y + 1}
+                  fill='white'
+                  fontSize={8 / Math.max(1, zoom * 0.5)}
+                  fontFamily='system-ui, sans-serif'
+                  paintOrder='stroke'
+                  stroke='rgba(0,0,0,0.7)'
+                  strokeWidth={2}>
+                  {label}
+                </text>
+              )
+            })}
         </g>
       )}
     </svg>
