@@ -2,7 +2,7 @@
 
 **Epic:** Color Analysis
 **Type:** Feature
-**Status:** Todo
+**Status:** In Progress
 
 ## Summary
 
@@ -10,11 +10,11 @@ Text search across paint name, hex code, and brand name. Matching paints are vis
 
 ## Acceptance Criteria
 
-- [ ] Text input searches across paint name, hex code, and brand name
-- [ ] Matching paints are highlighted on the wheel with a yellow ring and glow filter
-- [ ] Non-matching paints dim
-- [ ] Results appear in the detail panel as a scrollable list
-- [ ] A clear button (✕) resets the search
+- [x] Text input searches across paint name, hex code, and brand name
+- [x] Matching paints are highlighted on the wheel with a yellow ring and glow filter
+- [x] Non-matching paints dim
+- [x] Results appear in the detail panel as a scrollable list
+- [x] A clear button (✕) resets the search
 
 ## Implementation Plan
 
