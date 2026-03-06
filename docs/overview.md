@@ -131,7 +131,7 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 | [x] | [Interactive Color Wheel](./color-wheel-visualization/interactive-color-wheel.md) | Feature | Completed |
 | [x] | [Paint Selection & Hover](./color-wheel-visualization/paint-selection-and-hover.md) | Feature | Completed |
 | [x] | [Overlapping Paint Indicator](./color-wheel-visualization/overlapping-paint-indicator.md) | Bug | Completed |
-| [ ] | [Filter Visibility Priority](./color-wheel-visualization/filter-visibility-priority.md) | Bug | Todo |
+| [x] | [Filter Visibility Priority](./color-wheel-visualization/filter-visibility-priority.md) | Bug | Completed |
 | [ ] | [Auto-Center Selected Color](./color-wheel-visualization/auto-center-selected-color.md) | Feature | Todo |
 
 ### UI & Layout
@@ -147,7 +147,7 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 | | Name | Type | Status |
 |---|------|------|--------|
 | [x] | [Brand Filtering](./brand-features/brand-filtering.md) | Feature | Completed |
-| [x] | [Brand Ring Toggle](./brand-features/brand-ring-toggle.md) | Feature | In Progress |
+| [x] | [Brand Ring Toggle](./brand-features/brand-ring-toggle.md) | Feature | Completed |
 | [x] | [Brand Legend](./brand-features/brand-legend.md) | Feature | Completed |
 | [ ] | [Brand Ring Button Styling](./brand-features/brand-ring-button-styling.md) | Enhancement | Todo |
 
