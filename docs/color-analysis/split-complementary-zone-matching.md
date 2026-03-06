@@ -2,7 +2,7 @@
 
 **Epic:** Color Analysis
 **Type:** Bug
-**Status:** Todo
+**Status:** Completed
 
 ## Summary
 
@@ -33,9 +33,9 @@ Only paints near the two split complementary points (hue+150° and hue+210°) sh
 
 ## Acceptance Criteria
 
-- [ ] Split complementary only highlights paints near hue+150° and hue+210° (not the full 120°–180° band)
-- [ ] Matching zone width is consistent with the visual wedge indicators
-- [ ] Complementary and analogous schemes are unaffected
+- [x] Split complementary only highlights paints near hue+150° and hue+210° (not the full 120°–180° band)
+- [x] Matching zone width is consistent with the visual wedge indicators
+- [x] Complementary and analogous schemes are unaffected
 
 ## Implementation Plan
 

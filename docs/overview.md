@@ -157,4 +157,4 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 |---|------|------|--------|
 | [x] | [Color Scheme Modes](./color-analysis/color-scheme-modes.md) | Feature | Completed |
 | [x] | [Search](./color-analysis/search.md) | Feature | Completed |
-| [ ] | [Split Complementary Zone Matching](./color-analysis/split-complementary-zone-matching.md) | Bug | Todo |
+| [x] | [Split Complementary Zone Matching](./color-analysis/split-complementary-zone-matching.md) | Bug | Completed |
