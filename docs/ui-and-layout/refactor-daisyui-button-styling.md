@@ -2,7 +2,7 @@
 
 **Epic:** UI & Layout
 **Type:** Refactor
-**Status:** Todo
+**Status:** In Progress
 
 ## Summary
 
@@ -46,12 +46,12 @@ style={colorScheme === value
 
 ## Acceptance Criteria
 
-- [ ] DaisyUI theme in `globals.css` extended with semantic color tokens (`secondary`, `accent`, `info`, `success`, `warning`, `error` and their `-content` counterparts)
-- [ ] Color Scheme buttons use DaisyUI classes instead of inline styles
-- [ ] All active button states meet WCAG AA contrast (no white-on-yellow)
-- [ ] Brand Filter buttons use DaisyUI `btn-outline` / `btn-ghost` patterns with minimal inline overrides for brand-specific colors
-- [ ] Brand Ring toggle uses the same active/inactive styling pattern as the other sidebar buttons
-- [ ] Inactive states across all sidebar button groups use a consistent outline/ghost variant
+- [x] DaisyUI theme in `globals.css` extended with semantic color tokens (`secondary`, `accent`, `info`, `success`, `warning`, `error` and their `-content` counterparts)
+- [x] Color Scheme buttons use DaisyUI classes instead of inline styles
+- [x] All active button states meet WCAG AA contrast (no white-on-yellow)
+- [x] Brand Filter buttons use DaisyUI `btn-outline` / `btn-ghost` patterns with minimal inline overrides for brand-specific colors
+- [x] Brand Ring toggle uses the same active/inactive styling pattern as the other sidebar buttons
+- [x] Inactive states across all sidebar button groups use a consistent outline/ghost variant
 
 ## Implementation Plan
 
