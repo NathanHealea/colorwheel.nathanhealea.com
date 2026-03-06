@@ -306,20 +306,20 @@ export default function Home() {
             <div className='flex flex-col gap-1'>
               {(
                 [
-                  { label: 'No Scheme', value: 'none', color: '#888' },
-                  { label: 'Complementary', value: 'complementary', color: '#4fc3f7' },
-                  { label: 'Split Complementary', value: 'split', color: '#ffee58' },
-                  { label: 'Analogous', value: 'analogous', color: '#81c784' },
+                  { label: 'No Scheme', value: 'none', activeClass: 'btn-active', inactiveClass: 'btn-ghost' },
+                  { label: 'Complementary', value: 'complementary', activeClass: 'btn-info', inactiveClass: 'btn-outline btn-info' },
+                  {
+                    label: 'Split Complementary',
+                    value: 'split',
+                    activeClass: 'btn-warning',
+                    inactiveClass: 'btn-outline btn-warning',
+                  },
+                  { label: 'Analogous', value: 'analogous', activeClass: 'btn-success', inactiveClass: 'btn-outline btn-success' },
                 ] as const
-              ).map(({ label, value, color }) => (
+              ).map(({ label, value, activeClass, inactiveClass }) => (
                 <button
                   key={value}
-                  className='btn btn-sm justify-start'
-                  style={
-                    colorScheme === value
-                      ? { backgroundColor: color, borderColor: color, color: '#fff' }
-                      : { borderColor: color, color }
-                  }
+                  className={`btn btn-sm justify-start ${colorScheme === value ? activeClass : inactiveClass}`}
                   onClick={() => setColorScheme(value)}>
                   {label}
                 </button>
