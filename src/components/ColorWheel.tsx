@@ -551,8 +551,9 @@ export default function ColorWheel({
         {paintGroups.map((group) => {
           const matchesBrand = brandFilter.size === 0 || group.paints.some((p) => brandFilter.has(p.brand));
           const matchesSearch = searchMatchIds.size === 0 || group.paints.some((p) => searchMatchIds.has(p.id));
+          const hasActiveScheme = colorScheme !== 'none' && selectedPaint !== null;
           const schemeDimmed = !group.paints.some(isSchemeMatching);
-          const dimmed = !matchesBrand || !matchesSearch || schemeDimmed;
+          const dimmed = !matchesBrand || (hasActiveScheme ? schemeDimmed : !matchesSearch);
           return (
             <PaintDot
               key={group.key}
@@ -561,7 +562,7 @@ export default function ColorWheel({
               showBrandRing={showBrandRing}
               dimmed={dimmed}
               schemeDimmed={schemeDimmed}
-              searchHighlight={searchMatchIds.size > 0 && matchesSearch}
+              searchHighlight={searchMatchIds.size > 0 && !hasActiveScheme && matchesSearch}
               onHover={onHoverGroup}
               onClick={(g) => {
                 if (dragDistance.current > 3) return;
