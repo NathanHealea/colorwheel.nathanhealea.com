@@ -131,7 +131,7 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 | [x] | [Interactive Color Wheel](./color-wheel-visualization/interactive-color-wheel.md) | Feature | Completed |
 | [x] | [Paint Selection & Hover](./color-wheel-visualization/paint-selection-and-hover.md) | Feature | Completed |
 | [x] | [Overlapping Paint Indicator](./color-wheel-visualization/overlapping-paint-indicator.md) | Bug | Completed |
-| [ ] | [Filter Visibility Priority](./color-wheel-visualization/filter-visibility-priority.md) | Bug | Todo |
+| [x] | [Filter Visibility Priority](./color-wheel-visualization/filter-visibility-priority.md) | Bug | Completed |
 | [ ] | [Auto-Center Selected Color](./color-wheel-visualization/auto-center-selected-color.md) | Feature | Todo |
 
 ### UI & Layout

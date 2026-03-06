@@ -2,7 +2,7 @@
 
 **Epic:** Color Wheel Visualization
 **Type:** Bug
-**Status:** Todo
+**Status:** Completed
 
 ## Summary
 
@@ -36,10 +36,10 @@ Brand filter always applies as a base constraint. The "override" is between sear
 
 ## Acceptance Criteria
 
-- [ ] Brand filter always constrains the visible set of paints
-- [ ] When a color scheme is active, scheme matches determine visibility (search does not dim scheme matches)
-- [ ] When no color scheme is active, search matches determine visibility (current behavior)
-- [ ] When only brand filter is active, all brand-matched paints are visible (current behavior)
+- [x] Brand filter always constrains the visible set of paints
+- [x] When a color scheme is active, scheme matches determine visibility (search does not dim scheme matches)
+- [x] When no color scheme is active, search matches determine visibility (current behavior)
+- [x] When only brand filter is active, all brand-matched paints are visible (current behavior)
 
 ## Implementation Plan
 
