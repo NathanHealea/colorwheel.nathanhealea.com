@@ -53,6 +53,7 @@ Epic Template:
 | 4 | Paint Information | Detail panel populates the sidebar with paint data |
 | 5 | Brand Features | Filtering, rings, and legend layer on top of the wheel and sidebar |
 | 6 | Color Analysis | Color schemes and search are advanced features that enhance the base experience |
+| 7 | Paint Collection | Personal collection tracking lets users mark owned paints and filter by ownership |
 
 ---
 
@@ -110,6 +111,14 @@ Epic Template:
 - [x] [Color scheme modes (complementary, split complementary, analogous)](./color-analysis/color-scheme-modes.md)
 - [x] [Search](./color-analysis/search.md)
 
+## Epic 7: Paint Collection
+
+**Goal:** Let users track their personal paint collection with owned indicators, filtering, and localStorage persistence.
+
+**High-Level Scope:**
+
+- [ ] [Owned paint collection](./paint-collection/owned-paint-collection.md)
+
 ---
 
 ## Features (Epics)
@@ -157,3 +166,9 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 | [x] | [Color Scheme Modes](./color-analysis/color-scheme-modes.md) | Feature | Completed |
 | [x] | [Search](./color-analysis/search.md) | Feature | Completed |
 | [x] | [Split Complementary Zone Matching](./color-analysis/split-complementary-zone-matching.md) | Bug | Completed |
+
+### Paint Collection
+
+| | Name | Type | Status |
+|---|------|------|--------|
+| [ ] | [Owned Paint Collection](./paint-collection/owned-paint-collection.md) | Feature | Todo |
