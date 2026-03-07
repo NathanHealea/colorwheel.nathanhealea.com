@@ -301,20 +301,20 @@ export default function Home() {
             <div className='flex flex-col gap-1'>
               {(
                 [
-                  { label: 'No Scheme', value: 'none', activeClass: 'btn-neutral', inactiveClass: 'btn-outline btn-neutral' },
-                  { label: 'Complementary', value: 'complementary', activeClass: 'btn-info', inactiveClass: 'btn-outline btn-info' },
-                  {
-                    label: 'Split Complementary',
-                    value: 'split',
-                    activeClass: 'btn-warning',
-                    inactiveClass: 'btn-outline btn-warning',
-                  },
-                  { label: 'Analogous', value: 'analogous', activeClass: 'btn-success', inactiveClass: 'btn-outline btn-success' },
+                  { label: 'No Scheme', value: 'none', color: '#6b7280', contentColor: '#fff' },
+                  { label: 'Complementary', value: 'complementary', color: '#38bdf8', contentColor: '#000' },
+                  { label: 'Split Complementary', value: 'split', color: '#facc15', contentColor: '#000' },
+                  { label: 'Analogous', value: 'analogous', color: '#4ade80', contentColor: '#000' },
                 ] as const
-              ).map(({ label, value, activeClass, inactiveClass }) => (
+              ).map(({ label, value, color, contentColor }) => (
                 <button
                   key={value}
-                  className={`btn btn-sm justify-start ${colorScheme === value ? activeClass : inactiveClass}`}
+                  className={`btn btn-sm justify-start ${colorScheme === value ? '' : 'btn-outline'}`}
+                  style={
+                    colorScheme === value
+                      ? { backgroundColor: color, borderColor: color, color: contentColor }
+                      : { borderColor: color, color }
+                  }
                   onClick={() => setColorScheme(value)}>
                   {label}
                 </button>
