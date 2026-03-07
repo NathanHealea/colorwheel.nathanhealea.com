@@ -252,7 +252,12 @@ export default function Home() {
           {/* Brand Ring Toggle */}
           <section>
             <button
-              className={`btn btn-sm w-full ${showBrandRing ? 'btn-primary' : 'btn-outline btn-primary'}`}
+              className={`btn btn-sm w-full ${showBrandRing ? '' : 'btn-outline'}`}
+              style={
+                showBrandRing
+                  ? { backgroundColor: '#6366f1', borderColor: '#6366f1', color: '#fff' }
+                  : { borderColor: '#6366f1', color: '#6366f1' }
+              }
               onClick={() => setShowBrandRing(!showBrandRing)}>
               Brand Ring
             </button>
