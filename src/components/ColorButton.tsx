@@ -1,35 +1,57 @@
+import clsx from 'clsx';
 import type { ButtonHTMLAttributes } from 'react';
+
+/** Dictionary of button sizes */
+const SIZE: Record<string, string> = {
+  xs: 'btn-xs',
+  sm: 'btn-sm',
+  md: 'btn-md',
+  lg: 'btn-lg',
+  xl: 'btn-xl',
+};
+
+/** Dictionary of button colors */
+const COLORS: Record<string, string> = {
+  primary: 'btn-primary',
+  secondary: 'btn-secondary',
+  accent: 'btn-accent',
+  neutral: 'btn-neutral',
+  info: 'btn-info',
+  success: 'btn-success',
+  warning: 'btn-warning',
+  error: 'btn-error',
+};
 
 interface ColorButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Whether the button is in the active/selected state */
-  active: boolean;
-  /** Accent color for border, background (active), and text (inactive). Omit to use DaisyUI btn-neutral. */
-  color?: string;
+  active?: boolean;
   /** Text color when active (defaults to '#fff') */
   contentColor?: string;
-  /** Text alignment — 'start' for left-aligned labels, 'center' (default) for toggles */
-  align?: 'start' | 'center';
+
+  /** Size of the button (defaults to 'sm') */
+  size?: (typeof SIZE)[keyof typeof SIZE];
+
+  /** Color of the button (defaults to 'primary') */
+  color?: (typeof COLORS)[keyof typeof COLORS];
 }
 
 export default function ColorButton({
   active,
-  color,
-  contentColor = '#fff',
-  align = 'center',
+  size = 'sm',
+  color= 'primary',
   className = '',
-  style,
   children,
+  style,
   ...rest
 }: ColorButtonProps) {
-  const alignClass = align === 'start' ? 'justify-start' : '';
+  const btnDefault = 'btn btn-outline';
+  const btnSize = size in SIZE ? SIZE[size] : SIZE.sm;
+  const btnActive = active ? '' : '';
 
   // When no custom color, fall back to DaisyUI btn-neutral
   if (!color) {
     return (
-      <button
-        className={`btn btn-sm btn-neutral ${active ? '' : 'btn-outline'} ${alignClass} ${className}`}
-        style={style}
-        {...rest}>
+      <button className={clsx(btnDefault, btnSize, btnActive, className)} style={style} {...rest}>
         {children}
       </button>
     );
@@ -37,11 +59,11 @@ export default function ColorButton({
 
   return (
     <button
-      className={`btn btn-sm ${active ? '' : 'btn-outline'} ${alignClass} ${className}`}
+      className={clsx(btnDefault, btnSize, btnActive, className)}
       style={{
-        ...(active
-          ? { backgroundColor: color, borderColor: color, color: contentColor }
-          : { borderColor: color, color }),
+        // ...(active
+        //   ? { backgroundColor: color, borderColor: color, color: contentColor }
+        //   : { borderColor: color, color }),
         ...style,
       }}
       {...rest}>

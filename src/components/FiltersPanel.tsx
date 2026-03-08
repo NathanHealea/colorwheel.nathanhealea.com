@@ -1,6 +1,7 @@
 import BrandLegend from '@/components/BrandLegend';
 import DetailPanel from '@/components/DetailPanel';
 import type { Brand, ColorScheme, PaintGroup, ProcessedPaint } from '@/types/paint';
+import ColorButton from './ColorButton';
 
 interface FiltersPanelProps {
   showBrandRing: boolean;
@@ -124,17 +125,25 @@ export default function FiltersPanel({
         <h3 className='mb-2 text-xs font-semibold uppercase text-base-content/60'>Color Scheme</h3>
         <div className='flex flex-col gap-1'>
           {SCHEME_OPTIONS.map(({ label, value, color, contentColor }) => (
-            <button
-              key={value}
-              className={`btn btn-sm justify-start ${colorScheme === value ? '' : 'btn-outline'}`}
-              style={
-                colorScheme === value
-                  ? { backgroundColor: color, borderColor: color, color: contentColor }
-                  : { borderColor: color, color }
-              }
-              onClick={() => onColorScheme(value)}>
+            // <button
+            //   key={value}
+            //   className={`btn btn-sm justify-start ${colorScheme === value ? '' : 'btn-outline'}`}
+            //   style={
+            //     colorScheme === value
+            //       ? { backgroundColor: color, borderColor: color, color: contentColor }
+            //       : { borderColor: color, color }
+            //   }
+            //   onClick={() => onColorScheme(value)}>
+            //   {label}
+            // </button>
+
+            <ColorButton 
+            key={value}
+            onClick={()=> onColorScheme(value)}
+            active={colorScheme === value}
+            >
               {label}
-            </button>
+            </ColorButton>
           ))}
         </div>
         {colorScheme !== 'none' && !selectedPaint && (

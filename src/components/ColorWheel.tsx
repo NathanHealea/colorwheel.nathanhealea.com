@@ -657,12 +657,22 @@ export default function ColorWheel({
                       e.stopPropagation();
                       onToggleOwned(rep.id);
                     }}>
-                    <circle cx={btnCx} cy={btnCy} r={btnR} fill={isOwned ? '#10b981' : 'rgba(255,255,255,0.15)'} />
+                    <rect
+                      x={btnCx - btnR}
+                      y={btnCy - btnR + 1}
+                      width={btnR * 2}
+                      height={btnR * 2 - 2}
+                      rx={2}
+                      ry={2}
+                      fill={isOwned ? '#10b981' : 'transparent'}
+                      stroke={isOwned ? '#10b981' : '#666'}
+                      strokeWidth={0.8}
+                    />
                     <text
                       x={btnCx}
-                      y={btnCy + 0.5}
+                      y={btnCy}
                       textAnchor='middle'
-                      dominantBaseline='middle'
+                      dy='0.35em'
                       fill={isOwned ? '#fff' : '#aaa'}
                       fontSize={5}
                       fontWeight={700}
