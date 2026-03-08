@@ -547,6 +547,7 @@ export default function ColorWheel({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}>
       <defs>
+        <style>{`.tooltip-btn:hover .tooltip-btn-bg { opacity: 0.7; }`}</style>
         <filter id='search-glow' x='-50%' y='-50%' width='200%' height='200%'>
           <feGaussianBlur in='SourceGraphic' stdDeviation='2' result='blur' />
           <feMerge>
@@ -633,9 +634,10 @@ export default function ColorWheel({
                 {showBtn && (
                   <g
                     pointerEvents='all'
-                    className='cursor-pointer'
+                    className='tooltip-btn cursor-pointer'
                     onClick={() => (isOwned ? onRequestRemoveOwned(rep) : onToggleOwned(rep.id))}>
                     <rect
+                      className='tooltip-btn-bg'
                       x={boxX + 2}
                       y={boxY + 17}
                       width={boxW - 4}
