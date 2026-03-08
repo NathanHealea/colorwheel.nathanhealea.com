@@ -374,6 +374,9 @@ export default function Home() {
             colorScheme={colorScheme}
             selectedPaint={selectedPaint}
             isSchemeMatching={isSchemeMatching}
+            ownedIds={ownedIds}
+            showOwnedRing={showOwnedRing}
+            ownedFilter={ownedFilter}
           />
 
           {/* Stats overlay */}
