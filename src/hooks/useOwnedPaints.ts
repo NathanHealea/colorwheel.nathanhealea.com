@@ -1,21 +1,19 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 const STORAGE_KEY = 'colorwheel-owned-paints'
 
-export function useOwnedPaints() {
-  const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set())
-
-  // Hydrate from localStorage after mount to avoid SSR mismatch
-  useEffect(() => {
+function loadOwnedIds(): Set<string> {
+  if (typeof window === 'undefined') return new Set()
+  try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) {
-      try {
-        setOwnedIds(new Set(JSON.parse(stored)))
-      } catch {
-        // ignore malformed data
-      }
-    }
-  }, [])
+    return stored ? new Set(JSON.parse(stored)) : new Set()
+  } catch {
+    return new Set()
+  }
+}
+
+export function useOwnedPaints() {
+  const [ownedIds, setOwnedIds] = useState<Set<string>>(loadOwnedIds)
 
   const toggleOwned = useCallback((paintId: string) => {
     setOwnedIds((prev) => {
