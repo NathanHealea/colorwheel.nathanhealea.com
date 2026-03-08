@@ -9,6 +9,7 @@ import ColorWheel from '@/components/ColorWheel';
 import DetailPanel from '@/components/DetailPanel';
 import Sidebar, { useIsDesktop } from '@/components/Sidebar';
 import { brands, paints } from '@/data/index';
+import { useOwnedPaints } from '@/hooks/useOwnedPaints';
 import type { ColorScheme, PaintGroup, ProcessedPaint } from '@/types/paint';
 import { hexToHsl, isMatchingScheme, paintToWheelPosition, WHEEL_RADIUS } from '@/utils/colorUtils';
 
@@ -24,6 +25,9 @@ export default function Home() {
   const [brandFilter, setBrandFilter] = useState<Set<string>>(new Set());
   const [colorScheme, setColorScheme] = useState<ColorScheme>('none');
   const [searchQuery, setSearchQuery] = useState('');
+  const { ownedIds, toggleOwned } = useOwnedPaints();
+  const [showOwnedRing, setShowOwnedRing] = useState(false);
+  const [ownedFilter, setOwnedFilter] = useState(false);
 
   const uniqueColorCount = useMemo(() => new Set(paints.map((p) => p.hex.toLowerCase())).size, []);
 
@@ -347,6 +351,8 @@ export default function Home() {
               matches={isSearching ? searchResults : schemeMatches}
               hasSearch={isSearching}
               scheme={colorScheme}
+              ownedIds={ownedIds}
+              onToggleOwned={toggleOwned}
             />
           </section>
         </Sidebar>

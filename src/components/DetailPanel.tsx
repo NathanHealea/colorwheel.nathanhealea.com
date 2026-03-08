@@ -10,6 +10,8 @@ interface DetailPanelProps {
   matches: ProcessedPaint[]
   hasSearch: boolean
   scheme: string
+  ownedIds: Set<string>
+  onToggleOwned: (paintId: string) => void
 }
 
 function HslSliders({ hex }: { hex: string }) {
@@ -112,6 +114,8 @@ export default function DetailPanel({
   matches,
   hasSearch,
   scheme,
+  ownedIds,
+  onToggleOwned,
 }: DetailPanelProps) {
   if (!group) {
     return (
@@ -191,6 +195,17 @@ export default function DetailPanel({
           </span>
         </div>
         <HslSliders hex={paint.hex} />
+        <button
+          className={`btn btn-sm w-full ${ownedIds.has(paint.id) ? '' : 'btn-outline'}`}
+          style={
+            ownedIds.has(paint.id)
+              ? { backgroundColor: '#10b981', borderColor: '#10b981', color: '#fff' }
+              : { borderColor: '#10b981', color: '#10b981' }
+          }
+          onClick={() => onToggleOwned(paint.id)}
+        >
+          {ownedIds.has(paint.id) ? '✓ Owned' : 'Mark as Owned'}
+        </button>
         <MatchesList
           matches={matches}
           brands={brands}
