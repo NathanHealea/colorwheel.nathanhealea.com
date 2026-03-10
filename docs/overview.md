@@ -56,6 +56,7 @@ Epic Template:
 | 7 | Paint Collection | Personal collection tracking lets users mark owned paints and filter by ownership |
 | 8 | User Authentication | User registration, login, profiles, and role-based authorization via Supabase |
 | 9 | Color Palette | Palette building, projects, tags, and sharing for paint planning |
+| 10 | SEO & Branding | Branding assets, SEO metadata, sitemap, and discoverability |
 
 ---
 
@@ -147,6 +148,16 @@ Epic Template:
 - [ ] [Admin Management](./color-palette/admin-management.md)
 - [ ] [Sharing](./color-palette/sharing.md)
 
+## Epic 10: SEO & Branding
+
+**Goal:** Establish visual branding and implement SEO best practices so the site is discoverable and presents well in search results and social media.
+
+**High-Level Scope:**
+
+- [ ] [Branding Assets](./seo-and-branding/branding-assets.md)
+- [ ] [SEO Metadata](./seo-and-branding/seo-metadata.md)
+- [ ] [Sitemap & Robots](./seo-and-branding/sitemap-and-robots.md)
+
 ---
 
 ## Features (Epics)
@@ -226,3 +237,11 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 | [ ] | [Tags](./color-palette/tags.md) | Feature | Todo |
 | [ ] | [Admin Management](./color-palette/admin-management.md) | Feature | Todo |
 | [ ] | [Sharing](./color-palette/sharing.md) | Feature | Todo |
+
+### SEO & Branding
+
+| | Name | Type | Status |
+|---|------|------|--------|
+| [ ] | [Branding Assets](./seo-and-branding/branding-assets.md) | Feature | Todo |
+| [ ] | [SEO Metadata](./seo-and-branding/seo-metadata.md) | Feature | Todo |
+| [ ] | [Sitemap & Robots](./seo-and-branding/sitemap-and-robots.md) | Feature | Todo |
