@@ -55,6 +55,7 @@ Epic Template:
 | 6 | Color Analysis | Color schemes and search are advanced features that enhance the base experience |
 | 7 | Paint Collection | Personal collection tracking lets users mark owned paints and filter by ownership |
 | 8 | User Authentication | User registration, login, profiles, and role-based authorization via Supabase |
+| 9 | Color Palette | Palette building, projects, tags, and sharing for paint planning |
 
 ---
 
@@ -134,6 +135,18 @@ Epic Template:
 - [ ] [Password Recovery](./user-authentication/password-recovery.md)
 - [ ] [Role-Based Authorization](./user-authentication/role-based-authorization.md)
 
+## Epic 9: Color Palette
+
+**Goal:** Let users build color palettes for projects, track which paints they own vs need to buy, and share palettes and projects with others.
+
+**High-Level Scope:**
+
+- [ ] [Color Palettes](./color-palette/color-palettes.md)
+- [ ] [Projects](./color-palette/projects.md)
+- [ ] [Tags](./color-palette/tags.md)
+- [ ] [Admin Management](./color-palette/admin-management.md)
+- [ ] [Sharing](./color-palette/sharing.md)
+
 ---
 
 ## Features (Epics)
@@ -203,3 +216,13 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 | [ ] | [Social Login (Google & Discord)](./user-authentication/social-login.md) | Feature | Todo |
 | [ ] | [Password Recovery](./user-authentication/password-recovery.md) | Feature | Todo |
 | [ ] | [Role-Based Authorization](./user-authentication/role-based-authorization.md) | Feature | Todo |
+
+### Color Palette
+
+| | Name | Type | Status |
+|---|------|------|--------|
+| [ ] | [Color Palettes](./color-palette/color-palettes.md) | Feature | Todo |
+| [ ] | [Projects](./color-palette/projects.md) | Feature | Todo |
+| [ ] | [Tags](./color-palette/tags.md) | Feature | Todo |
+| [ ] | [Admin Management](./color-palette/admin-management.md) | Feature | Todo |
+| [ ] | [Sharing](./color-palette/sharing.md) | Feature | Todo |
