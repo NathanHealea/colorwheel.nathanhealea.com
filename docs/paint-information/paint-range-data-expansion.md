@@ -2,7 +2,7 @@
 
 **Epic:** Paint Information
 **Type:** Enhancement
-**Status:** In Progress
+**Status:** Completed
 
 ## Summary
 
