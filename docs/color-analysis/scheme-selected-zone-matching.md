@@ -2,7 +2,7 @@
 
 **Epic:** Color Analysis
 **Type:** Bug
-**Status:** Todo
+**Status:** In Progress
 
 ## Summary
 
@@ -10,11 +10,11 @@ When a color scheme is active (complementary, split complementary, or analogous)
 
 ## Acceptance Criteria
 
-- [ ] When any color scheme is active, paints near the selected paint's hue (within the white wedge zone) are included as scheme matches
-- [ ] The selected zone paints appear highlighted (not dimmed) on the color wheel
-- [ ] The selected zone paints appear in the scheme matches list in the detail panel
-- [ ] Analogous scheme continues to work correctly (it already includes nearby hues via `d < 45`)
-- [ ] The existing scheme-specific matching logic remains unchanged for complementary and split complementary target zones
+- [x] When any color scheme is active, paints near the selected paint's hue (within the white wedge zone) are included as scheme matches
+- [x] The selected zone paints appear highlighted (not dimmed) on the color wheel
+- [x] The selected zone paints appear in the scheme matches list in the detail panel
+- [x] Analogous scheme continues to work correctly (it already includes nearby hues via `d < 45`)
+- [x] The existing scheme-specific matching logic remains unchanged for complementary and split complementary target zones
 
 ## Implementation Plan
 
