@@ -209,6 +209,7 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 | [x] | [Split Complementary Zone Matching](./color-analysis/split-complementary-zone-matching.md) | Bug     | Completed |
 | [ ] | [Hue Value Suggestions](./color-analysis/hue-value-suggestions.md)                         | Feature | Todo      |
 | [ ] | [Scheme Selected Zone Matching](./color-analysis/scheme-selected-zone-matching.md)          | Bug     | Todo      |
+| [ ] | [Scheme Brand Filter Interaction](./color-analysis/scheme-brand-filter-interaction.md)      | Bug     | Todo      |
 
 ### Paint Collection
 
