@@ -1,11 +1,10 @@
-import type { Brand } from '@/types/paint';
+import { brands } from '@/data/index'
 
 interface BrandLegendProps {
-  brands: Brand[];
-  paintCounts: Map<string, number>;
+  paintCounts: Map<string, number>
 }
 
-export default function BrandLegend({ brands, paintCounts }: BrandLegendProps) {
+export default function BrandLegend({ paintCounts }: BrandLegendProps) {
   return (
     <div className='flex flex-col gap-2'>
       {brands.map((brand) => (
@@ -17,5 +16,5 @@ export default function BrandLegend({ brands, paintCounts }: BrandLegendProps) {
         </div>
       ))}
     </div>
-  );
+  )
 }
