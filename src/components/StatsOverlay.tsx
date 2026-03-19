@@ -1,22 +1,20 @@
-'use client';
+'use client'
+
+import { useMemo } from 'react'
+
+import { brands, paints } from '@/data/index'
 
 interface StatsOverlayProps {
-  totalPaints: number;
-  totalColors: number;
-  totalBrands: number;
-  filteredPaintCount: number;
-  filteredColorCount: number;
-  isAnyFilterActive: boolean;
+  filteredPaintCount: number
+  filteredColorCount: number
+  isAnyFilterActive: boolean
 }
 
-export default function StatsOverlay({
-  totalPaints,
-  totalColors,
-  totalBrands,
-  filteredPaintCount,
-  filteredColorCount,
-  isAnyFilterActive,
-}: StatsOverlayProps) {
+export default function StatsOverlay({ filteredPaintCount, filteredColorCount, isAnyFilterActive }: StatsOverlayProps) {
+  const totalPaints = paints.length
+  const totalBrands = brands.length
+  const totalColors = useMemo(() => new Set(paints.map((p) => p.hex.toLowerCase())).size, [])
+
   return (
     <div className='absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2'>
       <span className='text-xs text-base-content/40'>
@@ -27,5 +25,5 @@ export default function StatsOverlay({
       </span>
       <span className='text-xs text-base-content/40'>{totalBrands} brands</span>
     </div>
-  );
+  )
 }

@@ -1,11 +1,11 @@
-'use client';
+'use client'
 
-interface BrandRingToggleProps {
-  showBrandRing: boolean;
-  onToggle: () => void;
-}
+import { useUIStore } from '@/stores/useUIStore'
 
-export default function BrandRingToggle({ showBrandRing, onToggle }: BrandRingToggleProps) {
+export default function BrandRingToggle() {
+  const showBrandRing = useUIStore((s) => s.showBrandRing)
+  const toggleBrandRing = useUIStore((s) => s.toggleBrandRing)
+
   return (
     <section>
       <button
@@ -15,9 +15,9 @@ export default function BrandRingToggle({ showBrandRing, onToggle }: BrandRingTo
             ? { backgroundColor: '#6366f1', borderColor: '#6366f1', color: '#fff' }
             : { borderColor: '#6366f1', color: '#6366f1' }
         }
-        onClick={onToggle}>
+        onClick={toggleBrandRing}>
         Brand Ring
       </button>
     </section>
-  );
+  )
 }

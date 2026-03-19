@@ -1,27 +1,26 @@
-import type { Brand, PaintGroup, ProcessedPaint } from '@/types/paint';
-import { hexToHsl } from '@/utils/colorUtils';
+import { brands } from '@/data/index'
+import { useCollectionStore } from '@/stores/useCollectionStore'
+import type { ProcessedPaint } from '@/types/paint'
+import { hexToHsl } from '@/utils/colorUtils'
 
 interface DetailPanelProps {
-  group: PaintGroup | null;
-  selectedPaint: ProcessedPaint | null;
-  onSelectPaint: (paint: ProcessedPaint) => void;
-  onBack: () => void;
-  brands: Brand[];
-  matches: ProcessedPaint[];
-  hasSearch: boolean;
-  scheme: string;
-  ownedIds: Set<string>;
-  onToggleOwned: (paintId: string) => void;
+  group: { key: string; paints: ProcessedPaint[]; rep: ProcessedPaint } | null
+  selectedPaint: ProcessedPaint | null
+  onSelectPaint: (paint: ProcessedPaint) => void
+  onBack: () => void
+  matches: ProcessedPaint[]
+  hasSearch: boolean
+  scheme: string
 }
 
 function HslSliders({ hex }: { hex: string }) {
-  const hsl = hexToHsl(hex);
+  const hsl = hexToHsl(hex)
 
   const sliders = [
     {
       label: 'H',
       value: Math.round(hsl.h),
-      unit: '°',
+      unit: '\u00B0',
       percent: (hsl.h / 360) * 100,
       gradient: 'linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00)',
     },
@@ -39,7 +38,7 @@ function HslSliders({ hex }: { hex: string }) {
       percent: hsl.l * 100,
       gradient: 'linear-gradient(to right, #000, #888, #fff)',
     },
-  ];
+  ]
 
   return (
     <div className='flex flex-col gap-1'>
@@ -59,23 +58,21 @@ function HslSliders({ hex }: { hex: string }) {
         </div>
       ))}
     </div>
-  );
+  )
 }
 
 function MatchesList({
   matches,
-  brands,
   hasSearch,
   scheme,
   onSelectPaint,
 }: {
-  matches: ProcessedPaint[];
-  brands: Brand[];
-  hasSearch: boolean;
-  scheme: string;
-  onSelectPaint: (paint: ProcessedPaint) => void;
+  matches: ProcessedPaint[]
+  hasSearch: boolean
+  scheme: string
+  onSelectPaint: (paint: ProcessedPaint) => void
 }) {
-  if (matches.length === 0) return null;
+  if (matches.length === 0) return null
 
   return (
     <div>
@@ -84,7 +81,7 @@ function MatchesList({
       </h4>
       <div className='flex max-h-44 flex-col gap-0.5 overflow-y-auto'>
         {matches.map((match) => {
-          const matchBrand = brands.find((b) => b.id === match.brand);
+          const matchBrand = brands.find((b) => b.id === match.brand)
           return (
             <button
               key={match.id}
@@ -94,11 +91,11 @@ function MatchesList({
               <span className='truncate text-xs'>{match.name}</span>
               <span className='ml-auto text-[10px] text-base-content/40'>{matchBrand?.icon}</span>
             </button>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }
 
 export default function DetailPanel({
@@ -106,13 +103,13 @@ export default function DetailPanel({
   selectedPaint,
   onSelectPaint,
   onBack,
-  brands,
   matches,
   hasSearch,
   scheme,
-  ownedIds,
-  onToggleOwned,
 }: DetailPanelProps) {
+  const ownedIds = useCollectionStore((s) => s.ownedIds)
+  const toggleOwned = useCollectionStore((s) => s.toggleOwned)
+
   if (!group) {
     return (
       <div className='flex flex-col gap-3'>
@@ -138,23 +135,17 @@ export default function DetailPanel({
         </div>
         <HslSliders hex='#000000' />
         {hasSearch && (
-          <MatchesList
-            matches={matches}
-            brands={brands}
-            hasSearch={hasSearch}
-            scheme={scheme}
-            onSelectPaint={onSelectPaint}
-          />
+          <MatchesList matches={matches} hasSearch={hasSearch} scheme={scheme} onSelectPaint={onSelectPaint} />
         )}
       </div>
-    );
+    )
   }
 
-  const paint = selectedPaint ?? (group.paints.length === 1 ? group.rep : null);
+  const paint = selectedPaint ?? (group.paints.length === 1 ? group.rep : null)
 
   if (paint) {
-    const brand = brands.find((b) => b.id === paint.brand);
-    const hsl = hexToHsl(paint.hex);
+    const brand = brands.find((b) => b.id === paint.brand)
+    const hsl = hexToHsl(paint.hex)
 
     return (
       <div className='flex flex-col gap-3'>
@@ -193,18 +184,12 @@ export default function DetailPanel({
         <HslSliders hex={paint.hex} />
         <button
           className={`btn btn-sm btn-outline w-full ${ownedIds.has(paint.id) ? 'btn-success' : ''}`}
-          onClick={() => onToggleOwned(paint.id)}>
+          onClick={() => toggleOwned(paint.id)}>
           {ownedIds.has(paint.id) ? 'Remove from Collection' : 'Add to Collection'}
         </button>
-        <MatchesList
-          matches={matches}
-          brands={brands}
-          hasSearch={hasSearch}
-          scheme={scheme}
-          onSelectPaint={onSelectPaint}
-        />
+        <MatchesList matches={matches} hasSearch={hasSearch} scheme={scheme} onSelectPaint={onSelectPaint} />
       </div>
-    );
+    )
   }
 
   return (
@@ -217,7 +202,7 @@ export default function DetailPanel({
       </div>
       <div className='flex flex-col gap-1'>
         {group.paints.map((p) => {
-          const brand = brands.find((b) => b.id === p.brand);
+          const brand = brands.find((b) => b.id === p.brand)
           return (
             <button
               key={p.id}
@@ -231,9 +216,9 @@ export default function DetailPanel({
                 </p>
               </div>
             </button>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }
