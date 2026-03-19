@@ -1,45 +1,35 @@
-'use client';
+'use client'
 
-import { useMemo } from 'react';
+import { useMemo } from 'react'
 
-import { brands } from '@/data/index';
-import type { ColorScheme, PaintGroup, ProcessedPaint } from '@/types/paint';
-import { comparePaintGroups } from '@/utils/colorUtils';
-import { isGroupDimmed, isGroupSchemeDimmed, type GroupFilterParams } from '@/utils/filterUtils';
+import { brands } from '@/data/index'
+import { useCollectionStore } from '@/stores/useCollectionStore'
+import { useFilterStore } from '@/stores/useFilterStore'
+import { usePaintStore } from '@/stores/usePaintStore'
+import { useUIStore } from '@/stores/useUIStore'
+import type { PaintGroup, ProcessedPaint } from '@/types/paint'
+import { comparePaintGroups } from '@/utils/colorUtils'
+import { isGroupDimmed, isGroupSchemeDimmed, type GroupFilterParams } from '@/utils/filterUtils'
 
 interface GridViewProps {
-  paintGroups: PaintGroup[];
-  selectedGroup: PaintGroup | null;
-  hoveredGroup: PaintGroup | null;
-  onGroupClick: (group: PaintGroup) => void;
-  onHoverGroup: (group: PaintGroup | null) => void;
-  brandFilter: Set<string>;
-  searchMatchIds: Set<string>;
-  colorScheme: ColorScheme;
-  isSchemeMatching: (paint: ProcessedPaint) => boolean;
-  selectedPaint: ProcessedPaint | null;
-  showBrandRing: boolean;
-  showOwnedRing: boolean;
-  ownedIds: Set<string>;
-  ownedFilter: boolean;
+  paintGroups: PaintGroup[]
+  searchMatchIds: Set<string>
+  isSchemeMatching: (paint: ProcessedPaint) => boolean
 }
 
-export default function GridView({
-  paintGroups,
-  selectedGroup,
-  onGroupClick,
-  onHoverGroup,
-  brandFilter,
-  searchMatchIds,
-  colorScheme,
-  isSchemeMatching,
-  selectedPaint,
-  showBrandRing,
-  showOwnedRing,
-  ownedIds,
-  ownedFilter,
-}: GridViewProps) {
-  const sorted = useMemo(() => [...paintGroups].sort(comparePaintGroups), [paintGroups]);
+export default function GridView({ paintGroups, searchMatchIds, isSchemeMatching }: GridViewProps) {
+  const selectedGroup = usePaintStore((s) => s.selectedGroup)
+  const selectGroup = usePaintStore((s) => s.selectGroup)
+  const setHoveredGroup = usePaintStore((s) => s.setHoveredGroup)
+  const selectedPaint = usePaintStore((s) => s.selectedPaint)
+  const brandFilter = useFilterStore((s) => s.brandFilter)
+  const colorScheme = useFilterStore((s) => s.colorScheme)
+  const ownedFilter = useFilterStore((s) => s.ownedFilter)
+  const showBrandRing = useUIStore((s) => s.showBrandRing)
+  const showOwnedRing = useUIStore((s) => s.showOwnedRing)
+  const ownedIds = useCollectionStore((s) => s.ownedIds)
+
+  const sorted = useMemo(() => [...paintGroups].sort(comparePaintGroups), [paintGroups])
 
   return (
     <div
@@ -53,22 +43,22 @@ export default function GridView({
           isSchemeMatching,
           ownedFilter,
           ownedIds,
-        };
-        const dimmed = isGroupDimmed(group, filterParams);
-        const schemeDimmed = isGroupSchemeDimmed(group, isSchemeMatching);
-        const hasActiveScheme = filterParams.isSchemeActive;
-        const isSelected = selectedGroup?.key === group.key;
-        const isMulti = group.paints.length > 1;
-        const isOwned = group.paints.some((p) => ownedIds.has(p.id));
+        }
+        const dimmed = isGroupDimmed(group, filterParams)
+        const schemeDimmed = isGroupSchemeDimmed(group, isSchemeMatching)
+        const hasActiveScheme = filterParams.isSchemeActive
+        const isSelected = selectedGroup?.key === group.key
+        const isMulti = group.paints.length > 1
+        const isOwned = group.paints.some((p) => ownedIds.has(p.id))
 
-        const brandName = brands.find((b) => b.id === group.rep.brand)?.name ?? group.rep.brand;
+        const brandName = brands.find((b) => b.id === group.rep.brand)?.name ?? group.rep.brand
         const title = isMulti
           ? `${group.paints.length} paints: ${group.paints.map((p) => p.name).join(', ')}\n${group.rep.hex.toUpperCase()}`
-          : `${group.rep.name}\n${brandName}\n${group.rep.hex.toUpperCase()}`;
+          : `${group.rep.name}\n${brandName}\n${group.rep.hex.toUpperCase()}`
 
         const uniqueBrands = showBrandRing
           ? [...new Set(group.paints.map((p) => p.brand))].map((id) => brands.find((b) => b.id === id)).filter(Boolean)
-          : [];
+          : []
 
         return (
           <button
@@ -80,9 +70,9 @@ export default function GridView({
               opacity: dimmed ? (schemeDimmed && hasActiveScheme ? 0.06 : 0.15) : 1,
             }}
             title={title}
-            onClick={() => onGroupClick(group)}
-            onPointerEnter={() => onHoverGroup(group)}
-            onPointerLeave={() => onHoverGroup(null)}>
+            onClick={() => selectGroup(group)}
+            onPointerEnter={() => setHoveredGroup(group)}
+            onPointerLeave={() => setHoveredGroup(null)}>
             {/* Multi-paint count badge */}
             {isMulti && (
               <span className='absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#f0c040] text-[9px] font-extrabold text-black'>
@@ -110,8 +100,8 @@ export default function GridView({
               </span>
             )}
           </button>
-        );
+        )
       })}
     </div>
-  );
+  )
 }
