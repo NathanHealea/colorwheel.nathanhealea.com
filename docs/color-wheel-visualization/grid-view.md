@@ -2,7 +2,7 @@
 
 **Epic:** Color Wheel Visualization
 **Type:** Feature
-**Status:** Todo
+**Status:** In Progress
 
 ## Summary
 
@@ -10,19 +10,19 @@ An alternative grid-based visualization that displays all paints as color swatch
 
 ## Acceptance Criteria
 
-- [ ] Grid view displays all paints as color swatches in a responsive grid layout
-- [ ] Paints are sorted from darkest to lightest using perceived luminance
-- [ ] Paints with identical hex values are sub-sorted by HSL (hue, then saturation) for deterministic ordering
-- [ ] Toggle buttons allow switching between "Wheel" and "Grid" view modes
-- [ ] Toggle buttons are visible and accessible on both desktop and mobile
-- [ ] Clicking a paint swatch in the grid selects it (opens DetailPanel, same as wheel)
-- [ ] Brand filtering, search highlighting, color scheme matching, and owned indicators apply in grid view
-- [ ] Filtered/dimmed paints appear with reduced opacity (consistent with wheel behavior)
-- [ ] Each swatch shows the paint's hex color and displays the paint name on hover or at sufficient size
-- [ ] Multi-paint groups (same hex) show a count badge and expand on click (same as wheel behavior)
-- [ ] Selected paint has a visible highlight/border in the grid
-- [ ] Grid view is responsive — adjusts column count based on viewport width
-- [ ] View mode persists during the session (not reset by filter changes)
+- [x] Grid view displays all paints as color swatches in a responsive grid layout
+- [x] Paints are sorted from darkest to lightest using perceived luminance
+- [x] Paints with identical hex values are sub-sorted by HSL (hue, then saturation) for deterministic ordering
+- [x] Toggle buttons allow switching between "Wheel" and "Grid" view modes
+- [x] Toggle buttons are visible and accessible on both desktop and mobile
+- [x] Clicking a paint swatch in the grid selects it (opens DetailPanel, same as wheel)
+- [x] Brand filtering, search highlighting, color scheme matching, and owned indicators apply in grid view
+- [x] Filtered/dimmed paints appear with reduced opacity (consistent with wheel behavior)
+- [x] Each swatch shows the paint's hex color and displays the paint name on hover or at sufficient size
+- [x] Multi-paint groups (same hex) show a count badge and expand on click (same as wheel behavior)
+- [x] Selected paint has a visible highlight/border in the grid
+- [x] Grid view is responsive — adjusts column count based on viewport width
+- [x] View mode persists during the session (not reset by filter changes)
 
 ## Design Notes
 
