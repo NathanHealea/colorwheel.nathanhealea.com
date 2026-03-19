@@ -199,6 +199,7 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 | [ ] | [Iconographic Sidebar Navigation](./ui-and-layout/iconographic-sidebar.md)            | Refactor | Todo      |
 | [ ] | [Browser History Navigation](./ui-and-layout/browser-history-navigation.md)           | Feature  | Todo      |
 | [ ] | [State Management Refactor](./ui-and-layout/state-management-refactor.md)             | Refactor | Todo      |
+| [ ] | [Extract Filter Modules](./ui-and-layout/extract-filter-modules.md)                   | Refactor | Todo      |
 
 ### Brand Features
 
