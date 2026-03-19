@@ -2,7 +2,7 @@
 
 **Epic:** UI & Layout
 **Type:** Refactor
-**Status:** Todo
+**Status:** Done
 
 ## Summary
 
@@ -10,17 +10,17 @@ Extract all filter-related logic from `page.tsx` into dedicated modules: utility
 
 ## Acceptance Criteria
 
-- [ ] Filter utility functions (`matchesBrand`, `matchesSearch`, `matchesScheme`, `matchesOwned`, `getFilteredPaintCount`, `getFilteredColorCount`) are extracted to `src/utils/filterUtils.ts`
-- [ ] `useFilterState` hook manages all filter state (`brandFilter`, `searchQuery`, `colorScheme`, `ownedFilter`) with handlers
-- [ ] `useDerivedFilters` hook computes derived filter data (`searchResults`, `searchMatchIds`, `schemeMatches`, `isSchemeMatching`, filtered counts, `isAnyFilterActive`)
-- [ ] `BrandFilterPanel` component renders brand filter buttons with toggle logic
-- [ ] `ColorSchemePanel` component renders color scheme selector buttons with hint text
-- [ ] `BrandRingToggle` component renders the brand ring toggle button
-- [ ] `SearchBar` component encapsulates the search input with clear button
-- [ ] `StatsOverlay` component renders the filtered/total paint and color counts
-- [ ] `page.tsx` imports these modules instead of containing inline filter logic
-- [ ] All existing filter behavior works identically — no user-facing changes
-- [ ] Build and lint pass with no new warnings
+- [x] Filter utility functions (`matchesBrand`, `matchesSearch`, `matchesScheme`, `matchesOwned`, `getFilteredPaintCount`, `getFilteredColorCount`) are extracted to `src/utils/filterUtils.ts`
+- [x] `useFilterState` hook manages all filter state (`brandFilter`, `searchQuery`, `colorScheme`, `ownedFilter`) with handlers
+- [x] `useDerivedFilters` hook computes derived filter data (`searchResults`, `searchMatchIds`, `schemeMatches`, `isSchemeMatching`, filtered counts, `isAnyFilterActive`)
+- [x] `BrandFilterPanel` component renders brand filter buttons with toggle logic
+- [x] `ColorSchemePanel` component renders color scheme selector buttons with hint text
+- [x] `BrandRingToggle` component renders the brand ring toggle button
+- [x] `SearchBar` component encapsulates the search input with clear button
+- [x] `StatsOverlay` component renders the filtered/total paint and color counts
+- [x] `page.tsx` imports these modules instead of containing inline filter logic
+- [x] All existing filter behavior works identically — no user-facing changes
+- [x] Build and lint pass with no new warnings
 
 ## Design Notes
 
