@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
 interface StatsOverlayProps {
-  totalPaints: number
-  totalColors: number
-  totalBrands: number
-  filteredPaintCount: number
-  filteredColorCount: number
-  isAnyFilterActive: boolean
+  totalPaints: number;
+  totalColors: number;
+  totalBrands: number;
+  filteredPaintCount: number;
+  filteredColorCount: number;
+  isAnyFilterActive: boolean;
 }
 
 export default function StatsOverlay({
@@ -27,5 +27,5 @@ export default function StatsOverlay({
       </span>
       <span className='text-xs text-base-content/40'>{totalBrands} brands</span>
     </div>
-  )
+  );
 }

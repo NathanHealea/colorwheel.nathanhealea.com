@@ -1,66 +1,66 @@
-'use client'
+'use client';
 
-import { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react';
 
-import type { ColorScheme } from '@/types/paint'
+import type { ColorScheme } from '@/types/paint';
 
 export interface UseFilterStateOptions {
-  onSelectionReset?: () => void
+  onSelectionReset?: () => void;
 }
 
 export function useFilterState(options: UseFilterStateOptions = {}) {
-  const [brandFilter, setBrandFilter] = useState<Set<string>>(new Set())
-  const [colorScheme, setColorScheme] = useState<ColorScheme>('none')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [ownedFilter, setOwnedFilter] = useState(false)
-  const [showBrandRing, setShowBrandRing] = useState(false)
-  const [showOwnedRing, setShowOwnedRing] = useState(false)
+  const [brandFilter, setBrandFilter] = useState<Set<string>>(new Set());
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('none');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [ownedFilter, setOwnedFilter] = useState(false);
+  const [showBrandRing, setShowBrandRing] = useState(false);
+  const [showOwnedRing, setShowOwnedRing] = useState(false);
 
-  const isFiltered = brandFilter.size > 0
-  const isSearching = searchQuery.trim().length > 0
+  const isFiltered = brandFilter.size > 0;
+  const isSearching = searchQuery.trim().length > 0;
 
   const handleBrandFilter = useCallback(
     (id: string) => {
       setBrandFilter((prev) => {
-        if (id === 'all') return new Set()
-        const next = new Set(prev)
+        if (id === 'all') return new Set();
+        const next = new Set(prev);
         if (next.has(id)) {
-          next.delete(id)
+          next.delete(id);
         } else {
-          next.add(id)
+          next.add(id);
         }
-        return next
-      })
-      options.onSelectionReset?.()
+        return next;
+      });
+      options.onSelectionReset?.();
     },
     [options],
-  )
+  );
 
   const clearSearch = useCallback(() => {
-    setSearchQuery('')
-    options.onSelectionReset?.()
-  }, [options])
+    setSearchQuery('');
+    options.onSelectionReset?.();
+  }, [options]);
 
   const handleSearchChange = useCallback(
     (query: string) => {
-      setSearchQuery(query)
-      options.onSelectionReset?.()
+      setSearchQuery(query);
+      options.onSelectionReset?.();
     },
     [options],
-  )
+  );
 
   const toggleOwnedFilter = useCallback(() => {
-    setOwnedFilter((prev) => !prev)
-    options.onSelectionReset?.()
-  }, [options])
+    setOwnedFilter((prev) => !prev);
+    options.onSelectionReset?.();
+  }, [options]);
 
   const toggleBrandRing = useCallback(() => {
-    setShowBrandRing((prev) => !prev)
-  }, [])
+    setShowBrandRing((prev) => !prev);
+  }, []);
 
   const toggleOwnedRing = useCallback(() => {
-    setShowOwnedRing((prev) => !prev)
-  }, [])
+    setShowOwnedRing((prev) => !prev);
+  }, []);
 
   return {
     // State
@@ -81,5 +81,5 @@ export function useFilterState(options: UseFilterStateOptions = {}) {
     // Derived flags
     isFiltered,
     isSearching,
-  }
+  };
 }

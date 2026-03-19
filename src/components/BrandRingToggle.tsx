@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
 interface BrandRingToggleProps {
-  showBrandRing: boolean
-  onToggle: () => void
+  showBrandRing: boolean;
+  onToggle: () => void;
 }
 
 export default function BrandRingToggle({ showBrandRing, onToggle }: BrandRingToggleProps) {
@@ -19,5 +19,5 @@ export default function BrandRingToggle({ showBrandRing, onToggle }: BrandRingTo
         Brand Ring
       </button>
     </section>
-  )
+  );
 }

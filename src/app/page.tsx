@@ -1,50 +1,50 @@
-'use client'
+'use client';
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react';
 
-import { Bars3Icon } from '@heroicons/react/24/outline'
+import { Bars3Icon } from '@heroicons/react/24/outline';
 
-import BrandFilterPanel from '@/components/BrandFilterPanel'
-import BrandLegend from '@/components/BrandLegend'
-import BrandRingToggle from '@/components/BrandRingToggle'
-import CollectionPanel from '@/components/CollectionPanel'
-import ColorSchemePanel from '@/components/ColorSchemePanel'
-import ColorWheel from '@/components/ColorWheel'
-import DetailPanel from '@/components/DetailPanel'
-import GridView from '@/components/GridView'
-import SearchBar from '@/components/SearchBar'
-import Sidebar, { useIsDesktop } from '@/components/Sidebar'
-import StatsOverlay from '@/components/StatsOverlay'
-import { brands, paints } from '@/data/index'
-import { useDerivedFilters } from '@/hooks/useDerivedFilters'
-import { useFilterState } from '@/hooks/useFilterState'
-import { useOwnedPaints } from '@/hooks/useOwnedPaints'
-import type { PaintGroup, ProcessedPaint } from '@/types/paint'
-import { hexToHsl, paintToWheelPosition, WHEEL_RADIUS } from '@/utils/colorUtils'
+import BrandFilterPanel from '@/components/BrandFilterPanel';
+import BrandLegend from '@/components/BrandLegend';
+import BrandRingToggle from '@/components/BrandRingToggle';
+import CollectionPanel from '@/components/CollectionPanel';
+import ColorSchemePanel from '@/components/ColorSchemePanel';
+import ColorWheel from '@/components/ColorWheel';
+import DetailPanel from '@/components/DetailPanel';
+import GridView from '@/components/GridView';
+import SearchBar from '@/components/SearchBar';
+import Sidebar, { useIsDesktop } from '@/components/Sidebar';
+import StatsOverlay from '@/components/StatsOverlay';
+import { brands, paints } from '@/data/index';
+import { useDerivedFilters } from '@/hooks/useDerivedFilters';
+import { useFilterState } from '@/hooks/useFilterState';
+import { useOwnedPaints } from '@/hooks/useOwnedPaints';
+import type { PaintGroup, ProcessedPaint } from '@/types/paint';
+import { hexToHsl, paintToWheelPosition, WHEEL_RADIUS } from '@/utils/colorUtils';
 
-type SidebarTab = 'filters' | 'collection'
-type SidebarState = SidebarTab | 'closed' | null // null = derive from screen size
+type SidebarTab = 'filters' | 'collection';
+type SidebarState = SidebarTab | 'closed' | null; // null = derive from screen size
 
 export default function Home() {
-  const [zoom, setZoom] = useState(1)
-  const [pan, setPan] = useState({ x: 0, y: 0 })
-  const isDesktop = useIsDesktop()
-  const [sidebarState, setSidebarState] = useState<SidebarState>(null)
-  const [lastTab, setLastTab] = useState<SidebarTab>('filters')
-  const [selectedGroup, setSelectedGroup] = useState<PaintGroup | null>(null)
-  const [selectedPaint, setSelectedPaint] = useState<ProcessedPaint | null>(null)
-  const [hoveredGroup, setHoveredGroup] = useState<PaintGroup | null>(null)
-  const [paintToRemove, setPaintToRemove] = useState<ProcessedPaint | null>(null)
-  const [viewMode, setViewMode] = useState<'wheel' | 'grid'>('wheel')
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const isDesktop = useIsDesktop();
+  const [sidebarState, setSidebarState] = useState<SidebarState>(null);
+  const [lastTab, setLastTab] = useState<SidebarTab>('filters');
+  const [selectedGroup, setSelectedGroup] = useState<PaintGroup | null>(null);
+  const [selectedPaint, setSelectedPaint] = useState<ProcessedPaint | null>(null);
+  const [hoveredGroup, setHoveredGroup] = useState<PaintGroup | null>(null);
+  const [paintToRemove, setPaintToRemove] = useState<ProcessedPaint | null>(null);
+  const [viewMode, setViewMode] = useState<'wheel' | 'grid'>('wheel');
 
-  const { ownedIds, toggleOwned } = useOwnedPaints()
+  const { ownedIds, toggleOwned } = useOwnedPaints();
 
   const resetSelection = useCallback(() => {
-    setSelectedGroup(null)
-    setSelectedPaint(null)
-  }, [])
+    setSelectedGroup(null);
+    setSelectedPaint(null);
+  }, []);
 
-  const filterState = useFilterState({ onSelectionReset: resetSelection })
+  const filterState = useFilterState({ onSelectionReset: resetSelection });
   const {
     brandFilter,
     colorScheme,
@@ -61,73 +61,73 @@ export default function Home() {
     toggleOwnedRing,
     isFiltered,
     isSearching,
-  } = filterState
+  } = filterState;
 
-  const uniqueColorCount = useMemo(() => new Set(paints.map((p) => p.hex.toLowerCase())).size, [])
+  const uniqueColorCount = useMemo(() => new Set(paints.map((p) => p.hex.toLowerCase())).size, []);
 
   // null = derive from screen size, 'closed' = explicitly closed
   const effectiveTab: SidebarTab | null =
-    sidebarState === null ? (isDesktop ? 'filters' : null) : sidebarState === 'closed' ? null : sidebarState
+    sidebarState === null ? (isDesktop ? 'filters' : null) : sidebarState === 'closed' ? null : sidebarState;
 
   const handleTabToggle = useCallback(
     (tab: SidebarTab) => {
       setSidebarState((prev) => {
-        const current = prev === null ? (isDesktop ? 'filters' : null) : prev === 'closed' ? null : prev
-        if (current === tab) return 'closed'
-        setLastTab(tab)
-        return tab
-      })
+        const current = prev === null ? (isDesktop ? 'filters' : null) : prev === 'closed' ? null : prev;
+        if (current === tab) return 'closed';
+        setLastTab(tab);
+        return tab;
+      });
     },
     [isDesktop],
-  )
+  );
 
   const handleMenuToggle = useCallback(() => {
     setSidebarState((prev) => {
-      const current = prev === null ? (isDesktop ? 'filters' : null) : prev === 'closed' ? null : prev
-      if (current !== null) return 'closed'
-      const reopenTab = lastTab
-      return reopenTab
-    })
-  }, [isDesktop, lastTab])
+      const current = prev === null ? (isDesktop ? 'filters' : null) : prev === 'closed' ? null : prev;
+      if (current !== null) return 'closed';
+      const reopenTab = lastTab;
+      return reopenTab;
+    });
+  }, [isDesktop, lastTab]);
 
   const processedPaints = useMemo<ProcessedPaint[]>(
     () =>
       paints.map((paint) => {
-        const hsl = hexToHsl(paint.hex)
-        const pos = paintToWheelPosition(hsl.h, hsl.l, WHEEL_RADIUS)
+        const hsl = hexToHsl(paint.hex);
+        const pos = paintToWheelPosition(hsl.h, hsl.l, WHEEL_RADIUS);
         return {
           ...paint,
           id: `${paint.brand}-${paint.name}-${paint.type}`.toLowerCase().replace(/\s+/g, '-'),
           x: pos.x,
           y: pos.y,
-        }
+        };
       }),
     [],
-  )
+  );
 
   const brandPaintCounts = useMemo(() => {
-    const counts = new Map<string, number>()
-    brands.forEach((b) => counts.set(b.id, 0))
+    const counts = new Map<string, number>();
+    brands.forEach((b) => counts.set(b.id, 0));
     processedPaints.forEach((p) => {
-      counts.set(p.brand, (counts.get(p.brand) ?? 0) + 1)
-    })
-    return counts
-  }, [processedPaints])
+      counts.set(p.brand, (counts.get(p.brand) ?? 0) + 1);
+    });
+    return counts;
+  }, [processedPaints]);
 
   const paintGroups = useMemo<PaintGroup[]>(() => {
-    const map = new Map<string, ProcessedPaint[]>()
+    const map = new Map<string, ProcessedPaint[]>();
     processedPaints.forEach((p) => {
-      const key = p.hex.toLowerCase()
-      const list = map.get(key) ?? []
-      list.push(p)
-      map.set(key, list)
-    })
+      const key = p.hex.toLowerCase();
+      const list = map.get(key) ?? [];
+      list.push(p);
+      map.set(key, list);
+    });
     return Array.from(map.entries()).map(([key, paints]) => ({
       key,
       paints,
       rep: paints[0],
-    }))
-  }, [processedPaints])
+    }));
+  }, [processedPaints]);
 
   const {
     searchResults,
@@ -149,53 +149,53 @@ export default function Home() {
     ownedIds,
     isFiltered,
     isSearching,
-  })
+  });
 
   const handleReset = useCallback(() => {
-    setZoom(1)
-    setPan({ x: 0, y: 0 })
-  }, [])
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+  }, []);
 
   const handleGroupClick = useCallback(
     (group: PaintGroup | null) => {
       if (!group) {
-        setSelectedGroup(null)
-        setSelectedPaint(null)
-        setColorScheme('none')
-        return
+        setSelectedGroup(null);
+        setSelectedPaint(null);
+        setColorScheme('none');
+        return;
       }
       if (selectedGroup?.key === group.key) {
-        setSelectedGroup(null)
-        setSelectedPaint(null)
-        setColorScheme('none')
+        setSelectedGroup(null);
+        setSelectedPaint(null);
+        setColorScheme('none');
       } else if (group.paints.length === 1) {
-        setSelectedGroup(group)
-        setSelectedPaint(group.rep)
+        setSelectedGroup(group);
+        setSelectedPaint(group.rep);
       } else {
-        setSelectedGroup(group)
-        setSelectedPaint(null)
+        setSelectedGroup(group);
+        setSelectedPaint(null);
       }
     },
     [selectedGroup, setColorScheme],
-  )
+  );
 
   const handleSelectPaintFromGroup = useCallback((paint: ProcessedPaint, group: PaintGroup) => {
-    setSelectedGroup(group)
-    setSelectedPaint(paint)
-  }, [])
+    setSelectedGroup(group);
+    setSelectedPaint(paint);
+  }, []);
 
   const handleSelectSearchResult = useCallback(
     (paint: ProcessedPaint) => {
-      const group = paintGroups.find((g) => g.paints.some((p) => p.id === paint.id))
+      const group = paintGroups.find((g) => g.paints.some((p) => p.id === paint.id));
       if (group) {
-        setSelectedGroup(group)
-        setSelectedPaint(paint)
+        setSelectedGroup(group);
+        setSelectedPaint(paint);
       }
     },
     [paintGroups],
-  )
+  );
 
-  const displayGroup = hoveredGroup ?? selectedGroup
+  const displayGroup = hoveredGroup ?? selectedGroup;
 
   return (
     <div className='flex h-screen w-screen flex-col overflow-hidden'>
@@ -264,11 +264,7 @@ export default function Home() {
           <div className='divider' />
 
           {/* Color Scheme Mode */}
-          <ColorSchemePanel
-            colorScheme={colorScheme}
-            onSchemeChange={setColorScheme}
-            selectedPaint={selectedPaint}
-          />
+          <ColorSchemePanel colorScheme={colorScheme} onSchemeChange={setColorScheme} selectedPaint={selectedPaint} />
 
           <div className='divider' />
 
@@ -279,8 +275,8 @@ export default function Home() {
               group={displayGroup}
               selectedPaint={hoveredGroup ? null : selectedPaint}
               onSelectPaint={(paint) => {
-                if (isSearching) handleSelectSearchResult(paint)
-                else if (displayGroup) handleSelectPaintFromGroup(paint, displayGroup)
+                if (isSearching) handleSelectSearchResult(paint);
+                else if (displayGroup) handleSelectPaintFromGroup(paint, displayGroup);
               }}
               onBack={() => setSelectedPaint(null)}
               brands={brands}
@@ -300,8 +296,8 @@ export default function Home() {
             ownedIds={ownedIds}
             onToggleOwned={toggleOwned}
             onSelectPaint={(paint) => {
-              handleSelectSearchResult(paint)
-              if (!isDesktop) setSidebarState('closed')
+              handleSelectSearchResult(paint);
+              if (!isDesktop) setSidebarState('closed');
             }}
             brands={brands}
             showOwnedRing={showOwnedRing}
@@ -411,8 +407,8 @@ export default function Home() {
               <button
                 className='btn btn-error'
                 onClick={() => {
-                  toggleOwned(paintToRemove.id)
-                  setPaintToRemove(null)
+                  toggleOwned(paintToRemove.id);
+                  setPaintToRemove(null);
                 }}>
                 Remove
               </button>
@@ -424,5 +420,5 @@ export default function Home() {
         </dialog>
       )}
     </div>
-  )
+  );
 }

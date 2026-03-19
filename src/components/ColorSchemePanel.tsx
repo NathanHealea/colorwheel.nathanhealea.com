@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import type { ColorScheme, ProcessedPaint } from '@/types/paint'
+import type { ColorScheme, ProcessedPaint } from '@/types/paint';
 
 const SCHEME_OPTIONS = [
   { label: 'No Scheme', value: 'none', color: '#6b7280', contentColor: '#fff' },
   { label: 'Complementary', value: 'complementary', color: '#38bdf8', contentColor: '#000' },
   { label: 'Split Complementary', value: 'split', color: '#facc15', contentColor: '#000' },
   { label: 'Analogous', value: 'analogous', color: '#4ade80', contentColor: '#000' },
-] as const
+] as const;
 
 interface ColorSchemePanelProps {
-  colorScheme: ColorScheme
-  onSchemeChange: (scheme: ColorScheme) => void
-  selectedPaint: ProcessedPaint | null
+  colorScheme: ColorScheme;
+  onSchemeChange: (scheme: ColorScheme) => void;
+  selectedPaint: ProcessedPaint | null;
 }
 
 export default function ColorSchemePanel({ colorScheme, onSchemeChange, selectedPaint }: ColorSchemePanelProps) {
@@ -38,5 +38,5 @@ export default function ColorSchemePanel({ colorScheme, onSchemeChange, selected
         <p className='mt-1 text-xs text-base-content/40'>Click a paint to see its {colorScheme} colors</p>
       )}
     </section>
-  )
+  );
 }

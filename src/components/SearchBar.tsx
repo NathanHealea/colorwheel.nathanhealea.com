@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 interface SearchBarProps {
-  searchQuery: string
-  onSearchChange: (query: string) => void
-  onClear: () => void
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+  onClear: () => void;
 }
 
 export default function SearchBar({ searchQuery, onSearchChange, onClear }: SearchBarProps) {
@@ -24,5 +24,5 @@ export default function SearchBar({ searchQuery, onSearchChange, onClear }: Sear
         </button>
       )}
     </label>
-  )
+  );
 }

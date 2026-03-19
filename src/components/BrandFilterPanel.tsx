@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import type { Brand } from '@/types/paint'
+import type { Brand } from '@/types/paint';
 
 interface BrandFilterPanelProps {
-  brands: Brand[]
-  brandFilter: Set<string>
-  isFiltered: boolean
-  onBrandFilter: (id: string) => void
+  brands: Brand[];
+  brandFilter: Set<string>;
+  isFiltered: boolean;
+  onBrandFilter: (id: string) => void;
 }
 
 export default function BrandFilterPanel({ brands, brandFilter, isFiltered, onBrandFilter }: BrandFilterPanelProps) {
@@ -34,5 +34,5 @@ export default function BrandFilterPanel({ brands, brandFilter, isFiltered, onBr
         ))}
       </div>
     </section>
-  )
+  );
 }
