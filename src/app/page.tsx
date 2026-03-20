@@ -12,6 +12,7 @@ import ColorSchemePanel from '@/components/ColorSchemePanel'
 import ColorWheel from '@/components/ColorWheel'
 import DetailPanel from '@/components/DetailPanel'
 import GridView from '@/components/GridView'
+import ListView from '@/components/ListView'
 import SearchBar from '@/components/SearchBar'
 import Sidebar, { useIsDesktop } from '@/components/Sidebar'
 import StatsOverlay from '@/components/StatsOverlay'
@@ -177,13 +178,22 @@ export default function Home() {
                 onClick={() => setViewMode('grid')}>
                 Grid
               </button>
+              <button
+                className={`join-item btn btn-sm ${viewMode === 'list' ? 'btn-active' : ''}`}
+                onClick={() => setViewMode('list')}>
+                List
+              </button>
             </div>
           </div>
 
-          {viewMode === 'wheel' ? (
+          {viewMode === 'wheel' && (
             <ColorWheel paintGroups={paintGroups} searchMatchIds={searchMatchIds} isSchemeMatching={isSchemeMatching} />
-          ) : (
+          )}
+          {viewMode === 'grid' && (
             <GridView paintGroups={paintGroups} searchMatchIds={searchMatchIds} isSchemeMatching={isSchemeMatching} />
+          )}
+          {viewMode === 'list' && (
+            <ListView paintGroups={paintGroups} searchMatchIds={searchMatchIds} isSchemeMatching={isSchemeMatching} />
           )}
 
           {/* Stats overlay */}
