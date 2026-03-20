@@ -123,7 +123,10 @@ export default function ListView({ paintGroups, searchMatchIds, isSchemeMatching
                       } ${isPaintSearchMatch && !dimmed ? 'bg-primary/10' : ''}`}
                       role="option"
                       aria-selected={selectedPaint?.id === paint.id}
-                      onClick={() => usePaintStore.getState().selectPaint(paint, group)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        usePaintStore.getState().selectPaint(paint, group)
+                      }}
                       onPointerEnter={() => setHoveredGroup(group)}
                       onPointerLeave={() => setHoveredGroup(null)}>
                       {/* Smaller swatch */}

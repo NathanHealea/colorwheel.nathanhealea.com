@@ -140,7 +140,7 @@ export default function Home() {
             <h3 className='mb-2 text-xs font-semibold uppercase text-base-content/60'>Color Details</h3>
             <DetailPanel
               group={displayGroup}
-              selectedPaint={hoveredGroup ? null : selectedPaint}
+              selectedPaint={hoveredGroup && hoveredGroup.key !== selectedGroup?.key ? null : selectedPaint}
               onSelectPaint={(paint) => {
                 if (isSearching) selectSearchResult(paint, paintGroups)
                 else if (displayGroup) selectPaint(paint, displayGroup)
