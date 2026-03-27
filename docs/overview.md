@@ -144,6 +144,7 @@ Epic Template:
 
 **High-Level Scope:**
 
+- [ ] [Local Color Palettes](./color-palette/local-color-palettes.md)
 - [ ] [Color Palettes](./color-palette/color-palettes.md)
 - [ ] [Projects](./color-palette/projects.md)
 - [ ] [Tags](./color-palette/tags.md)
@@ -226,3 +227,14 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 |---|------|------|--------|
 | [x] | [Owned Paint Collection](./paint-collection/owned-paint-collection.md) | Feature | Completed |
 | [ ] | [Owned Collection UX Improvements](./paint-collection/owned-collection-ux-improvements.md) | Enhancement | Todo |
+
+### Color Palette
+
+| | Name | Type | Status |
+|---|------|------|--------|
+| [ ] | [Local Color Palettes](./color-palette/local-color-palettes.md) | Feature | Todo |
+| [ ] | [Color Palettes](./color-palette/color-palettes.md) | Feature | Todo |
+| [ ] | [Projects](./color-palette/projects.md) | Feature | Todo |
+| [ ] | [Tags](./color-palette/tags.md) | Feature | Todo |
+| [ ] | [Admin Management](./color-palette/admin-management.md) | Feature | Todo |
+| [ ] | [Sharing](./color-palette/sharing.md) | Feature | Todo |
