@@ -49,13 +49,15 @@ export default function UserMenu({ displayName, avatarUrl, signOutAction, isAdmi
         <div className='divider my-1' />
 
         <MenuItem>
-          <form action={signOutAction}>
-            <button
-              type='submit'
-              className={clsx('btn btn-ghost btn-sm btn-block justify-start', 'data-[focus]:bg-base-300')}>
-              Sign Out
-            </button>
-          </form>
+          <button
+            type='button'
+            onClick={async () => {
+              await signOutAction()
+              window.location.href = '/sign-in'
+            }}
+            className={clsx('btn btn-ghost btn-sm btn-block justify-start', 'data-[focus]:bg-base-300')}>
+            Sign Out
+          </button>
         </MenuItem>
       </MenuItems>
     </Menu>
