@@ -2,7 +2,7 @@
 
 **Epic:** User Authentication
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 
 ## Summary
 
@@ -10,12 +10,12 @@ Configure Supabase client libraries and middleware for cookie-based auth session
 
 ## Acceptance Criteria
 
-- [ ] `@supabase/supabase-js` and `@supabase/ssr` packages are installed
-- [ ] Browser Supabase client exists for client components
-- [ ] Server Supabase client exists for server components and server actions (cookie-based)
-- [ ] Middleware refreshes auth session on every request via `supabase.auth.getUser()`
-- [ ] Environment variables `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` are referenced
-- [ ] Auth state persists across page refreshes (SSR-compatible via `@supabase/ssr`)
+- [x] `@supabase/supabase-js` and `@supabase/ssr` packages are installed
+- [x] Browser Supabase client exists for client components
+- [x] Server Supabase client exists for server components and server actions (cookie-based)
+- [x] Middleware refreshes auth session on every request via `supabase.auth.getUser()`
+- [x] Environment variables `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` are referenced
+- [x] Auth state persists across page refreshes (SSR-compatible via `@supabase/ssr`)
 
 ## Key Files
 
