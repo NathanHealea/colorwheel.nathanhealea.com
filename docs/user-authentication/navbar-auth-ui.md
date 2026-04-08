@@ -2,7 +2,7 @@
 
 **Epic:** User Authentication
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 
 ## Summary
 
@@ -10,12 +10,12 @@ Add authentication-aware UI elements to the app's navigation. Show sign-in/sign-
 
 ## Acceptance Criteria
 
-- [ ] Unauthenticated users see "Sign In" and "Sign Up" links in the navigation
-- [ ] Authenticated users see their display name or avatar in the navigation
-- [ ] Clicking the user menu reveals options: Profile, Sign Out
-- [ ] Admin users see an "Admin" link in the navigation or user menu
-- [ ] The navbar updates reactively after sign-in/sign-out without a full page reload
-- [ ] Mobile navigation includes the same auth-aware elements
+- [x] Unauthenticated users see "Sign In" and "Sign Up" links in the navigation
+- [x] Authenticated users see their display name or avatar in the navigation
+- [x] Clicking the user menu reveals options: Profile, Sign Out
+- [x] Admin users see an "Admin" link in the navigation or user menu
+- [x] The navbar updates reactively after sign-in/sign-out without a full page reload
+- [x] Mobile navigation includes the same auth-aware elements
 
 ## Key Files
 
