@@ -130,7 +130,7 @@ Epic Template:
 
 **High-Level Scope:**
 
-- [ ] [Supabase Setup](./user-authentication/supabase-setup.md)
+- [x] [Supabase Setup](./user-authentication/supabase-setup.md)
 - [ ] [Email Authentication Pages](./user-authentication/email-auth-pages.md)
 - [ ] [User Profiles](./user-authentication/user-profiles.md)
 - [ ] [Navbar Auth UI](./user-authentication/navbar-auth-ui.md)
@@ -176,6 +176,7 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 | [ ] | [Grouped Paint Details](./paint-information/grouped-paint-details.md)           | Refactor    | Todo      |
 | [ ] | [Paint Data Migration](./paint-information/paint-data-migration.md)             | Enhancement | Todo      |
 | [x] | [Paint Range Data Expansion](./paint-information/paint-range-data-expansion.md) | Enhancement | Completed |
+| [ ] | [AK Interactive Paint Data](./paint-information/ak-interactive-paint-data.md) | Feature | Todo |
 
 ### Color Wheel Visualization
 
@@ -228,6 +229,18 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 |---|------|------|--------|
 | [x] | [Owned Paint Collection](./paint-collection/owned-paint-collection.md) | Feature | Completed |
 | [ ] | [Owned Collection UX Improvements](./paint-collection/owned-collection-ux-improvements.md) | Enhancement | Todo |
+
+### User Authentication
+
+|     | Name                                                                                  | Type    | Status |
+| --- | ------------------------------------------------------------------------------------- | ------- | ------ |
+| [x] | [Supabase Setup](./user-authentication/supabase-setup.md)                             | Feature | Done   |
+| [ ] | [Email Authentication Pages](./user-authentication/email-auth-pages.md)               | Feature | Todo   |
+| [ ] | [User Profiles](./user-authentication/user-profiles.md)                               | Feature | Todo   |
+| [ ] | [Navbar Auth UI](./user-authentication/navbar-auth-ui.md)                             | Feature | Todo   |
+| [ ] | [Social Login (Google & Discord)](./user-authentication/social-login.md)              | Feature | Todo   |
+| [ ] | [Password Recovery](./user-authentication/password-recovery.md)                       | Feature | Todo   |
+| [ ] | [Role-Based Authorization](./user-authentication/role-based-authorization.md)         | Feature | Todo   |
 
 ### Recipe
 

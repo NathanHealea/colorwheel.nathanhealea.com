@@ -6,67 +6,78 @@
 
 ## Summary
 
-Create sign-up and sign-in pages with email/password authentication using Supabase Auth. Includes server actions for form handling, email confirmation flow, and auth callback route.
+Allow users to create an account and log in using email and password through Supabase Auth.
 
 ## Acceptance Criteria
 
-- [ ] Sign-up page at `/sign-up` with email and password fields
-- [ ] Sign-in page at `/sign-in` with email and password fields
-- [ ] Server actions for `signUp`, `signIn`, and `signOut` in `(auth)/actions.ts`
-- [ ] Auth callback route at `/auth/callback` handles OAuth and PKCE code exchange
-- [ ] Auth confirm route at `/auth/confirm` handles email confirmation links
-- [ ] Email confirmation required for new sign-ups
-- [ ] Error and success messages displayed on forms
-- [ ] Minimum password length of 6 characters enforced
-- [ ] Redirect to home page after successful sign-in
-- [ ] Links between sign-up and sign-in pages
+- [ ] Users can sign up with email and password
+- [ ] Users can sign in with existing credentials
+- [ ] Users can sign out
+- [ ] Auth state persists across page refreshes (SSR-compatible via `@supabase/ssr`)
+- [ ] Error messages display for invalid credentials or duplicate accounts
 
-## Implementation Plan
+## Routes
 
-### Step 1: Create auth route group
+- `/sign-up` — Registration page
+- `/sign-in` — Login page
+- `/auth/callback` — Supabase auth callback handler for confirming email/session exchange
 
-Create `src/app/(auth)/` route group for auth pages. This keeps auth pages in a separate layout without the main app chrome.
+## Key Files
 
-### Step 2: Create server actions
+| Action | File                              | Description                                       |
+| ------ | --------------------------------- | ------------------------------------------------- |
+| Create | `app/(auth)/layout.tsx`           | Minimal centered layout for auth pages            |
+| Create | `app/(auth)/sign-up/page.tsx`     | Sign up form                                      |
+| Create | `app/(auth)/sign-in/page.tsx`     | Sign in form                                      |
+| Create | `app/(auth)/actions.ts`           | Server actions for `signUp`, `signIn`, `signOut`  |
+| Create | `app/auth/callback/route.ts`      | Auth callback route handler                       |
 
-**`src/app/(auth)/actions.ts`** — Server actions using Supabase Auth API:
-- `signUp(formData)` — `supabase.auth.signUp()` with email confirmation redirect
-- `signIn(formData)` — `supabase.auth.signInWithPassword()`, redirect to `/`
-- `signOut()` — `supabase.auth.signOut()`, revalidate path, redirect to `/`
+## Approach
 
-Reference: `grimdark.nathanhealea.com/src/app/(auth)/actions.ts`
+### 1. Auth layout
 
-### Step 3: Create sign-up page
+`app/(auth)/layout.tsx` uses a `(auth)` route group so sign-up/sign-in pages share a minimal layout without the main app navigation. Renders children centered on screen with `flex min-h-screen items-center justify-center`.
 
-**`src/app/(auth)/sign-up/page.tsx`** — Form with email, password inputs. Uses `useActionState` for progressive enhancement. DaisyUI form styling. Success state shows "check your email" message.
+### 2. Sign up page
 
-### Step 4: Create sign-in page
+`app/(auth)/sign-up/page.tsx` — Client component (`'use client'`) using React `useActionState` hook bound to the `signUp` server action.
 
-**`src/app/(auth)/sign-in/page.tsx`** — Form with email, password inputs. Error display for invalid credentials. Links to sign-up and forgot-password pages.
+- DaisyUI card layout (`card`, `card-body`, `card-title`) with email and password inputs (`input input-bordered`).
+- Password field has `minLength={6}` for client-side validation.
+- Submit button shows a DaisyUI loading spinner (`loading loading-spinner`) while `pending`.
+- On success, displays a `alert-success` message: "Check your email to confirm your account."
+- On error, displays the Supabase error message in an `alert-error` alert.
+- Includes a link to `/sign-in` for existing users.
 
-### Step 5: Create auth API routes
+### 3. Sign in page
 
-**`src/app/auth/callback/route.ts`** — Handles OAuth redirects and PKCE code exchange.
+`app/(auth)/sign-in/page.tsx` — Client component (`'use client'`) using React `useActionState` hook bound to the `signIn` server action.
 
-**`src/app/auth/confirm/route.ts`** — Handles email confirmation token verification and password reset token verification.
+- Same DaisyUI card layout as the sign-up page, without `minLength` on the password field.
+- Submit button shows a loading spinner while `pending`.
+- On error, displays the Supabase error message in an `alert-error` alert.
+- On success, the server action redirects to `/` (no client-side success message needed).
+- Includes a link to `/sign-up` for new users.
 
-### Step 6: Configure Supabase email templates
+### 4. Auth server actions
 
-Update `supabase/config.toml` to customize confirmation email templates.
+`app/(auth)/actions.ts` — Marked with `'use server'` directive. Exports three actions: `signUp`, `signIn`, `signOut`.
 
-### Affected Files
+- Shared `AuthState` type: `{ error?: string; success?: string } | null`.
+- `signUp(prevState, formData)` — Calls `supabase.auth.signUp({ email, password })`. Returns `{ success }` on success or `{ error }` on failure. Does not redirect (user stays on page to see the confirmation message).
+- `signIn(prevState, formData)` — Calls `supabase.auth.signInWithPassword({ email, password })`. Returns `{ error }` on failure. Calls `redirect('/')` on success.
+- `signOut()` — Calls `supabase.auth.signOut()`, then `redirect('/sign-in')`.
 
-| File | Changes |
-|------|---------|
-| `src/app/(auth)/actions.ts` | New — server actions for auth |
-| `src/app/(auth)/sign-up/page.tsx` | New — sign-up form page |
-| `src/app/(auth)/sign-in/page.tsx` | New — sign-in form page |
-| `src/app/auth/callback/route.ts` | New — OAuth/PKCE callback handler |
-| `src/app/auth/confirm/route.ts` | New — email confirmation handler |
-| `supabase/config.toml` | Update auth email settings |
+### 5. Auth callback route
 
-### Risks & Considerations
+`app/auth/callback/route.ts` — Next.js route handler (`GET`) that handles the redirect from Supabase email confirmation links.
 
-- Email confirmation requires a working SMTP setup in Supabase (built-in for hosted, configure for local dev).
-- Forms use `useActionState` (React 19) — ensure the Next.js 16 version supports this pattern.
-- Reference `grimdark.nathanhealea.com/src/app/(auth)/` for the exact form patterns and action signatures.
+- Reads `code` and optional `next` (defaults to `/`) query parameters from the URL.
+- Calls `supabase.auth.exchangeCodeForSession(code)` to complete email verification.
+- On success, redirects to `${origin}${next}`.
+- On error (or missing code), redirects to `/sign-in?error=Could not verify your email. Please try again.`.
+
+## Notes
+
+- All auth forms use DaisyUI component classes for styling.
+- Server actions are preferred over client-side API calls — form pages invoke them via `useActionState` which handles the pending/error state lifecycle.

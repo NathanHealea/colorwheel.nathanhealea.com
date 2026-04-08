@@ -6,58 +6,50 @@
 
 ## Summary
 
-Update the existing navbar in `page.tsx` to show sign-in/sign-up buttons for unauthenticated users and a user menu dropdown for authenticated users. The user menu includes links to profile, edit profile, and sign out.
+Add authentication-aware UI elements to the app's navigation. Show sign-in/sign-up links for unauthenticated users and a user menu with profile and sign-out options for authenticated users. Admins see an additional admin link.
 
 ## Acceptance Criteria
 
-- [ ] Unauthenticated users see "Sign In" and "Sign Up" buttons in the navbar
-- [ ] Authenticated users see a user menu dropdown with their display name or avatar
-- [ ] User menu includes: My Profile, Edit Profile, Sign Out
-- [ ] Sign Out action signs the user out and redirects to home
-- [ ] Navbar buttons use DaisyUI button styling consistent with the rest of the app
-- [ ] Layout is responsive — works on both desktop and mobile
+- [ ] Unauthenticated users see "Sign In" and "Sign Up" links in the navigation
+- [ ] Authenticated users see their display name or avatar in the navigation
+- [ ] Clicking the user menu reveals options: Profile, Sign Out
+- [ ] Admin users see an "Admin" link in the navigation or user menu
+- [ ] The navbar updates reactively after sign-in/sign-out without a full page reload
+- [ ] Mobile navigation includes the same auth-aware elements
 
-## Implementation Plan
+## Key Files
 
-### Step 1: Extract navbar into its own component
+| Action | File                           | Description                                          |
+| ------ | ------------------------------ | ---------------------------------------------------- |
+| Modify | Navigation component(s)        | Add auth-aware user menu, sign-in/sign-up links      |
+| Create | `app/components/UserMenu.tsx`  | Dropdown menu for authenticated users                |
 
-Currently the navbar is inline in `src/app/page.tsx` (lines 248-285). Extract it to **`src/components/Navbar.tsx`** so it can independently fetch auth state.
+## Approach
 
-### Step 2: Fetch auth state in navbar
+### 1. Server-side auth check
 
-Use `getAuthUser({ withProfile: true })` to check if the user is authenticated. This requires the navbar to be a server component, or use a client-side hook that checks auth state.
+The navigation component (or a layout wrapping it) checks auth state server-side via `supabase.auth.getUser()`. If authenticated, queries the user's profile for display name and roles.
 
-Given the app is currently `"use client"`, consider:
-- Option A: Make the navbar a server component and pass auth state down
-- Option B: Create a `useAuth` hook using `@supabase/ssr` browser client
+### 2. Unauthenticated state
 
-Reference: `grimdark.nathanhealea.com/src/components/navbar.tsx` uses server-side auth check.
+Show "Sign In" and "Sign Up" links styled as DaisyUI buttons or links in the header area.
 
-### Step 3: Create user menu component
+### 3. Authenticated state
 
-**`src/components/UserMenu.tsx`** — Dropdown menu using DaisyUI `dropdown` component or Headless UI `Menu`. Shows avatar/initials, display name, and menu items.
+Show a user menu (DaisyUI dropdown) displaying the user's display name. Menu items:
 
-Reference: `grimdark.nathanhealea.com/src/components/user-menu.tsx`
+- **Profile** — links to `/profile/edit` or `/profile`
+- **Sign Out** — triggers the `signOut` server action
 
-### Step 4: Add auth buttons for unauthenticated state
+### 4. Admin link
 
-When no user is authenticated, show:
-- "Sign In" — DaisyUI `btn btn-ghost btn-sm` linking to `/sign-in`
-- "Sign Up" — DaisyUI `btn btn-primary btn-sm` linking to `/sign-up`
+If the user has the `admin` role (from [Role-Based Authorization](./role-based-authorization.md)), show an "Admin" link pointing to the admin area.
 
-### Step 5: Update page.tsx
+### 5. Mobile navigation
 
-Replace inline navbar with the new `<Navbar />` component. Pass necessary props or let it fetch auth state independently.
+Ensure the same auth-aware elements appear in the mobile navigation layout.
 
-### Affected Files
+## Notes
 
-| File | Changes |
-|------|---------|
-| `src/components/Navbar.tsx` | New — extracted navbar with auth UI |
-| `src/components/UserMenu.tsx` | New — authenticated user dropdown menu |
-| `src/app/page.tsx` | Remove inline navbar, use `<Navbar />` component |
-
-### Risks & Considerations
-
-- The current app is entirely `"use client"`. The navbar needs auth state which is best fetched server-side. This may require refactoring the layout to support a server component navbar above the client page.
-- Consider moving the navbar to `src/app/layout.tsx` so it's rendered server-side, with the main page content remaining client-side.
+- The navigation component should be a server component that fetches auth state, passing minimal props to client sub-components as needed.
+- Role data comes from the `user_roles` table via the role utility functions.

@@ -2,69 +2,57 @@
 
 **Epic:** User Authentication
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 
 ## Summary
 
-Install and configure Supabase for the colorwheel project. This is the foundation feature that all other auth features depend on. Set up the Supabase project, install packages, create server/client helpers, and add middleware for session management.
+Configure Supabase client libraries and middleware for cookie-based auth session management. This is the foundation that all other auth features depend on.
 
 ## Acceptance Criteria
 
-- [ ] `@supabase/supabase-js` and `@supabase/ssr` packages installed
-- [ ] Supabase project initialized (`supabase init`) with `config.toml`
-- [ ] Server-side Supabase client helper at `src/lib/supabase/server.ts` using cookie-based auth
-- [ ] Browser-side Supabase client helper at `src/lib/supabase/client.ts`
-- [ ] Environment variables documented (`.env.example`) and added to `.env.local`
-- [ ] Next.js middleware at `src/middleware.ts` refreshes auth session on every request
-- [ ] Supabase types generated (if using CLI) or base types defined
+- [x] `@supabase/supabase-js` and `@supabase/ssr` packages are installed
+- [x] Browser Supabase client exists for client components
+- [x] Server Supabase client exists for server components and server actions (cookie-based)
+- [x] Middleware refreshes auth session on every request via `supabase.auth.getUser()`
+- [x] Environment variables `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` are referenced
+- [x] Auth state persists across page refreshes (SSR-compatible via `@supabase/ssr`)
+
+## Key Files
+
+| Action | File                         | Description                                     |
+| ------ | ---------------------------- | ----------------------------------------------- |
+| Create | `src/lib/supabase/client.ts` | Browser Supabase client                         |
+| Create | `src/lib/supabase/server.ts` | Server-side Supabase client (cookies-based)     |
+| Create | `src/middleware.ts`          | Auth session refresh middleware                  |
+| Modify | `.env.local`                 | Add Supabase URL and anon key                   |
+| Modify | `package.json`               | Add `@supabase/supabase-js` and `@supabase/ssr` |
 
 ## Implementation Plan
 
-### Step 1: Install dependencies
+### 1. Install dependencies
 
 ```bash
 npm install @supabase/supabase-js @supabase/ssr
-npx supabase init
 ```
 
-### Step 2: Create Supabase client helpers
+### 2. Browser client
 
-Follow the grimdark reference pattern:
+Create `src/lib/supabase/client.ts` — export a `createClient()` function that returns `createBrowserClient()` from `@supabase/ssr`, passing `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` env vars.
 
-**`src/lib/supabase/server.ts`** — Server-side client using `createServerClient` from `@supabase/ssr` with cookie management via `next/headers`.
+### 3. Server client
 
-**`src/lib/supabase/client.ts`** — Browser client using `createBrowserClient` from `@supabase/ssr` for client components.
+Create `src/lib/supabase/server.ts` — export an async `createClient()` function that returns `createServerClient()` from `@supabase/ssr`. Reads/writes auth tokens via Next.js `cookies()` from `next/headers`. The `setAll` callback is wrapped in a try/catch to handle calls from Server Components where cookies are read-only (middleware handles the refresh in that case).
 
-### Step 3: Create middleware
+### 4. Middleware
 
-**`src/middleware.ts`** — Refresh auth session on every request by calling `supabase.auth.getUser()`. Define public routes that don't require auth. Use `matcher` config to exclude static assets and API routes.
+Create `src/middleware.ts` that refreshes the auth session on every request:
 
-### Step 4: Configure environment
+- Creates a `createServerClient` inline using request/response cookie accessors (sets cookies on both the request and a new `NextResponse`).
+- Calls `supabase.auth.getUser()` to refresh the session and rewrite expired tokens into the response cookies.
+- Matcher excludes static assets: `_next/static`, `_next/image`, `favicon.ico`, and common image extensions (`svg|png|jpg|jpeg|gif|webp`).
+- Does **not** handle redirects or route protection at this stage — that is added later in [Role-Based Authorization](./role-based-authorization.md).
 
-Create `.env.example` with:
-```
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-```
+## Notes
 
-Add actual values to `.env.local` (gitignored).
-
-### Step 5: Update next.config.ts if needed
-
-No changes expected — Supabase works with default Next.js config.
-
-### Affected Files
-
-| File | Changes |
-|------|---------|
-| `package.json` | Add `@supabase/supabase-js`, `@supabase/ssr` |
-| `src/lib/supabase/server.ts` | New — server-side Supabase client |
-| `src/lib/supabase/client.ts` | New — browser-side Supabase client |
-| `src/middleware.ts` | New — session refresh middleware |
-| `supabase/config.toml` | New — Supabase local config |
-| `.env.example` | New — env var template |
-
-### Risks & Considerations
-
-- The app is currently entirely client-side (`"use client"`). The middleware and server helpers introduce server-side rendering concerns. Ensure existing client components continue to work.
-- Reference `grimdark.nathanhealea.com/src/lib/supabase/server.ts` and `client.ts` for the exact pattern.
+- Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`.
+- The local Supabase instance is already configured (`supabase/config.toml`) with API on port 54421, DB on port 54422, Studio on port 54423.

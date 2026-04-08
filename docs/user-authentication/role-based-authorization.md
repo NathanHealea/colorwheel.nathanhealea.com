@@ -6,157 +6,139 @@
 
 ## Summary
 
-Implement role-based authorization with `user` and `administrator` roles. All users receive the `user` role by default on signup. A user can have multiple roles. Users can manage their own profile/account. Administrators can manage any account. Roles are enforced via RLS policies and middleware.
+Assign roles to user accounts to control access levels across the application. Users can hold **multiple roles** simultaneously. Two roles exist:
+
+- **user** — default role assigned to every account on sign-up. Grants basic access (view content, manage own profile, manage own paint collection and recipes).
+- **admin** — promoted role for platform administrators. Grants full management capabilities (role assignment, content moderation, recipe/tag management).
+
+Admins can grant or revoke the `admin` role through an admin interface. The `user` role is always present and cannot be removed.
 
 ## Acceptance Criteria
 
-- [ ] `roles` table created with seeded roles: `user`, `administrator`
-- [ ] `user_roles` join table linking profiles to roles (many-to-many)
-- [ ] Default `user` role auto-assigned on profile creation via database trigger
-- [ ] Role helper functions: `getUserRoles()`, `hasRole()`, `hasAnyRole()` at `src/lib/supabase/roles.ts`
-- [ ] Admin Supabase client at `src/lib/supabase/admin.ts` using service role key
-- [ ] Middleware protects admin routes (e.g., `/admin/*`) — requires `administrator` role
-- [ ] RLS policies: admins can read/update/delete any profile; users can only manage their own
-- [ ] Admin user management page at `/admin/users` — list, edit, delete any user
-- [ ] Admin can assign/remove roles for other users (but not themselves)
-- [ ] Admins cannot remove the base `user` role from any account
-- [ ] Role type defined at `src/types/role.ts`
+- [ ] A `roles` table exists with seeded `user` and `admin` entries
+- [ ] A `user_roles` table links users to roles (many-to-many — a user can hold multiple roles)
+- [ ] New users are automatically assigned the `user` role upon profile creation
+- [ ] The `user` role cannot be removed from any account
+- [ ] At least one admin is seeded or manually assigned in the database
+- [ ] Admins can grant or revoke the `admin` role via an admin interface
+- [ ] RLS policies on `user_roles` prevent non-admin users from modifying role assignments
+- [ ] A helper function or utility exists to check a user's roles on the server
+- [ ] Role information is available in middleware for route-level access control
+- [ ] Unauthenticated users are redirected to the sign-in page when accessing protected routes
+- [ ] Admin routes (`/admin/*`) require the `admin` role
+- [ ] Public pages remain accessible without login
 
-## Implementation Plan
+## Data Model
 
-### Step 1: Create roles migration
+### `roles` Table
 
-**`supabase/migrations/{timestamp}_create_roles_tables.sql`**
+| Column | Type     | Constraints      |
+| ------ | -------- | ---------------- |
+| `id`   | `serial` | Primary key      |
+| `name` | `text`   | Unique, not null |
 
-```sql
-CREATE TABLE public.roles (
-  id SERIAL PRIMARY KEY,
-  name TEXT UNIQUE NOT NULL
-);
+Seeded with two rows: `user`, `admin`.
 
-INSERT INTO public.roles (name) VALUES ('user'), ('administrator');
+### `user_roles` Table
 
-CREATE TABLE public.user_roles (
-  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
-  role_id INT REFERENCES public.roles(id) ON DELETE CASCADE,
-  assigned_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  PRIMARY KEY (user_id, role_id)
-);
+| Column        | Type          | Constraints                                                |
+| ------------- | ------------- | ---------------------------------------------------------- |
+| `user_id`     | `uuid`        | FK → `profiles.id` on delete cascade, part of composite PK |
+| `role_id`     | `int`         | FK → `roles.id`, part of composite PK                      |
+| `assigned_at` | `timestamptz` | Not null, default `now()`                                  |
 
-ALTER TABLE public.roles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
+Composite primary key on `(user_id, role_id)`.
 
--- Auto-assign 'user' role on profile creation
-CREATE OR REPLACE FUNCTION handle_new_profile_role()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.user_roles (user_id, role_id)
-  SELECT NEW.id, r.id FROM public.roles r WHERE r.name = 'user';
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+## Row Level Security
 
-CREATE TRIGGER on_profile_created_assign_role
-  AFTER INSERT ON public.profiles
-  FOR EACH ROW EXECUTE FUNCTION handle_new_profile_role();
+### `roles` Table
 
--- Helper function to get user roles
-CREATE OR REPLACE FUNCTION public.get_user_roles(uid UUID)
-RETURNS TEXT[] AS $$
-  SELECT COALESCE(
-    array_agg(r.name),
-    ARRAY['user']::TEXT[]
-  )
-  FROM public.user_roles ur
-  JOIN public.roles r ON r.id = ur.role_id
-  WHERE ur.user_id = uid;
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
+- **SELECT**: All authenticated users can read roles (needed for display/lookups).
+- **INSERT / UPDATE / DELETE**: No user-facing mutations — managed via migrations/seed only.
 
--- RLS: authenticated can read roles
-CREATE POLICY "Authenticated can read roles"
-  ON public.roles FOR SELECT TO authenticated USING (true);
+### `user_roles` Table
 
-CREATE POLICY "Authenticated can read user_roles"
-  ON public.user_roles FOR SELECT TO authenticated USING (true);
+- **SELECT**: Authenticated users can read all role assignments (needed for role badges, etc.).
+- **INSERT**: Only users with the `admin` role can assign roles to other users.
+- **UPDATE**: Only admins can change role assignments.
+- **DELETE**: Only admins can remove role assignments. The `user` role cannot be deleted (enforced in policy).
+- Users cannot modify their own role assignment regardless of their role.
 
--- RLS: only admins can modify user_roles (not their own)
-CREATE POLICY "Admins can insert user_roles"
-  ON public.user_roles FOR INSERT TO authenticated
-  WITH CHECK (
-    'administrator' = ANY(public.get_user_roles(auth.uid()))
-    AND user_id != auth.uid()
-  );
+## Key Files
 
-CREATE POLICY "Admins can delete user_roles"
-  ON public.user_roles FOR DELETE TO authenticated
-  USING (
-    'administrator' = ANY(public.get_user_roles(auth.uid()))
-    AND user_id != auth.uid()
-    AND role_id != (SELECT id FROM public.roles WHERE name = 'user')
-  );
+| Action | File                                                         | Description                                                                    |
+| ------ | ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Create | `supabase/migrations/XXXXXX_create_roles_tables.sql`         | Migration for `roles`, `user_roles`, RLS policies, helper function, trigger    |
+| Create | `app/types/role.ts`                                          | `Role` type definition                                                         |
+| Create | `app/lib/supabase/roles.ts`                                  | Server-side `getUserRoles` and `hasRole` utilities                             |
+| Modify | `middleware.ts`                                               | Add protected route redirects and admin route protection                       |
+
+## Approach
+
+### 1. Database Migration
+
+Create a new migration that:
+
+1. Creates the `roles` table and seeds `user` and `admin` rows.
+2. Creates the `user_roles` table with foreign keys to `profiles` and `roles`.
+3. Enables RLS on both tables.
+4. Creates RLS policies as described above.
+5. Creates a helper SQL function `public.get_user_roles(user_uuid uuid)` that returns an array of the user's role names.
+
+### 2. Auto-Assign Default `user` Role
+
+A database trigger on `profiles` insert automatically inserts into `user_roles`, linking the user to the `user` role. This guarantees every profile has the `user` role regardless of how it was created.
+
+### 3. Server-Side Role Check Utility
+
+Add a utility in `app/lib/supabase/roles.ts` that exposes:
+
+```ts
+type Role = 'user' | 'admin'
+
+async function getUserRoles(userId: string): Promise<Role[]>
+async function hasRole(userId: string, role: Role): Promise<boolean>
 ```
 
-### Step 2: Update profiles RLS for admin access
+`getUserRoles` queries `user_roles` joined with `roles` and returns all role names for the user. `hasRole` is a convenience wrapper. Used by server actions and API routes to gate role-specific operations.
 
-**`supabase/migrations/{timestamp}_admin_profile_policies.sql`**
+### 4. Middleware Integration
 
-Add policies allowing administrators to read/update/delete any profile:
+Extend `middleware.ts` to handle route protection:
 
-```sql
-CREATE POLICY "Admins can update any profile"
-  ON public.profiles FOR UPDATE TO authenticated
-  USING ('administrator' = ANY(public.get_user_roles(auth.uid())));
+1. Define `PUBLIC_ROUTES` (`/sign-in`, `/sign-up`, `/auth/callback`, `/forgot-password`, `/reset-password`, `/auth/confirm`) that skip all protection checks.
+2. Unauthenticated users accessing non-public routes are redirected to `/sign-in`.
+3. Authenticated users without a profile are redirected to `/profile/setup`.
+4. For admin routes (`/admin/*`), query the user's roles and redirect users who lack the `admin` role to `/`.
 
-CREATE POLICY "Admins can delete any profile"
-  ON public.profiles FOR DELETE TO authenticated
-  USING ('administrator' = ANY(public.get_user_roles(auth.uid())));
-```
+### 5. Seeding the First Admin
 
-### Step 3: Create role helpers
+The first admin must be assigned manually since no admin UI exists yet at the start:
 
-**`src/lib/supabase/roles.ts`**:
-- `getUserRoles(userId)` — Calls `get_user_roles` RPC or queries `user_roles` join
-- `hasRole(userId, role)` — Boolean check
-- `hasAnyRole(userId, roles)` — Boolean check for any role in array
+1. Create an account through the normal sign-up flow (assigned the `user` role by default).
+2. Run a SQL command or use Supabase Studio to insert an `admin` role assignment for that user.
 
-**`src/lib/supabase/admin.ts`**:
-- Admin client using `SUPABASE_SERVICE_ROLE_KEY` for server-only operations (user deletion, etc.)
+## Key Design Decisions
 
-Reference: `grimdark.nathanhealea.com/src/lib/supabase/roles.ts` and `admin.ts`
+1. **Two-tier role system (`user`, `admin`)** — The `user` role is a permanent baseline assigned to every account. `admin` is a promotional role granted by other admins. This keeps the system simple — users either have basic access or full management access.
 
-### Step 4: Create role type
+2. **Multi-role support (many-to-many)** — Users can hold multiple roles simultaneously. This avoids a strict hierarchy and makes permission checks explicit. The structure supports future role expansion (e.g., adding `moderator`) without schema changes — just insert a new row into `roles`.
 
-**`src/types/role.ts`**:
-```typescript
-export type Role = 'user' | 'administrator'
-```
+3. **Separate `roles` and `user_roles` tables over a column on `profiles`** — A dedicated join table supports the many-to-many relationship, keeps role data normalized, and makes it straightforward to add new roles in the future.
 
-### Step 5: Update middleware for admin routes
+4. **Database trigger for auto-assignment** — A PostgreSQL trigger on `profiles` insert automatically assigns the `user` role. This guarantees consistency regardless of how the profile is created.
 
-Update **`src/middleware.ts`** to check roles for `/admin/*` routes. Redirect to `/` if user lacks `administrator` role.
+5. **`user` role cannot be deleted via RLS** — The delete policy on `user_roles` explicitly excludes rows where `role_id` matches the `user` role. Enforced at the database level.
 
-### Step 6: Create admin user management pages
+6. **Self-modification prevention** — All write policies on `user_roles` include `auth.uid() != user_id`, preventing admins from modifying their own roles.
 
-**`src/app/admin/users/page.tsx`** — List all users with their roles. Actions: edit profile, manage roles, delete user.
+7. **`security definer` on helper functions** — The `get_user_roles` SQL function and the trigger function use `security definer` so they execute with the permissions of the function owner, bypassing RLS. Necessary because the trigger runs during insert (before the user has any roles) and the helper function is used inside other RLS policies.
 
-**`src/app/admin/users/[id]/page.tsx`** — Edit a specific user's profile and roles.
+8. **Server-only role enforcement** — All role checks happen on the server (middleware, server actions, RLS policies). The client never receives role data for authorization purposes.
 
-### Affected Files
+## Notes
 
-| File | Changes |
-|------|---------|
-| `supabase/migrations/{timestamp}_create_roles_tables.sql` | New — roles, user_roles, triggers, RLS |
-| `supabase/migrations/{timestamp}_admin_profile_policies.sql` | New — admin RLS policies for profiles |
-| `src/types/role.ts` | New — Role type |
-| `src/lib/supabase/roles.ts` | New — role helper functions |
-| `src/lib/supabase/admin.ts` | New — admin Supabase client |
-| `src/middleware.ts` | Add admin route protection |
-| `src/app/admin/users/page.tsx` | New — admin user list |
-| `src/app/admin/users/[id]/page.tsx` | New — admin user edit |
-
-### Risks & Considerations
-
-- The `SECURITY DEFINER` on role functions is necessary to bypass RLS when checking roles within policies. Ensure these functions don't leak data.
-- Admin self-modification is intentionally restricted — admins cannot change their own roles via the UI (prevents accidental lockout).
-- The base `user` role cannot be removed from any account — this is enforced at the database level.
-- Reference `grimdark.nathanhealea.com/supabase/migrations/20260218000000_create_roles_tables.sql` and `20260220200000_admin_profile_policies.sql`.
+- The `user` role is the baseline — it is always assigned and cannot be removed.
+- The many-to-many structure supports future expansion (e.g., adding `moderator`) without schema changes — just insert a new row into `roles`.
+- Role checks should happen server-side only — never trust the client to enforce role-based access.
+- The `get_user_roles` SQL function can be used inside other RLS policies to gate table access by role (e.g., only admins can delete community recipes).

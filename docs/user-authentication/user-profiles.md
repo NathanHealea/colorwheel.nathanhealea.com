@@ -6,113 +6,75 @@
 
 ## Summary
 
-Create a profiles table in Supabase that auto-creates a profile when a user signs up. Profiles store display name and are linked to `auth.users`. Add auth helper utilities for fetching the authenticated user with their profile.
+Automatically prompt new users to create their profile after their first successful login. A `profiles` table stores user display names linked to Supabase auth users.
 
 ## Acceptance Criteria
 
-- [ ] `profiles` table created via Supabase migration with columns: `id`, `display_name`, `avatar_url`, `bio`, `created_at`, `updated_at`
-- [ ] Profile auto-created on user sign-up via database trigger
-- [ ] RLS policies: authenticated users can read any profile, users can only update their own
-- [ ] Auth helper `getAuthUser()` at `src/lib/supabase/auth.ts` fetches user with optional profile
-- [ ] Profile type defined at `src/types/profile.ts`
-- [ ] Users can view their own profile
-- [ ] Users can edit their own profile (display name, avatar URL, bio)
-- [ ] Users can delete their own account (cascades to profile)
+- [ ] After first login, user is redirected to a profile setup flow
+- [ ] User must provide required profile fields before accessing authenticated features
+- [ ] Profile record is created in the database linked to the Supabase auth user
+- [ ] Returning users skip the setup flow and go directly to the app
+- [ ] Display names are unique (case-insensitive)
+- [ ] A `profiles` table exists with RLS policies
 
-## Implementation Plan
+## Routes
 
-### Step 1: Create profiles migration
+- `/profile/setup` — Profile setup form (display name required)
 
-**`supabase/migrations/{timestamp}_create_profiles_table.sql`**
+## Data Model
 
-```sql
-CREATE TABLE public.profiles (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  display_name TEXT NOT NULL DEFAULT '',
-  avatar_url TEXT,
-  bio TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
+### `profiles` Table
 
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+| Column         | Type          | Constraints                                              |
+| -------------- | ------------- | -------------------------------------------------------- |
+| `id`           | `uuid`        | Primary key, FK → `auth.users(id)` on delete cascade    |
+| `display_name` | `text`        | Not null, unique (case-insensitive via unique index)     |
+| `bio`          | `text`        | Nullable                                                 |
+| `created_at`   | `timestamptz` | Not null, default `now()`                                |
+| `updated_at`   | `timestamptz` | Not null, default `now()`                                |
 
--- Auto-update timestamp
-CREATE OR REPLACE FUNCTION update_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = now();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+### Row Level Security
 
-CREATE TRIGGER profiles_updated_at
-  BEFORE UPDATE ON public.profiles
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+- **SELECT**: Authenticated users can read all profiles.
+- **INSERT**: Authenticated users can insert their own profile only (`auth.uid() = id`).
+- **UPDATE**: Authenticated users can update their own profile only (`auth.uid() = id`).
 
--- Auto-create profile on user signup
-CREATE OR REPLACE FUNCTION handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.profiles (id, display_name)
-  VALUES (NEW.id, COALESCE(NEW.raw_user_meta_data->>'display_name', NEW.email));
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+## Key Files
 
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION handle_new_user();
+| Action | File                                                             | Description                                                    |
+| ------ | ---------------------------------------------------------------- | -------------------------------------------------------------- |
+| Create | `app/profile/setup/page.tsx`                                     | Setup page (renders `ProfileForm` component)                   |
+| Create | `app/profile/setup/profile-form.tsx`                             | Client component with display name form, field-level errors    |
+| Create | `app/profile/setup/actions.ts`                                   | `setupProfile` server action (validates, checks uniqueness, inserts) |
+| Create | `app/modules/profile/validation.ts`                              | Shared validation logic (`validateDisplayName`) and types      |
+| Create | `supabase/migrations/XXXXXX_create_profiles_table.sql`           | Creates `profiles` table with RLS policies                     |
+| Create | `supabase/migrations/XXXXXX_add_unique_display_name.sql`         | Case-insensitive unique index on `display_name`                |
+| Modify | `middleware.ts`                                                  | Redirect authenticated users without a profile to `/profile/setup` |
 
--- RLS policies
-CREATE POLICY "Authenticated users can read profiles"
-  ON public.profiles FOR SELECT TO authenticated USING (true);
+## Approach
 
-CREATE POLICY "Users can update own profile"
-  ON public.profiles FOR UPDATE TO authenticated
-  USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
+### 1. Profiles table migration
 
-CREATE POLICY "Users can delete own profile"
-  ON public.profiles FOR DELETE TO authenticated
-  USING (auth.uid() = id);
-```
+Create the `profiles` table with `id` (uuid FK to `auth.users`), `display_name`, `bio`, and timestamps. Enable RLS. Create policies: authenticated users can SELECT all; users can INSERT/UPDATE own row only. Add a case-insensitive unique index on `display_name`.
 
-### Step 2: Create profile type
+### 2. Middleware redirect
 
-**`src/types/profile.ts`**
-```typescript
-export type Profile = {
-  id: string
-  display_name: string
-  avatar_url: string | null
-  bio: string | null
-  created_at: string
-  updated_at: string
-}
-```
+After refreshing the auth session, middleware checks if the authenticated user has a profile. If not, redirects to `/profile/setup`. If they already have a profile and visit `/profile/setup`, redirects to `/`. Public routes (`/sign-in`, `/sign-up`, `/auth/callback`) skip this check.
 
-### Step 3: Create auth helper
+### 3. Profile form
 
-**`src/lib/supabase/auth.ts`** — `getAuthUser()` function that fetches the current user and optionally joins with the profile. Reference: `grimdark.nathanhealea.com/src/lib/supabase/auth.ts`
+Client component using `useActionState` with the `setupProfile` server action. Runs client-side validation from shared `validateDisplayName` before submitting. Displays field-level errors below the input with `input-error` styling.
 
-### Step 4: Create profile pages
+### 4. Server action
 
-**`src/app/profile/page.tsx`** — View own profile.
-**`src/app/profile/edit/page.tsx`** — Edit own profile (display name, bio).
-**`src/app/profile/delete/page.tsx`** — Delete account with confirmation.
+Validates display name (required, 2-50 chars, alphanumeric/hyphens/underscores only), checks for existing display name (case-insensitive via `ilike`), inserts profile, and redirects to `/`. Handles duplicate constraint violation (`23505`) as a fallback for race conditions.
 
-### Affected Files
+### 5. Auto-assign user role
 
-| File | Changes |
-|------|---------|
-| `supabase/migrations/{timestamp}_create_profiles_table.sql` | New — profiles table, triggers, RLS |
-| `src/types/profile.ts` | New — Profile type definition |
-| `src/lib/supabase/auth.ts` | New — getAuthUser helper |
-| `src/app/profile/page.tsx` | New — view profile page |
-| `src/app/profile/edit/page.tsx` | New — edit profile page |
-| `src/app/profile/delete/page.tsx` | New — delete account page |
+A database trigger on `profiles` insert automatically assigns the `user` role via the `user_roles` table (see [Role-Based Authorization](./role-based-authorization.md)).
 
-### Risks & Considerations
+## Notes
 
-- The `ON DELETE CASCADE` on `auth.users` means deleting the auth user also deletes the profile. Account deletion should call `supabase.auth.admin.deleteUser()` from a server action using the service role key.
-- Reference `grimdark.nathanhealea.com/supabase/migrations/20260217215309_create_profiles_table.sql` for the exact migration pattern.
+- Display names are unique (case-insensitive) — "Ragnar" and "ragnar" are treated as the same name.
+- Display names cannot contain spaces — only letters, numbers, hyphens, and underscores.
+- The profile setup flow is enforced at the middleware level, so no authenticated route can be accessed without a profile.
