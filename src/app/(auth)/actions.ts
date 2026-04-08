@@ -18,7 +18,7 @@ export async function signUp(_prevState: AuthState, formData: FormData): Promise
     return { error: error.message }
   }
 
-  return { success: 'Check your email to confirm your account.' }
+  redirect('/sign-up/confirm')
 }
 
 export async function signIn(_prevState: AuthState, formData: FormData): Promise<AuthState> {
