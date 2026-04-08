@@ -131,7 +131,7 @@ Epic Template:
 **High-Level Scope:**
 
 - [x] [Supabase Setup](./user-authentication/supabase-setup.md)
-- [ ] [Email Authentication Pages](./user-authentication/email-auth-pages.md)
+- [x] [Email Authentication Pages](./user-authentication/email-auth-pages.md)
 - [ ] [User Profiles](./user-authentication/user-profiles.md)
 - [ ] [Navbar Auth UI](./user-authentication/navbar-auth-ui.md)
 - [ ] [Social Login (Google & Discord)](./user-authentication/social-login.md)
@@ -235,7 +235,7 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 |     | Name                                                                                  | Type    | Status |
 | --- | ------------------------------------------------------------------------------------- | ------- | ------ |
 | [x] | [Supabase Setup](./user-authentication/supabase-setup.md)                             | Feature | Done   |
-| [ ] | [Email Authentication Pages](./user-authentication/email-auth-pages.md)               | Feature | Todo   |
+| [x] | [Email Authentication Pages](./user-authentication/email-auth-pages.md)               | Feature | Done   |
 | [ ] | [User Profiles](./user-authentication/user-profiles.md)                               | Feature | Todo   |
 | [ ] | [Navbar Auth UI](./user-authentication/navbar-auth-ui.md)                             | Feature | Todo   |
 | [ ] | [Social Login (Google & Discord)](./user-authentication/social-login.md)              | Feature | Todo   |
