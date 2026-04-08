@@ -6,143 +6,127 @@
 
 ## Summary
 
-Add Google and Discord OAuth login options to the sign-in and sign-up pages. Users can authenticate via their Google or Discord accounts as an alternative to email/password.
+Allow users to sign in or sign up using their Google or Discord accounts via Supabase OAuth, in addition to the existing email/password flow.
 
 ## Acceptance Criteria
 
-- [ ] Google OAuth login button on sign-in and sign-up pages
-- [ ] Discord OAuth login button on sign-in and sign-up pages
-- [ ] OAuth redirects handled by existing `/auth/callback` route
-- [ ] Profile auto-created for OAuth users (using display name from provider)
-- [ ] OAuth providers configured in `supabase/config.toml`
-- [ ] Environment variables for provider client IDs and secrets documented
-- [ ] Users who sign up via OAuth can still set a password later (optional)
+- [ ] Users can sign in/sign up with Google
+- [ ] Users can sign in/sign up with Discord
+- [ ] OAuth users are redirected through `/auth/callback` and session is established
+- [ ] New OAuth users are redirected to `/profile/setup` (existing middleware handles this)
+- [ ] Existing OAuth users bypass setup and go to `/`
+- [ ] OAuth buttons appear on both sign-in and sign-up pages
+- [ ] Email/password login continues to work alongside OAuth
+- [ ] `avatar_url` column added to `profiles` table (nullable text)
+- [ ] On OAuth sign-in/sign-up, if `avatar_url` is null, populate it from the provider's profile picture via a Supabase database trigger
+- [ ] Profile setup page pre-fills display name from OAuth provider metadata (`full_name`, `name`, or `custom_username`)
+- [ ] If the suggested display name is already taken, a warning is shown on the profile setup page
 
-## Implementation Plan
+## Routes
 
-### Step 1: Configure OAuth providers in Supabase
+No new routes required — reuses existing `/auth/callback`.
 
-Update **`supabase/config.toml`** to enable Google and Discord providers:
+## Key Files
+
+| Action | File                                                              | Description                                                              |
+| ------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Modify | `app/(auth)/sign-in/page.tsx`                                     | Add Google and Discord OAuth buttons                                     |
+| Modify | `app/(auth)/sign-up/page.tsx`                                     | Add Google and Discord OAuth buttons                                     |
+| Modify | `app/(auth)/actions.ts`                                           | Add `signInWithGoogle()` and `signInWithDiscord()` server actions        |
+| Modify | `supabase/config.toml`                                            | Enable Google and Discord providers                                      |
+| Create | `supabase/migrations/XXXXXX_add_avatar_url_to_profiles.sql`      | Add `avatar_url` column and trigger to sync from OAuth provider          |
+| Modify | `app/profile/setup/page.tsx`                                      | Fetch OAuth display name from user metadata, check uniqueness            |
+| Modify | `app/profile/setup/profile-form.tsx`                              | Accept `suggestedName` and `nameAlreadyTaken` props, pre-fill and warn   |
+
+## Approach
+
+### 1. Enable OAuth providers in Supabase
+
+Update `supabase/config.toml` to enable Google and Discord:
 
 ```toml
 [auth.external.google]
 enabled = true
-client_id = "env(GOOGLE_CLIENT_ID)"
-secret = "env(GOOGLE_CLIENT_SECRET)"
-redirect_uri = "http://localhost:54321/auth/v1/callback"
+client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
 
 [auth.external.discord]
 enabled = true
-client_id = "env(DISCORD_CLIENT_ID)"
-secret = "env(DISCORD_CLIENT_SECRET)"
-redirect_uri = "http://localhost:54321/auth/v1/callback"
+client_id = "env(SUPABASE_AUTH_EXTERNAL_DISCORD_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_DISCORD_SECRET)"
 ```
 
-For hosted Supabase, configure providers in the Supabase dashboard under Authentication > Providers.
+### 2. Add environment variables
 
-### Step 2: Add environment variables
+Add OAuth client IDs and secrets to `.env.local` for local development and to the production Supabase project settings.
 
-Update **`.env.example`**:
+### 3. Add `avatar_url` column to profiles
 
-```
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-DISCORD_CLIENT_ID=
-DISCORD_CLIENT_SECRET=
-```
+Create a migration that adds the column and a database trigger to sync the avatar from the OAuth provider:
 
-These are server-only variables (no `NEXT_PUBLIC_` prefix) — OAuth client secrets must never be exposed to the browser. The actual OAuth flow is handled server-side by Supabase.
+```sql
+alter table public.profiles
+  add column avatar_url text;
 
-### Step 3: Add OAuth server actions
+create or replace function public.sync_avatar_from_provider()
+returns trigger as $$
+declare
+  provider_avatar text;
+begin
+  if new.avatar_url is not null then
+    return new;
+  end if;
 
-Add to **`src/app/(auth)/actions.ts`** (alongside existing signUp/signIn/signOut):
+  select raw_user_meta_data->>'avatar_url'
+    into provider_avatar
+    from auth.users
+    where id = new.id;
 
-```typescript
-export async function signInWithGoogle() {
-  const supabase = await createClient()
+  if provider_avatar is not null and provider_avatar <> '' then
+    new.avatar_url := provider_avatar;
+  end if;
 
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${getSiteUrl()}/auth/callback`,
-    },
-  })
+  return new;
+end;
+$$ language plpgsql security definer;
 
-  if (error || !data.url) {
-    redirect('/sign-in?error=Could not connect to Google. Please try again.')
-  }
-
-  redirect(data.url)
-}
-
-export async function signInWithDiscord() {
-  const supabase = await createClient()
-
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'discord',
-    options: {
-      redirectTo: `${getSiteUrl()}/auth/callback`,
-    },
-  })
-
-  if (error || !data.url) {
-    redirect('/sign-in?error=Could not connect to Discord. Please try again.')
-  }
-
-  redirect(data.url)
-}
+create trigger on_profile_sync_avatar
+  before insert or update on public.profiles
+  for each row
+  execute function public.sync_avatar_from_provider();
 ```
 
-Each action initiates the OAuth flow by getting a redirect URL from Supabase, then redirecting the browser to the provider's consent screen. After the user authorizes, Supabase redirects back to `/auth/callback` which exchanges the code for a session.
+### 4. Create OAuth server actions
 
-### Step 4: Add OAuth buttons to auth pages
+Add two server actions to `app/(auth)/actions.ts`:
 
-Update **`src/app/(auth)/sign-in/page.tsx`** and **`src/app/(auth)/sign-up/page.tsx`** to include OAuth buttons below the email/password form:
+- `signInWithGoogle()` — calls `supabase.auth.signInWithOAuth({ provider: 'google' })` with a redirect URL pointing to `/auth/callback`
+- `signInWithDiscord()` — calls `supabase.auth.signInWithOAuth({ provider: 'discord' })` with a redirect URL pointing to `/auth/callback`
 
-```tsx
-<div className="divider">OR</div>
+Both actions receive the OAuth redirect URL from Supabase and redirect the browser to the provider's consent screen.
 
-<form action={signInWithGoogle}>
-  <button type="submit" className="btn btn-outline w-full">
-    {/* Google SVG icon */}
-    Continue with Google
-  </button>
-</form>
+### 5. Add OAuth buttons to sign-in and sign-up pages
 
-<form action={signInWithDiscord}>
-  <button type="submit" className="btn btn-outline w-full">
-    {/* Discord SVG icon */}
-    Continue with Discord
-  </button>
-</form>
-```
+Add "Continue with Google" and "Continue with Discord" buttons to both pages, separated from the email/password form by a divider. Each button submits a form that calls the corresponding server action.
 
-Each OAuth button is wrapped in its own `<form>` with the server action, so clicking submits directly to the action without JavaScript. Use inline SVG icons for Google and Discord branding (no additional icon library needed).
+### 6. Pre-fill display name on profile setup
 
-Reference: `grimdark.nathanhealea.com/src/app/(auth)/sign-in/page.tsx` for exact SVG icons and DaisyUI button styling.
+When an OAuth user lands on `/profile/setup`, the setup page reads the user's metadata from `auth.users.user_metadata` (fields: `full_name`, `name`, or `custom_username`) and passes it to the form as `suggestedName`. The page also checks if that name is already taken and passes `nameAlreadyTaken` to the form.
 
-### Step 5: Verify callback route handles OAuth
+The form pre-fills the display name input via `defaultValue` and shows a warning alert if the name is taken. Email/password users see an empty input.
 
-The `/auth/callback` route created in the Email Auth Pages feature already handles OAuth code exchange via `supabase.auth.exchangeCodeForSession(code)`. No changes needed — the same flow works for both email confirmation and OAuth callbacks.
+### 7. Reuse existing auth callback
 
-### Affected Files
+The existing `/auth/callback` route handler already exchanges the authorization code for a session and redirects. No changes needed.
 
-| File | Changes |
-|------|---------|
-| `supabase/config.toml` | Enable Google and Discord OAuth providers |
-| `.env.example` | Add `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET` |
-| `src/app/(auth)/actions.ts` | Add `signInWithGoogle`, `signInWithDiscord` server actions |
-| `src/app/(auth)/sign-in/page.tsx` | Add OAuth buttons below email form |
-| `src/app/(auth)/sign-up/page.tsx` | Add OAuth buttons below email form |
+## Key Design Decisions
 
-### Dependencies
+- **Server actions for OAuth** — `signInWithOAuth()` returns a redirect URL. The server action performs the redirect, keeping the flow server-side.
+- **Avatar sync via database trigger** — A `BEFORE INSERT OR UPDATE` trigger on `profiles` checks `auth.users.raw_user_meta_data->>'avatar_url'` and populates `avatar_url` only when null. Uses `security definer` to read from `auth.users`.
+- **Existing middleware handles new OAuth users** — Supabase Auth creates the user in `auth.users` automatically. The middleware detects the missing profile and redirects to `/profile/setup`.
 
-- [Supabase Setup](./supabase-setup.md) — Supabase client and middleware
-- [Email Auth Pages](./email-auth-pages.md) — auth route group, `actions.ts` file, `/auth/callback` route
+## Notes
 
-### Risks & Considerations
-
-- Google and Discord OAuth require creating developer applications on each platform and configuring redirect URIs. For production, the redirect URI must point to the hosted Supabase project (not localhost).
-- For local development with `supabase start`, OAuth redirects go through the local Supabase instance at `localhost:54321`.
-- The `handle_new_user()` trigger from the User Profiles migration should extract the display name from `raw_user_meta_data` for OAuth users (e.g., `raw_user_meta_data->>'full_name'` for Google, `raw_user_meta_data->>'custom_claims'->'global_name'` for Discord).
-- OAuth buttons use `<form action={serverAction}>` which works without JavaScript — the server action receives the form submission and redirects the browser. This is the same pattern used in the grimdark reference project.
+- **Google OAuth** requires a Google Cloud Console project with OAuth 2.0 credentials. Authorized redirect URI: `https://<supabase-project>.supabase.co/auth/v1/callback`.
+- **Discord OAuth** requires a Discord Developer Application. Redirect URI: `https://<supabase-project>.supabase.co/auth/v1/callback`.
+- For local development, redirect URIs must include `http://localhost:54321/auth/v1/callback` (Supabase local auth server).

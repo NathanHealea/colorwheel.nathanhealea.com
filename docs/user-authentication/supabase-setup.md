@@ -6,148 +6,53 @@
 
 ## Summary
 
-Install and configure Supabase for the colorwheel project. This is the foundation feature that all other auth features depend on. Set up the Supabase project, install packages, create server/client helpers, and add middleware for session management.
+Configure Supabase client libraries and middleware for cookie-based auth session management. This is the foundation that all other auth features depend on.
 
 ## Acceptance Criteria
 
-- [ ] `@supabase/supabase-js` and `@supabase/ssr` packages installed
-- [ ] Supabase project initialized (`supabase init`) with `config.toml`
-- [ ] Server-side Supabase client helper at `src/lib/supabase/server.ts` using cookie-based auth
-- [ ] Browser-side Supabase client helper at `src/lib/supabase/client.ts`
-- [ ] Environment variables documented (`.env.example`) and added to `.env`
-- [ ] Next.js middleware at `src/middleware.ts` refreshes auth session on every request
-- [ ] Supabase types generated (if using CLI) or base types defined
+- [ ] `@supabase/supabase-js` and `@supabase/ssr` packages are installed
+- [ ] Browser Supabase client exists for client components
+- [ ] Server Supabase client exists for server components and server actions (cookie-based)
+- [ ] Middleware refreshes auth session on every request via `supabase.auth.getUser()`
+- [ ] Environment variables `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` are referenced
+- [ ] Auth state persists across page refreshes (SSR-compatible via `@supabase/ssr`)
 
-## Implementation Plan
+## Key Files
 
-### Step 1: Install dependencies
+| Action | File                        | Description                                          |
+| ------ | --------------------------- | ---------------------------------------------------- |
+| Create | `app/lib/supabase/client.ts` | Browser Supabase client                              |
+| Create | `app/lib/supabase/server.ts` | Server-side Supabase client (cookies-based)          |
+| Create | `middleware.ts`              | Auth session refresh middleware                      |
+| Modify | `.env.local`                 | Add Supabase URL and anon key                        |
+| Modify | `package.json`               | Add `@supabase/supabase-js` and `@supabase/ssr`     |
+
+## Approach
+
+### 1. Install dependencies
 
 ```bash
 npm install @supabase/supabase-js @supabase/ssr
-npx supabase init
 ```
 
-This creates `supabase/config.toml` for local development configuration.
+### 2. Browser client
 
-### Step 2: Create server-side Supabase client
+Create `app/lib/supabase/client.ts` using `createBrowserClient()` from `@supabase/ssr`. References `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` env vars.
 
-**`src/lib/supabase/server.ts`** — Server-side client using `createServerClient` from `@supabase/ssr` with cookie-based session management via `next/headers`:
+### 3. Server client
 
-```typescript
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+Create `app/lib/supabase/server.ts` — async server client created with `createServerClient()` from `@supabase/ssr`. Reads/writes auth tokens via Next.js `cookies()` from `next/headers`. The `setAll` callback is wrapped in a try/catch to handle calls from Server Components where cookies are read-only (middleware handles the refresh in that case).
 
-export async function createClient() {
-  const cookieStore = await cookies()
+### 4. Middleware
 
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
-          } catch {
-            // The `setAll` method is called from a Server Component.
-            // This can be ignored if middleware is refreshing user sessions.
-          }
-        },
-      },
-    }
-  )
-}
-```
+Create `middleware.ts` that refreshes the auth session on every request:
 
-### Step 3: Create browser-side Supabase client
+- Creates a `createServerClient` inline using request/response cookie accessors (sets cookies on both the request and a new `NextResponse`).
+- Calls `supabase.auth.getUser()` to refresh the session and rewrite expired tokens into the response cookies.
+- Matcher excludes static assets: `_next/static`, `_next/image`, `favicon.ico`, and common image extensions (`svg|png|jpg|jpeg|gif|webp`).
+- Does **not** handle redirects or route protection at this stage — that is added later in [Role-Based Authorization](./role-based-authorization.md).
 
-**`src/lib/supabase/client.ts`** — Browser client using `createBrowserClient` from `@supabase/ssr` for client components:
+## Notes
 
-```typescript
-import { createBrowserClient } from '@supabase/ssr'
-
-export function createClient() {
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY!
-  )
-}
-```
-
-### Step 4: Create middleware
-
-**`src/middleware.ts`** — Refresh auth session on every request by calling `supabase.auth.getUser()`. This is the simplified initial version — profile checks and role-based route protection will be added by later features.
-
-```typescript
-import { createServerClient } from '@supabase/ssr'
-import { type NextRequest, NextResponse } from 'next/server'
-
-const PUBLIC_ROUTES = ['/sign-in', '/sign-up', '/auth/callback', '/auth/confirm', '/forgot-password', '/reset-password']
-
-export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request })
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) => supabaseResponse.cookies.set(name, value, options))
-        },
-      },
-    }
-  )
-
-  // Refresh the auth session to keep it alive
-  await supabase.auth.getUser()
-
-  return supabaseResponse
-}
-
-export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
-}
-```
-
-The `matcher` excludes static assets and images from middleware processing.
-
-### Step 5: Update environment configuration
-
-`.env.example` already contains the required variables:
-
-```
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-```
-
-Actual values are in `.env` (gitignored). The `NEXT_PUBLIC_` prefixed variables are exposed to the browser. `SUPABASE_SERVICE_ROLE_KEY` is server-only and used for admin operations that bypass RLS (added by the Role-Based Authorization feature).
-
-### Affected Files
-
-| File | Changes |
-|------|---------|
-| `package.json` | Add `@supabase/supabase-js`, `@supabase/ssr` |
-| `src/lib/supabase/server.ts` | New — server-side Supabase client |
-| `src/lib/supabase/client.ts` | New — browser-side Supabase client |
-| `src/middleware.ts` | New — session refresh middleware |
-| `supabase/config.toml` | New — Supabase local config (generated by `supabase init`) |
-
-### Dependencies
-
-None — this is the foundation feature.
-
-### Risks & Considerations
-
-- The app is currently entirely client-side (`"use client"`). The middleware and server helpers introduce server-side rendering concerns. Ensure existing client components continue to work — they will, since middleware only manages cookies and doesn't affect component rendering.
-- The `setAll` try/catch in `server.ts` is intentional. When called from a Server Component (read-only context), cookie writes fail. The middleware handles session refresh instead, so this is safe to ignore.
-- Reference `grimdark.nathanhealea.com/src/lib/supabase/server.ts` and `client.ts` for the exact pattern this follows.
+- Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`.
+- The local Supabase instance is already configured (`supabase/config.toml`) with API on port 54421, DB on port 54422, Studio on port 54423.

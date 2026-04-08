@@ -6,196 +6,78 @@
 
 ## Summary
 
-Create sign-up and sign-in pages with email/password authentication using Supabase Auth. Includes server actions for form handling, email confirmation flow, and auth callback route.
+Allow users to create an account and log in using email and password through Supabase Auth.
 
 ## Acceptance Criteria
 
-- [ ] Sign-up page at `/sign-up` with email and password fields
-- [ ] Sign-in page at `/sign-in` with email and password fields
-- [ ] Server actions for `signUp`, `signIn`, and `signOut` in `(auth)/actions.ts`
-- [ ] Auth callback route at `/auth/callback` handles OAuth and PKCE code exchange
-- [ ] Auth confirm route at `/auth/confirm` handles email confirmation links
-- [ ] Email confirmation required for new sign-ups
-- [ ] Error and success messages displayed on forms
-- [ ] Minimum password length of 6 characters enforced
-- [ ] Redirect to home page after successful sign-in
-- [ ] Links between sign-up and sign-in pages
+- [ ] Users can sign up with email and password
+- [ ] Users can sign in with existing credentials
+- [ ] Users can sign out
+- [ ] Auth state persists across page refreshes (SSR-compatible via `@supabase/ssr`)
+- [ ] Error messages display for invalid credentials or duplicate accounts
 
-## Implementation Plan
+## Routes
 
-### Step 1: Create auth route group and server actions
+- `/sign-up` — Registration page
+- `/sign-in` — Login page
+- `/auth/callback` — Supabase auth callback handler for confirming email/session exchange
 
-**`src/app/(auth)/actions.ts`** — Server actions using Supabase Auth API. This file consolidates all auth-related server actions. Uses `useActionState`-compatible signatures (`prevState, formData`) for progressive enhancement.
+## Key Files
 
-```typescript
-'use server'
+| Action | File                              | Description                                       |
+| ------ | --------------------------------- | ------------------------------------------------- |
+| Create | `app/(auth)/layout.tsx`           | Minimal centered layout for auth pages            |
+| Create | `app/(auth)/sign-up/page.tsx`     | Sign up form                                      |
+| Create | `app/(auth)/sign-in/page.tsx`     | Sign in form                                      |
+| Create | `app/(auth)/actions.ts`           | Server actions for `signUp`, `signIn`, `signOut`  |
+| Create | `app/auth/callback/route.ts`      | Auth callback route handler                       |
 
-import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
+## Approach
 
-function getSiteUrl() {
-  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL
-  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
-  return 'http://localhost:3000'
-}
+### 1. Auth layout
 
-type AuthState = { error?: string; success?: string } | null
+`app/(auth)/layout.tsx` uses a `(auth)` route group so sign-up/sign-in pages share a minimal layout without the main app navigation. Renders children centered on screen with `flex min-h-screen items-center justify-center`.
 
-export async function signUp(prevState: AuthState, formData: FormData) {
-  const supabase = await createClient()
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
+### 2. Sign up page
 
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: `${getSiteUrl()}/auth/callback`,
-    },
-  })
+`app/(auth)/sign-up/page.tsx` — Client component (`'use client'`) using React `useActionState` hook bound to the `signUp` server action.
 
-  if (error) return { error: error.message }
-  return { success: 'Check your email to confirm your account.' }
-}
+- DaisyUI card layout (`card`, `card-body`, `card-title`) with email and password inputs (`input input-bordered`).
+- Password field has `minLength={6}` for client-side validation.
+- Submit button shows a DaisyUI loading spinner (`loading loading-spinner`) while `pending`.
+- On success, displays a `alert-success` message: "Check your email to confirm your account."
+- On error, displays the Supabase error message in an `alert-error` alert.
+- Includes a link to `/sign-in` for existing users.
 
-export async function signIn(prevState: AuthState, formData: FormData) {
-  const supabase = await createClient()
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
+### 3. Sign in page
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password })
+`app/(auth)/sign-in/page.tsx` — Client component (`'use client'`) using React `useActionState` hook bound to the `signIn` server action.
 
-  if (error) return { error: error.message }
+- Same DaisyUI card layout as the sign-up page, without `minLength` on the password field.
+- Submit button shows a loading spinner while `pending`.
+- On error, displays the Supabase error message in an `alert-error` alert.
+- On success, the server action redirects to `/` (no client-side success message needed).
+- Includes a link to `/sign-up` for new users.
 
-  revalidatePath('/', 'layout')
-  redirect('/')
-}
+### 4. Auth server actions
 
-export async function signOut() {
-  const supabase = await createClient()
-  await supabase.auth.signOut()
-  revalidatePath('/', 'layout')
-  redirect('/')
-}
-```
+`app/(auth)/actions.ts` — Marked with `'use server'` directive. Exports three actions: `signUp`, `signIn`, `signOut`.
 
-The `getSiteUrl()` helper resolves the site URL for email redirect links, supporting local dev, Vercel preview, and production environments.
+- Shared `AuthState` type: `{ error?: string; success?: string } | null`.
+- `signUp(prevState, formData)` — Calls `supabase.auth.signUp({ email, password })`. Returns `{ success }` on success or `{ error }` on failure. Does not redirect (user stays on page to see the confirmation message).
+- `signIn(prevState, formData)` — Calls `supabase.auth.signInWithPassword({ email, password })`. Returns `{ error }` on failure. Calls `redirect('/')` on success.
+- `signOut()` — Calls `supabase.auth.signOut()`, then `redirect('/sign-in')`.
 
-### Step 2: Create sign-up page
+### 5. Auth callback route
 
-**`src/app/(auth)/sign-up/page.tsx`** — Client component with email/password form using `useActionState` for progressive enhancement. DaisyUI card + form styling.
+`app/auth/callback/route.ts` — Next.js route handler (`GET`) that handles the redirect from Supabase email confirmation links.
 
-- Email input (required)
-- Password input (required, `minLength={6}`)
-- Submit button with loading spinner
-- Success state shows "Check your email to confirm your account"
-- Error state shows error message in alert
-- Link to sign-in page: "Already have an account? Sign in"
-- Divider and OAuth buttons placeholder (populated by Social Login feature)
+- Reads `code` and optional `next` (defaults to `/`) query parameters from the URL.
+- Calls `supabase.auth.exchangeCodeForSession(code)` to complete email verification.
+- On success, redirects to `${origin}${next}`.
+- On error (or missing code), redirects to `/sign-in?error=Could not verify your email. Please try again.`.
 
-Reference: `grimdark.nathanhealea.com/src/app/(auth)/sign-up/page.tsx`
+## Notes
 
-### Step 3: Create sign-in page
-
-**`src/app/(auth)/sign-in/page.tsx`** — Client component with email/password form using `useActionState`.
-
-- Email input (required)
-- Password input (required)
-- Submit button with loading spinner
-- Error display for invalid credentials (from form state and URL query params)
-- Success/message display from URL query params (e.g., post-password-reset redirect)
-- Uses `useSearchParams` wrapped in `Suspense` for reading URL params
-- "Forgot your password?" link to `/forgot-password`
-- Link to sign-up page: "Don't have an account? Sign up"
-- Divider and OAuth buttons placeholder (populated by Social Login feature)
-
-Reference: `grimdark.nathanhealea.com/src/app/(auth)/sign-in/page.tsx`
-
-### Step 4: Create auth callback route
-
-**`src/app/auth/callback/route.ts`** — Handles OAuth redirects and email confirmation PKCE code exchange:
-
-```typescript
-import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
-import { NextResponse, type NextRequest } from 'next/server'
-
-export async function GET(request: NextRequest) {
-  const { searchParams, origin } = request.nextUrl
-  const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/'
-
-  if (code) {
-    const supabase = await createClient()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-
-    if (!error) {
-      revalidatePath('/', 'layout')
-      return NextResponse.redirect(`${origin}${next}`)
-    }
-  }
-
-  return NextResponse.redirect(`${origin}/sign-in?error=Could not verify your email. Please try again.`)
-}
-```
-
-This is a simplified version — the grimdark reference includes Discord profile auto-linking logic that isn't needed for colorwheel.
-
-### Step 5: Create auth confirm route
-
-**`src/app/auth/confirm/route.ts`** — Handles email confirmation token verification and password reset token verification. Supports both PKCE flow (`code` param) and legacy flow (`token_hash` + `type` params):
-
-```typescript
-import { createClient } from '@/lib/supabase/server'
-import { type NextRequest, NextResponse } from 'next/server'
-
-export async function GET(request: NextRequest) {
-  const { searchParams, origin } = request.nextUrl
-  const code = searchParams.get('code')
-  const tokenHash = searchParams.get('token_hash')
-  const type = searchParams.get('type') as 'recovery' | 'signup' | 'email'
-  const next = searchParams.get('next') ?? '/'
-
-  const supabase = await createClient()
-
-  // PKCE flow
-  if (code) {
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) return NextResponse.redirect(`${origin}${next}`)
-  }
-
-  // Fallback: direct token_hash verification (non-PKCE)
-  if (tokenHash && type) {
-    const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash })
-    if (!error) return NextResponse.redirect(`${origin}${next}`)
-  }
-
-  return NextResponse.redirect(
-    `${origin}/sign-in?error=${encodeURIComponent('Your verification link is invalid or has expired. Please try again.')}`
-  )
-}
-```
-
-### Affected Files
-
-| File | Changes |
-|------|---------|
-| `src/app/(auth)/actions.ts` | New — server actions for signUp, signIn, signOut |
-| `src/app/(auth)/sign-up/page.tsx` | New — sign-up form page |
-| `src/app/(auth)/sign-in/page.tsx` | New — sign-in form page |
-| `src/app/auth/callback/route.ts` | New — OAuth/PKCE callback handler |
-| `src/app/auth/confirm/route.ts` | New — email/password reset confirmation handler |
-
-### Dependencies
-
-- [Supabase Setup](./supabase-setup.md) — `createClient` from `src/lib/supabase/server.ts`
-
-### Risks & Considerations
-
-- Email confirmation requires a working SMTP setup in Supabase (built-in for hosted projects, configure for local dev via `supabase/config.toml`).
-- Forms use `useActionState` (React 19) — Next.js 16 with React 19 supports this natively.
-- The `(auth)` route group keeps auth pages in a separate layout segment. These pages don't need the main app's sidebar/header chrome.
-- The `getSiteUrl()` helper is critical for email redirect links working in all environments (local, preview, production).
-- Reference `grimdark.nathanhealea.com/src/app/(auth)/` for the exact form patterns and DaisyUI styling.
+- All auth forms use DaisyUI component classes for styling.
+- Server actions are preferred over client-side API calls — form pages invoke them via `useActionState` which handles the pending/error state lifecycle.
