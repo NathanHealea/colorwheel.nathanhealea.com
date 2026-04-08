@@ -53,7 +53,7 @@ export default function UserMenu({ displayName, avatarUrl, signOutAction, isAdmi
             type='button'
             onClick={async () => {
               await signOutAction()
-              window.location.href = '/sign-in'
+              window.location.href = '/'
             }}
             className={clsx('btn btn-ghost btn-sm btn-block justify-start', 'data-[focus]:bg-base-300')}>
             Sign Out
