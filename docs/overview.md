@@ -133,7 +133,7 @@ Epic Template:
 - [x] [Supabase Setup](./user-authentication/supabase-setup.md)
 - [x] [Email Authentication Pages](./user-authentication/email-auth-pages.md)
 - [ ] [User Profiles](./user-authentication/user-profiles.md)
-- [ ] [Navbar Auth UI](./user-authentication/navbar-auth-ui.md)
+- [x] [Navbar Auth UI](./user-authentication/navbar-auth-ui.md)
 - [ ] [Social Login (Google & Discord)](./user-authentication/social-login.md)
 - [ ] [Password Recovery](./user-authentication/password-recovery.md)
 - [ ] [Role-Based Authorization](./user-authentication/role-based-authorization.md)
@@ -237,7 +237,7 @@ All documented features, bugs, enhancements, and refactors organized by epic.
 | [x] | [Supabase Setup](./user-authentication/supabase-setup.md)                             | Feature | Done   |
 | [x] | [Email Authentication Pages](./user-authentication/email-auth-pages.md)               | Feature | Done   |
 | [ ] | [User Profiles](./user-authentication/user-profiles.md)                               | Feature | Todo   |
-| [ ] | [Navbar Auth UI](./user-authentication/navbar-auth-ui.md)                             | Feature | Todo   |
+| [x] | [Navbar Auth UI](./user-authentication/navbar-auth-ui.md)                             | Feature | Done   |
 | [ ] | [Social Login (Google & Discord)](./user-authentication/social-login.md)              | Feature | Todo   |
 | [ ] | [Password Recovery](./user-authentication/password-recovery.md)                       | Feature | Todo   |
 | [ ] | [Role-Based Authorization](./user-authentication/role-based-authorization.md)         | Feature | Todo   |
