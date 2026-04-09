@@ -2,8 +2,13 @@ import { type NextRequest } from 'next/server'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const mockGetUser = vi.fn().mockResolvedValue({ data: { user: null }, error: null })
+const mockSingle = vi.fn().mockResolvedValue({ data: null, error: null })
+const mockEq = vi.fn().mockReturnValue({ single: mockSingle })
+const mockSelect = vi.fn().mockReturnValue({ eq: mockEq })
+const mockFrom = vi.fn().mockReturnValue({ select: mockSelect })
 const mockCreateServerClient = vi.fn().mockReturnValue({
   auth: { getUser: mockGetUser },
+  from: mockFrom,
 })
 
 vi.mock('@supabase/ssr', () => ({
@@ -16,16 +21,24 @@ const mockNextResponse = {
   cookies: { set: mockResponseCookiesSet },
 }
 
+const mockRedirectResponse = { type: 'redirect' }
+
 vi.mock('next/server', () => ({
   NextResponse: {
     next: vi.fn().mockReturnValue(mockNextResponse),
+    redirect: vi.fn().mockReturnValue(mockRedirectResponse),
   },
 }))
 
 function createMockRequest(url: string) {
   const cookies: { name: string; value: string }[] = []
+  const parsedUrl = new URL(url)
   return {
     url,
+    nextUrl: {
+      pathname: parsedUrl.pathname,
+      clone: () => ({ ...parsedUrl, pathname: parsedUrl.pathname }),
+    },
     cookies: {
       getAll: vi.fn().mockReturnValue(cookies),
       set: vi.fn(),
@@ -38,8 +51,12 @@ describe('auth middleware', () => {
     vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', 'http://localhost:54421')
     vi.stubEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY', 'test-anon-key')
     mockCreateServerClient.mockClear()
-    mockGetUser.mockClear()
+    mockGetUser.mockClear().mockResolvedValue({ data: { user: null }, error: null })
     mockResponseCookiesSet.mockClear()
+    mockSingle.mockClear().mockResolvedValue({ data: null, error: null })
+    mockEq.mockClear().mockReturnValue({ single: mockSingle })
+    mockSelect.mockClear().mockReturnValue({ eq: mockEq })
+    mockFrom.mockClear().mockReturnValue({ select: mockSelect })
   })
 
   it('creates a supabase client with request cookie accessors', async () => {
