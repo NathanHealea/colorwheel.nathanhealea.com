@@ -22,7 +22,36 @@ export async function middleware(request: NextRequest) {
   )
 
   // Refresh the auth session to keep it alive
-  await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const { pathname } = request.nextUrl
+
+  // Paths that should skip profile-setup redirect
+  const skipPaths = ['/profile/setup', '/auth/', '/sign-in', '/sign-up', '/sign-up/confirm', '/_next/']
+  const shouldSkip = skipPaths.some((p) => pathname.startsWith(p))
+
+  if (user && !shouldSkip) {
+    // Check if user still has the default Painter#### display name
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('display_name')
+      .eq('id', user.id)
+      .single()
+
+    if (profile?.display_name && /^Painter\d{4}$/.test(profile.display_name)) {
+      const setupUrl = request.nextUrl.clone()
+      setupUrl.pathname = '/profile/setup'
+      return NextResponse.redirect(setupUrl)
+    }
+  }
+
+  if (!user && pathname === '/profile/setup') {
+    const signInUrl = request.nextUrl.clone()
+    signInUrl.pathname = '/sign-in'
+    return NextResponse.redirect(signInUrl)
+  }
 
   return supabaseResponse
 }
