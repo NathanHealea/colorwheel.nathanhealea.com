@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { createClient } from '@/lib/supabase/server'
@@ -18,7 +19,7 @@ export async function signUp(_prevState: AuthState, formData: FormData): Promise
     return { error: error.message }
   }
 
-  return { success: 'Check your email to confirm your account.' }
+  redirect('/sign-up/confirm')
 }
 
 export async function signIn(_prevState: AuthState, formData: FormData): Promise<AuthState> {
@@ -33,6 +34,7 @@ export async function signIn(_prevState: AuthState, formData: FormData): Promise
     return { error: error.message }
   }
 
+  revalidatePath('/', 'layout')
   redirect('/')
 }
 
@@ -41,5 +43,5 @@ export async function signOut() {
 
   await supabase.auth.signOut()
 
-  redirect('/sign-in')
+  revalidatePath('/', 'layout')
 }

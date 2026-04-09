@@ -13,12 +13,6 @@ export default function SignUpPage() {
       <div className='card-body'>
         <h2 className='card-title'>Sign Up</h2>
 
-        {state?.success && (
-          <div role='alert' className='alert alert-success'>
-            <span>{state.success}</span>
-          </div>
-        )}
-
         {state?.error && (
           <div role='alert' className='alert alert-error'>
             <span>{state.error}</span>
