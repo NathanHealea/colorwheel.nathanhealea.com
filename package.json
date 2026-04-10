@@ -1,13 +1,17 @@
 {
   "name": "colorwheel.nathanhealea.com",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "private": true,
   "scripts": {
     "dev": "next dev --port ${PORT:-3000}",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "supabase:start": "npx supabase start",
+    "supabase:stop": "npx supabase stop",
+    "supabase:restart": "npx supabase stop && npx supabase start",
+    "supabase:reset": "npx supabase db reset && npx supabase start"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
