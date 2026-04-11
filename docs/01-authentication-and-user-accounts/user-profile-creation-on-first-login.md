@@ -2,7 +2,7 @@
 
 **Epic:** Authentication & User Accounts
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 
 ## Summary
 
@@ -10,13 +10,13 @@ When a user signs up (email/password or OAuth), a skeleton profile record is aut
 
 ## Acceptance Criteria
 
-- [ ] A profile record is automatically created when a new auth user is created (database trigger)
-- [ ] New users with incomplete profiles are redirected to `/profile/setup`
-- [ ] User must provide a display name before accessing authenticated features
-- [ ] Returning users with completed profiles skip setup and go directly to the app
-- [ ] Display names are unique (case-insensitive)
-- [ ] The setup page updates the existing profile record (not insert)
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] A profile record is automatically created when a new auth user is created (database trigger)
+- [x] New users with incomplete profiles are redirected to `/profile/setup`
+- [x] User must provide a display name before accessing authenticated features
+- [x] Returning users with completed profiles skip setup and go directly to the app
+- [x] Display names are unique (case-insensitive)
+- [x] The setup page updates the existing profile record (not insert)
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Routes
 
