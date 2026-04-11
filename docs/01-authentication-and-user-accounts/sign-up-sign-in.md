@@ -2,7 +2,7 @@
 
 **Epic:** Authentication & User Accounts
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 **Branch:** `v1/feature/sign-up-sign-in`
 
 ## Summary
@@ -11,12 +11,12 @@ Allow users to create an account and log in using email and password through Sup
 
 ## Acceptance Criteria
 
-- [ ] Users can sign up with email and password
-- [ ] Users can sign in with existing credentials
-- [ ] Users can sign out
-- [ ] Auth state persists across page refreshes (SSR-compatible via `@supabase/ssr`)
-- [ ] Error messages display for invalid credentials or duplicate accounts
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] Users can sign up with email and password
+- [x] Users can sign in with existing credentials
+- [x] Users can sign out
+- [x] Auth state persists across page refreshes (SSR-compatible via `@supabase/ssr`)
+- [x] Error messages display for invalid credentials or duplicate accounts
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Routes
 
