@@ -2,11 +2,11 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @import '../styles/variables.css';
-@import '../styles/card.css';
-@import '../styles/input.css';
-@import '../styles/label.css';
-@import '../styles/form.css';
-@import '../styles/navbar.css';
+@import '../styles/card.css' layer(components);
+@import '../styles/input.css' layer(components);
+@import '../styles/label.css' layer(components);
+@import '../styles/form.css' layer(components);
+@import '../styles/navbar.css' layer(components);
 
 @custom-variant dark (&:is(.dark *));
 
