@@ -2,7 +2,7 @@
 
 **Epic:** Marketing & Branding
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 **Branch:** `v1/feature/color-scheme-and-theme`
 
 ## Summary
@@ -15,14 +15,14 @@ Grimify was primarily built for a group of friends painting Warhammer and Age of
 
 ## Acceptance Criteria
 
-- [ ] Brand primary color is defined with WCAG 2.1 AA contrast compliance
-- [ ] Light mode theme is configured with brand colors in `globals.css`
-- [ ] Dark mode theme is configured with brand colors in `globals.css`
-- [ ] Theme tokens use OKLch color format for perceptual consistency
-- [ ] Color variables are documented in a `src/styles/variables.css` file
-- [ ] Backgrounds are neutral (near-zero chroma) so paint swatches display accurately
-- [ ] All existing components render correctly with the updated theme
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] Brand primary color is defined with WCAG 2.1 AA contrast compliance
+- [x] Light mode theme is configured with brand colors in `globals.css`
+- [x] Dark mode theme is configured with brand colors in `globals.css`
+- [x] Theme tokens use OKLch color format for perceptual consistency
+- [x] Color variables are documented in a `src/styles/variables.css` file
+- [x] Backgrounds are neutral (near-zero chroma) so paint swatches display accurately
+- [x] All existing components render correctly with the updated theme
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Design Principle
 
