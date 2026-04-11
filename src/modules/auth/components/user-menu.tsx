@@ -1,16 +1,21 @@
 'use client'
 
-import Image from 'next/image'
-import { useEffect, useRef } from 'react'
+import Image from 'next/image';
 
-import { signOut } from '@/modules/auth/actions/sign-out'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { signOut } from '@/modules/auth/actions/sign-out';
 
 /**
  * User avatar dropdown menu for the navbar.
  *
- * Displays the user's profile picture (or initials fallback) and opens a
- * dropdown with account actions on click. Uses the native `<details>` element
- * for toggle state.
+ * Displays the user's profile picture (or initials fallback) as a trigger
+ * button. Opens a Radix dropdown with the user's name and a sign-out action.
  *
  * @param props.displayName - The user's display name.
  * @param props.avatarUrl - URL to the user's profile picture, or `null` for the initials fallback.
@@ -22,20 +27,6 @@ export function UserMenu({
   displayName: string
   avatarUrl: string | null
 }) {
-  const detailsRef = useRef<HTMLDetailsElement>(null)
-
-  // Close the dropdown when clicking outside
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (detailsRef.current && !detailsRef.current.contains(e.target as Node)) {
-        detailsRef.current.removeAttribute('open')
-      }
-    }
-
-    document.addEventListener('click', handleClick)
-    return () => document.removeEventListener('click', handleClick)
-  }, [])
-
   const initials = displayName
     .split(/\s+/)
     .map((w) => w[0])
@@ -43,30 +34,35 @@ export function UserMenu({
     .slice(0, 2)
 
   return (
-    <details ref={detailsRef} className="dropdown dropdown-end">
-      <summary className="btn btn-ghost btn-circle btn-sm list-none">
+    <DropdownMenu>
+      <DropdownMenuTrigger className="btn btn-circle focus-visible:ring-0 hover:ring-3 hover:ring-primary data-[state=open]:ring-3 data-[state=open]:ring-primary">
         {avatarUrl ? (
           <Image
             src={avatarUrl}
             alt={displayName}
-            width={32}
-            height={32}
-            className="avatar avatar-sm"
+            width={28}
+            height={28}
+            className="size-7 rounded-full pointer-events-none"
             referrerPolicy="no-referrer"
           />
         ) : (
-          <span className="avatar avatar-sm avatar-placeholder">{initials}</span>
+          <span className="avatar avatar-sm avatar-placeholder pointer-events-none">
+            {initials}
+          </span>
         )}
-      </summary>
-      <div className="dropdown-content">
-        <div className="px-2 py-1.5 text-sm font-medium">{displayName}</div>
-        <div className="my-1 h-px bg-border" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>{displayName}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
         <form action={signOut}>
-          <button type="submit" className="dropdown-item dropdown-item-destructive">
+          <button
+            type="submit"
+            className="dropdown-item dropdown-item-destructive"
+          >
             Sign out
           </button>
         </form>
-      </div>
-    </details>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
