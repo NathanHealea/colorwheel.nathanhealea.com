@@ -1,8 +1,16 @@
 import { createServerClient } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
 
+/** Routes that bypass authentication and profile-setup checks. */
 const PUBLIC_ROUTES = ['/sign-in', '/sign-up', '/auth/callback']
 
+/**
+ * Next.js middleware that handles Supabase session refresh and profile-setup enforcement.
+ *
+ * For authenticated users, queries the `profiles` table and:
+ * - Redirects to `/profile/setup` if `has_setup_profile` is `false`.
+ * - Redirects away from `/profile/setup` if setup is already complete.
+ */
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
@@ -39,10 +47,10 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse
   }
 
-  // Check if the authenticated user has a completed profile
-  const { data: profile } = await supabase.from('profiles').select('display_name').eq('id', user.id).single()
+  // Check if the authenticated user has completed profile setup
+  const { data: profile } = await supabase.from('profiles').select('has_setup_profile').eq('id', user.id).single()
 
-  const isProfileComplete = profile?.display_name != null
+  const isProfileComplete = profile?.has_setup_profile === true
   const isSetupPage = pathname === '/profile/setup'
 
   // Incomplete profile and not on setup page — redirect to setup

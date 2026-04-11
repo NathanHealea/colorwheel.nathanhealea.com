@@ -1,8 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
+import { ProfileForm } from '@/modules/profile/components/profile-form'
 import { redirect } from 'next/navigation'
-
-import { ProfileForm } from './profile-form'
 
 export default async function ProfileSetupPage() {
   const supabase = await createClient()
@@ -15,10 +14,14 @@ export default async function ProfileSetupPage() {
     redirect('/sign-in')
   }
 
-  const { data: profile } = await supabase.from('profiles').select('display_name').eq('id', user.id).single()
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('display_name, has_setup_profile')
+    .eq('id', user.id)
+    .single()
 
-  // If profile already has a display name, redirect to home (already complete)
-  if (profile?.display_name) {
+  // If profile setup is already complete, redirect to home
+  if (profile?.has_setup_profile) {
     redirect('/')
   }
 
@@ -35,7 +38,7 @@ export default async function ProfileSetupPage() {
           <CardDescription>Choose a display name to get started.</CardDescription>
         </CardHeader>
         <CardContent>
-          <ProfileForm />
+          <ProfileForm defaultValues={{ display_name: profile?.display_name ?? '' }} submitLabel="Complete setup" />
         </CardContent>
       </Card>
     </div>
