@@ -1,6 +1,8 @@
 import { createServerClient } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
 
+const PUBLIC_ROUTES = ['/sign-in', '/sign-up', '/auth/callback']
+
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
@@ -21,7 +23,41 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const { pathname } = request.nextUrl
+
+  // Skip all checks for public routes
+  if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
+    return supabaseResponse
+  }
+
+  // No authenticated user — skip profile checks (Protected Routes feature handles auth redirects)
+  if (!user) {
+    return supabaseResponse
+  }
+
+  // Check if the authenticated user has a completed profile
+  const { data: profile } = await supabase.from('profiles').select('display_name').eq('id', user.id).single()
+
+  const isProfileComplete = profile?.display_name != null
+  const isSetupPage = pathname === '/profile/setup'
+
+  // Incomplete profile and not on setup page — redirect to setup
+  if (!isProfileComplete && !isSetupPage) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/profile/setup'
+    return NextResponse.redirect(url)
+  }
+
+  // Complete profile but on setup page — redirect to home
+  if (isProfileComplete && isSetupPage) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/'
+    return NextResponse.redirect(url)
+  }
 
   return supabaseResponse
 }
