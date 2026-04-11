@@ -6,6 +6,7 @@
 @import '../styles/input.css';
 @import '../styles/label.css';
 @import '../styles/form.css';
+@import '../styles/navbar.css';
 
 @custom-variant dark (&:is(.dark *));
 
