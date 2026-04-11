@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
-import { ProfileForm } from '@/modules/profile/components/profile-form'
+import { ProfileForm } from '@/modules/user/components/profile-form'
 import { redirect } from 'next/navigation'
 
 export default async function ProfileSetupPage() {
