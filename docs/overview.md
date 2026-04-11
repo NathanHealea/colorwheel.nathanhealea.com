@@ -68,7 +68,7 @@ Core functionality:
 
 **High-Level Scope:**
 
-- [ ] [Sign up / sign in via Supabase Auth](./01-authentication-and-user-accounts/sign-up-sign-in.md)
+- [x] [Sign up / sign in via Supabase Auth](./01-authentication-and-user-accounts/sign-up-sign-in.md)
 - [ ] [User profile creation on first login](./01-authentication-and-user-accounts/user-profile-creation-on-first-login.md)
 - [ ] [Protected routes for authenticated features](./01-authentication-and-user-accounts/protected-routes.md)
 - [ ] [User roles (user, admin)](./01-authentication-and-user-accounts/user-roles.md)
