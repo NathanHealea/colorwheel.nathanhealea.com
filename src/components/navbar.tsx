@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { createClient } from '@/lib/supabase/server'
-import { UserMenu } from '@/modules/auth/components/user-menu'
+import { UserMenu } from '@/modules/user/components/user-menu'
 
 /**
  * Top-level navigation bar (server component).

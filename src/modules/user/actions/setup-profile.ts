@@ -1,8 +1,8 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { ProfileFormState } from '@/modules/profile/types/profile-form-state'
-import { validateDisplayName } from '@/modules/profile/validation'
+import type { ProfileFormState } from '@/modules/user/types/profile-form-state'
+import { validateDisplayName } from '@/modules/user/validation'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
