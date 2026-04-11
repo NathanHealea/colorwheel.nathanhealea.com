@@ -2,7 +2,7 @@
 
 **Epic:** Authentication & User Accounts
 **Type:** Feature
-**Status:** Todo
+**Status:** In Progress
 
 ## Summary
 
@@ -15,16 +15,16 @@ Admins can grant or revoke the `admin` role through an admin interface. The `use
 
 ## Acceptance Criteria
 
-- [ ] A `roles` table exists with seeded `user` and `admin` entries
-- [ ] A `user_roles` table links users to roles (many-to-many)
-- [ ] New users are automatically assigned the `user` role upon profile creation
-- [ ] The `user` role cannot be removed from any account
+- [x] A `roles` table exists with seeded `user` and `admin` entries
+- [x] A `user_roles` table links users to roles (many-to-many)
+- [x] New users are automatically assigned the `user` role upon profile creation
+- [x] The `user` role cannot be removed from any account
 - [ ] At least one admin is seeded or manually assigned in the database
 - [ ] Admins can grant or revoke the `admin` role via an admin interface
-- [ ] RLS policies on `user_roles` prevent non-admin users from modifying role assignments
-- [ ] A helper function or utility exists to check a user's roles on the server
-- [ ] Role information is available in middleware for route-level access control
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] RLS policies on `user_roles` prevent non-admin users from modifying role assignments
+- [x] A helper function or utility exists to check a user's roles on the server
+- [x] Role information is available in middleware for route-level access control
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Database
 
