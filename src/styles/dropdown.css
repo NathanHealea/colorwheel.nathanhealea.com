@@ -1,0 +1,62 @@
+/*
+ * Dropdown Component
+ *
+ * Based on the daisyUI Dropdown component API.
+ * https://daisyui.com/components/dropdown/
+ *
+ * Implements daisyUI's class naming conventions using this project's
+ * Tailwind CSS theme tokens instead of daisyUI's built-in theme system.
+ *
+ * Uses the native HTML <details> element for open/close state — no JS required.
+ *
+ * Classes:
+ *   Base:      .dropdown           — Positioning wrapper (relative)
+ *   Content:   .dropdown-content   — The floating panel (absolute, hidden until open)
+ *   Position:  .dropdown-end       — Align content to the right edge
+ *              .dropdown-top       — Open upward
+ *   Items:     .dropdown-item      — Individual menu item (block link/button)
+ */
+
+/* -------------------------------------------------------------------------
+ * Base
+ * ----------------------------------------------------------------------- */
+.dropdown {
+  @apply relative inline-block;
+}
+
+/* -------------------------------------------------------------------------
+ * Content panel
+ * ----------------------------------------------------------------------- */
+.dropdown-content {
+  @apply absolute z-50 mt-2 hidden min-w-48 rounded-lg
+    border border-border bg-popover p-1 text-popover-foreground shadow-md;
+}
+
+.dropdown[open] > .dropdown-content,
+.dropdown:focus-within > .dropdown-content {
+  @apply block;
+}
+
+/* -------------------------------------------------------------------------
+ * Position modifiers
+ * ----------------------------------------------------------------------- */
+.dropdown-end > .dropdown-content {
+  @apply right-0;
+}
+
+.dropdown-top > .dropdown-content {
+  @apply bottom-full top-auto mb-2 mt-0;
+}
+
+/* -------------------------------------------------------------------------
+ * Menu items
+ * ----------------------------------------------------------------------- */
+.dropdown-item {
+  @apply flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-1.5
+    text-sm text-foreground no-underline transition-colors
+    hover:bg-muted focus-visible:bg-muted focus-visible:outline-none;
+}
+
+.dropdown-item-destructive {
+  @apply text-destructive hover:bg-destructive/10 focus-visible:bg-destructive/10;
+}
