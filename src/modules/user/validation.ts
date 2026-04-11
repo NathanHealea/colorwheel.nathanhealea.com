@@ -10,7 +10,7 @@
  * @remarks
  * Rules:
  * - Required (non-empty after trim)
- * - 2–50 characters
+ * - 2-50 characters
  * - Only letters, numbers, hyphens, underscores (`/^[a-zA-Z0-9_-]+$/`)
  */
 export function validateDisplayName(name: string): string | null {

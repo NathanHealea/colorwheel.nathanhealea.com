@@ -5,10 +5,10 @@ import { type SubmitEvent, useActionState, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { setupProfile } from '@/modules/profile/actions/setup-profile'
-import type { ProfileFormState } from '@/modules/profile/types/profile-form-state'
-import type { ProfileFormValues } from '@/modules/profile/types/profile-form-values'
-import { validateDisplayName } from '@/modules/profile/validation'
+import { setupProfile } from '@/modules/user/actions/setup-profile'
+import type { ProfileFormState } from '@/modules/user/types/profile-form-state'
+import type { ProfileFormValues } from '@/modules/user/types/profile-form-values'
+import { validateDisplayName } from '@/modules/user/validation'
 
 /**
  * Profile display name form.
