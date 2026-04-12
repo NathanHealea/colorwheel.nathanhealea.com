@@ -47,6 +47,7 @@ Core functionality:
 5. Color Scheme Explorer — Extends the color wheel with color theory relationships
 6. Collection Tracking — Personalizes the experience; requires paint data and user accounts
 7. Community & Social — Highest complexity; depends on collections, recipes, and user accounts
+8. User Management — Admin tools for managing roles, users, and profiles; requires authentication and roles
 
 ## MVP Features (Epics)
 
@@ -134,3 +135,15 @@ Core functionality:
 - [ ] [Curated palette sharing](./07-community-social/palette-sharing.md)
 - [ ] [Community feed and discovery](./07-community-social/community-feed.md)
 - [ ] [User profiles and shared collections](./07-community-social/user-profiles.md)
+
+### Epic: User Management
+
+**Goal:** Provide administrators with tools to manage roles, user accounts, and profiles, including the ability to merge duplicate profiles.
+
+**High-Level Scope:**
+
+- [ ] [Admin dashboard and navigation](./08-user-management/admin-dashboard.md)
+- [ ] [Role management (CRUD and assignment)](./08-user-management/role-management.md)
+- [ ] [User account management](./08-user-management/user-account-management.md)
+- [ ] [Admin profile editing](./08-user-management/admin-profile-editing.md)
+- [ ] [Profile and account merging](./08-user-management/profile-merging.md)
