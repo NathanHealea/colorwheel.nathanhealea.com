@@ -2,7 +2,7 @@
 
 **Epic:** Authentication & User Accounts
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 
 ## Summary
 
@@ -10,11 +10,11 @@ Restrict access to authenticated-only pages so that unauthenticated users are re
 
 ## Acceptance Criteria
 
-- [ ] Unauthenticated users are redirected to the sign-in page when accessing protected routes
-- [ ] Authenticated users can access all protected routes
-- [ ] Middleware or layout-level auth check handles protection consistently
-- [ ] Public pages (landing, color wheel browse) remain accessible without login
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] Unauthenticated users are redirected to the sign-in page when accessing protected routes
+- [x] Authenticated users can access all protected routes
+- [x] Middleware or layout-level auth check handles protection consistently
+- [x] Public pages (landing, color wheel browse) remain accessible without login
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Key Files
 
