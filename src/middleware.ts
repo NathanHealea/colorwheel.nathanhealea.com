@@ -1,17 +1,20 @@
 import { createServerClient } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
 
-/** Routes that bypass authentication and profile-setup checks. */
+/** Route prefixes that bypass authentication and profile-setup checks. */
 const PUBLIC_ROUTES = ['/sign-in', '/sign-up', '/auth/callback', '/auth/confirm', '/forgot-password', '/reset-password']
+
+/** Exact routes that bypass authentication (cannot use prefix matching because `/` would match everything). */
+const PUBLIC_EXACT_ROUTES = ['/']
 
 /** Route prefixes that require the `admin` role. */
 const ADMIN_ROUTES = ['/admin']
 
 /**
- * Next.js middleware that handles Supabase session refresh, profile-setup
- * enforcement, and admin route protection.
+ * Next.js middleware that handles Supabase session refresh, authentication
+ * enforcement, profile-setup enforcement, and admin route protection.
  *
- * For authenticated users:
+ * - Redirects unauthenticated users to `/sign-in` with a `next` query param.
  * - Redirects to `/profile/setup` if `has_setup_profile` is `false`.
  * - Redirects away from `/profile/setup` if setup is already complete.
  * - Blocks access to admin routes for non-admin users (redirects to `/`).
@@ -43,13 +46,19 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Skip all checks for public routes
-  if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
+  if (
+    PUBLIC_ROUTES.some((route) => pathname.startsWith(route)) ||
+    PUBLIC_EXACT_ROUTES.some((route) => pathname === route)
+  ) {
     return supabaseResponse
   }
 
-  // No authenticated user — skip profile checks (Protected Routes feature handles auth redirects)
+  // No authenticated user — redirect to sign-in with a `next` param for post-login redirect
   if (!user) {
-    return supabaseResponse
+    const url = request.nextUrl.clone()
+    url.pathname = '/sign-in'
+    url.searchParams.set('next', pathname)
+    return NextResponse.redirect(url)
   }
 
   // Check if the authenticated user has completed profile setup
