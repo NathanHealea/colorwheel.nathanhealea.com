@@ -1,7 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
 import { ChangePasswordForm } from '@/modules/user/components/change-password-form'
-import { redirect } from 'next/navigation'
 
 export default async function ProfileEditPage() {
   const supabase = await createClient()
@@ -10,12 +9,8 @@ export default async function ProfileEditPage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
-    redirect('/sign-in')
-  }
-
   // Check if the user has an email identity (password-based account)
-  const hasEmailIdentity = user.identities?.some((identity) => identity.provider === 'email') ?? false
+  const hasEmailIdentity = user?.identities?.some((identity) => identity.provider === 'email') ?? false
 
   return (
     <div className="flex min-h-screen w-full justify-center px-4 py-24">

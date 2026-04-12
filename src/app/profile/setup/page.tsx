@@ -6,18 +6,16 @@ import { redirect } from 'next/navigation'
 export default async function ProfileSetupPage() {
   const supabase = await createClient()
 
+  // Middleware guarantees an authenticated user on this route
   const {
     data: { user },
   } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/sign-in')
-  }
+  const userId = user!.id
 
   const { data: profile } = await supabase
     .from('profiles')
     .select('display_name, has_setup_profile')
-    .eq('id', user.id)
+    .eq('id', userId)
     .single()
 
   // If profile setup is already complete, redirect to home
@@ -27,11 +25,11 @@ export default async function ProfileSetupPage() {
 
   // Edge case: trigger failed and no profile row exists — create a skeleton row
   if (!profile) {
-    await supabase.from('profiles').insert({ id: user.id })
+    await supabase.from('profiles').insert({ id: userId })
   }
 
   // Extract a suggested display name from OAuth provider metadata
-  const meta = user.user_metadata ?? {}
+  const meta = user!.user_metadata ?? {}
   const suggestedName =
     (meta.full_name as string) ||
     (meta.name as string) ||
@@ -47,7 +45,7 @@ export default async function ProfileSetupPage() {
       .from('profiles')
       .select('id')
       .ilike('display_name', suggestedName)
-      .neq('id', user.id)
+      .neq('id', userId)
       .limit(1)
 
     nameAlreadyTaken = (existing?.length ?? 0) > 0
