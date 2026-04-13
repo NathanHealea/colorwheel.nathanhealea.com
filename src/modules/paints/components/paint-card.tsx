@@ -1,6 +1,6 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 
 /**
  * A compact paint card showing a color swatch, paint name, brand, and type.
@@ -43,11 +43,11 @@ export function PaintCard({
         style={{ backgroundColor: hex }}
         aria-hidden="true"
       />
-      <span className="text-center text-sm font-medium leading-tight">{name}</span>
+      <p className="text-center text-sm font-medium leading-tight">{name}</p>
       {(brand || paintType) && (
-        <span className="text-center text-xs text-muted-foreground leading-tight">
+        <p className="text-center text-xs text-muted-foreground leading-tight">
           {brand}{brand && paintType ? ': ' : ''}{paintType?.replace(/\b\w/g, (c) => c.toUpperCase())}
-        </span>
+        </p>
       )}
     </Link>
   )

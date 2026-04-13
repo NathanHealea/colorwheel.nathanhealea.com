@@ -1,6 +1,6 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
-import type { IttenHue } from '@/types/color'
+import type { IttenHue } from '@/types/color';
 
 /**
  * A clickable card displaying a named color swatch, name, and paint count.
@@ -22,10 +22,10 @@ export function ColorCard({ color, paintCount }: { color: IttenHue; paintCount: 
         style={{ backgroundColor: color.hex_code }}
         aria-hidden="true"
       />
-      <span className="text-center text-sm font-medium leading-tight">{color.name}</span>
-      <span className="text-xs text-muted-foreground">
+      <p className="text-center text-sm font-medium leading-tight">{color.name}</p>
+      <p className="text-xs text-muted-foreground">
         {paintCount} {paintCount === 1 ? 'paint' : 'paints'}
-      </span>
+      </p>
     </Link>
   )
 }

@@ -21,7 +21,7 @@ export function ColorGroupCard({ group }: { group: ColorGroup }) {
             style={{ backgroundColor: group.hex }}
             aria-hidden="true"
           />
-          <div className="min-w-0">
+          <div className="min-w-0 text-center">
             <h3 className="font-semibold">{group.name}</h3>
             <p className="text-sm text-muted-foreground">
               {group.count} {group.count === 1 ? 'Paint' : 'Paints'}
