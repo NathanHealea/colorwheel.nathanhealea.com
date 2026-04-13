@@ -2,7 +2,7 @@
 
 **Epic:** Paint Data & Search
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 
 ## Summary
 
@@ -10,17 +10,17 @@ Design and implement the core database schema for storing miniature paint data a
 
 ## Acceptance Criteria
 
-- [ ] A `brands` table exists with manufacturer information
-- [ ] A `product_lines` table exists linking paint ranges to brands
-- [ ] A `paints` table exists with color data (name, hex, RGB, HSL values)
-- [ ] A `paint_references` table exists linking related paints with relationship type and similarity score
-- [ ] A seed generator script (`scripts/generate-seed.ts`) converts JSON data to SQL
-- [ ] Seed data covers all 5 brands from `main` branch data (Citadel, Army Painter, Vallejo, Green Stuff World, AK Interactive — 2,337 paints)
-- [ ] Each paint has accurate hex color values with computed RGB and HSL
-- [ ] Paint references are seeded from the `comparable` data (334 cross-brand alternatives)
-- [ ] RLS policies allow all users to read paint data
-- [ ] Only admins can insert/update/delete paint data
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] A `brands` table exists with manufacturer information
+- [x] A `product_lines` table exists linking paint ranges to brands
+- [x] A `paints` table exists with color data (name, hex, RGB, HSL values)
+- [x] A `paint_references` table exists linking related paints with relationship type and similarity score
+- [x] A seed generator script (`scripts/generate-seed.ts`) converts JSON data to SQL
+- [x] Seed data covers all 5 brands from `main` branch data (Citadel, Army Painter, Vallejo, Green Stuff World, AK Interactive — 2,337 paints)
+- [x] Each paint has accurate hex color values with computed RGB and HSL
+- [x] Paint references are seeded from the `comparable` data (334 cross-brand alternatives)
+- [x] RLS policies allow all users to read paint data
+- [x] Only admins can insert/update/delete paint data
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Database
 
