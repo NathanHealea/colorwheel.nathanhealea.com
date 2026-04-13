@@ -1,11 +1,11 @@
-import { notFound } from 'next/navigation'
+import { notFound } from 'next/navigation';
 
-import { Breadcrumbs } from '@/components/breadcrumbs'
-import { ChildHueCard } from '@/modules/hues/components/child-hue-card'
-import { getHueService } from '@/modules/hues/services/hue-service.server'
-import { HueGroupPaintGrid } from '@/modules/paints/components/hue-group-paint-grid'
-import { HuePaintGrid } from '@/modules/paints/components/hue-paint-grid'
-import { getPaintService } from '@/modules/paints/services/paint-service.server'
+import { Breadcrumbs } from '@/components/breadcrumbs';
+import { ChildHueCard } from '@/modules/hues/components/child-hue-card';
+import { getHueService } from '@/modules/hues/services/hue-service.server';
+import { HueGroupPaintGrid } from '@/modules/paints/components/hue-group-paint-grid';
+import { HuePaintGrid } from '@/modules/paints/components/hue-paint-grid';
+import { getPaintService } from '@/modules/paints/services/paint-service.server';
 
 /** Valid page sizes that the paginated grid supports. */
 const VALID_SIZES = [25, 50, 100, 200]
@@ -64,7 +64,7 @@ export default async function HuePage({
 
         {childHues.length > 0 && (
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold">Colors</h2>
+            <h2 className="mb-4 text-2xl font-semibold">Hues</h2>
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
               {childHues.map((child) => (
                 <ChildHueCard key={child.id} hue={child} paintCount={childPaintCounts.get(child.id) ?? 0} />
