@@ -1,19 +1,19 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-import { Card, CardContent } from '@/components/ui/card';
-import type { IttenHue } from '@/types/color';
+import { Card, CardContent } from '@/components/ui/card'
+import type { IttenHue } from '@/types/color'
 
 /**
  * A clickable card displaying an Itten hue group with a color swatch, name, and paint count.
  *
- * Links to `/paints/group/[id]` where all paints in the hue are listed.
+ * Links to `/hues/[id]` where all paints in the hue are listed.
  *
  * @param props.hue - The Itten hue data to display.
  * @param props.paintCount - Number of paints assigned to this hue group.
  */
 export function IttenHueCard({ hue, paintCount }: { hue: IttenHue; paintCount: number }) {
   return (
-    <Link href={`/paints/group/${hue.id}`}>
+    <Link href={`/hues/${hue.id}`}>
       <Card className="card-compact transition-shadow hover:shadow-md">
         <CardContent className="flex items-center gap-4 p-4">
           <div

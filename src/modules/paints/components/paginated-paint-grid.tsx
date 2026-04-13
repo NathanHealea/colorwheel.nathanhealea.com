@@ -25,7 +25,7 @@ const MAX_VISIBLE_PAGES = 7
  *
  * @param props.initialPaints - First page of paints (server-rendered).
  * @param props.totalCount - Total number of paints in the database.
- * @param props.basePath - URL path prefix for pagination links (e.g., "/paints" or "/paints/group/abc").
+ * @param props.basePath - URL path prefix for pagination links (e.g., "/paints" or "/hues/abc").
  * @param props.fetchPaints - Optional custom fetch function. Defaults to fetching all paints.
  */
 export function PaginatedPaintGrid({

@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
-import { IttenHueCard } from '@/modules/colors/components/itten-hue-card'
-import { getColorService } from '@/modules/colors/services/color-service.server'
+import { IttenHueCard } from '@/modules/hues/components/itten-hue-card'
+import { getHueService } from '@/modules/hues/services/hue-service.server'
 import { PaginatedPaintGrid } from '@/modules/paints/components/paginated-paint-grid'
 import { getPaintService } from '@/modules/paints/services/paint-service.server'
 
@@ -17,13 +17,13 @@ export default async function PaintsPage({
   const currentPage = Math.max(1, parseInt(page ?? '1', 10) || 1)
   const offset = (currentPage - 1) * pageSize
 
-  const [colorService, paintService] = await Promise.all([
-    getColorService(),
+  const [hueService, paintService] = await Promise.all([
+    getHueService(),
     getPaintService(),
   ])
 
   const [hues, initialPaints, totalPaints] = await Promise.all([
-    colorService.getIttenHues(),
+    hueService.getIttenHues(),
     paintService.getAllPaints({ limit: pageSize, offset }),
     paintService.getTotalPaintCount(),
   ])

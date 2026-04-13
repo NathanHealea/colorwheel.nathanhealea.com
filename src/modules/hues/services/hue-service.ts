@@ -3,19 +3,18 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { IttenHue } from '@/types/color'
 
 /**
- * Creates a color service bound to the given Supabase client.
+ * Creates a hue service bound to the given Supabase client.
  *
  * Encapsulates all queries for the self-referencing Itten hue table.
  * Top-level hues have `parent_id = null`; child entries (named colors)
  * have `parent_id` set to their parent hue.
  *
- * Use the `.server.ts` or `.client.ts` wrappers to obtain an instance
- * with the correct client.
+ * Use the `.server.ts` wrapper to obtain an instance with the correct client.
  *
  * @param supabase - A Supabase client instance (server or browser).
- * @returns An object with color query methods.
+ * @returns An object with hue query methods.
  */
-export function createColorService(supabase: SupabaseClient) {
+export function createHueService(supabase: SupabaseClient) {
   return {
     /**
      * Fetches all top-level Itten hues ordered by their color wheel position.
@@ -66,5 +65,5 @@ export function createColorService(supabase: SupabaseClient) {
   }
 }
 
-/** The color service instance type. */
-export type ColorService = ReturnType<typeof createColorService>
+/** The hue service instance type. */
+export type HueService = ReturnType<typeof createHueService>

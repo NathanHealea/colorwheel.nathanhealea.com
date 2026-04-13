@@ -7,37 +7,37 @@ import type { PaintWithBrand } from '@/modules/paints/services/paint-service'
 import { getPaintService } from '@/modules/paints/services/paint-service.client'
 
 /**
- * Paginated paint grid filtered to a specific color.
+ * Paginated paint grid filtered to a specific child hue.
  *
- * Wraps {@link PaginatedPaintGrid} with a color-specific fetch function
+ * Wraps {@link PaginatedPaintGrid} with a hue-specific fetch function
  * and URL base path.
  *
- * @param props.colorId - The color UUID to filter paints by.
+ * @param props.hueId - The child hue UUID to filter paints by.
  * @param props.initialPaints - First page of paints (server-rendered).
- * @param props.totalCount - Total number of paints assigned to this color.
+ * @param props.totalCount - Total number of paints assigned to this hue.
  */
-export function ColorPaintGrid({
-  colorId,
+export function HuePaintGrid({
+  hueId,
   initialPaints,
   totalCount,
 }: {
-  colorId: string
+  hueId: string
   initialPaints: PaintWithBrand[]
   totalCount: number
 }) {
   const fetchPaints = useCallback(
     async (options: { limit: number; offset: number }) => {
       const paintService = getPaintService()
-      return paintService.getPaintsByIttenHueId(colorId, options)
+      return paintService.getPaintsByIttenHueId(hueId, options)
     },
-    [colorId]
+    [hueId]
   )
 
   return (
     <PaginatedPaintGrid
       initialPaints={initialPaints}
       totalCount={totalCount}
-      basePath={`/colors/${colorId}`}
+      basePath={`/hues/${hueId}`}
       fetchPaints={fetchPaints}
     />
   )

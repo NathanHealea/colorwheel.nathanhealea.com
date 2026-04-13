@@ -37,7 +37,7 @@ export function HueGroupPaintGrid({
     <PaginatedPaintGrid
       initialPaints={initialPaints}
       totalCount={totalCount}
-      basePath={`/paints/group/${hueId}`}
+      basePath={`/hues/${hueId}`}
       fetchPaints={fetchPaints}
     />
   )
