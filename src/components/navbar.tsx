@@ -36,6 +36,14 @@ export async function Navbar() {
           Grimify
         </Link>
       </div>
+      <div className="navbar-center">
+        <Link href="/paints" className="btn btn-ghost btn-sm">
+          Paints
+        </Link>
+        <Link href="/brands" className="btn btn-ghost btn-sm">
+          Brands
+        </Link>
+      </div>
       <div className="navbar-end">
         {user && displayName ? (
           <UserMenu displayName={displayName} avatarUrl={avatarUrl} />

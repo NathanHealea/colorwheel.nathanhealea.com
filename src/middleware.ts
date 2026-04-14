@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
 
 /** Route prefixes that bypass authentication and profile-setup checks. */
-const PUBLIC_ROUTES = ['/sign-in', '/sign-up', '/auth/callback', '/auth/confirm', '/forgot-password', '/reset-password']
+const PUBLIC_ROUTES = ['/sign-in', '/sign-up', '/auth/callback', '/auth/confirm', '/forgot-password', '/reset-password', '/brands', '/paints', '/hues']
 
 /** Exact routes that bypass authentication (cannot use prefix matching because `/` would match everything). */
 const PUBLIC_EXACT_ROUTES = ['/']
