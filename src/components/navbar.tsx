@@ -1,7 +1,7 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-import { createClient } from '@/lib/supabase/server';
-import { UserMenu } from '@/modules/user/components/user-menu';
+import { createClient } from '@/lib/supabase/server'
+import { UserMenu } from '@/modules/user/components/user-menu'
 
 /**
  * Top-level navigation bar (server component).
@@ -36,14 +36,14 @@ export async function Navbar() {
           Grimify
         </Link>
       </div>
-      <div className='navbar-center'>
+      <div className="navbar-center">
         <Link href="/paints" className="btn btn-ghost btn-sm">
           Paints
         </Link>
         <Link href="/brands" className="btn btn-ghost btn-sm">
           Brands
         </Link>
-        </div>
+      </div>
       <div className="navbar-end">
         {user && displayName ? (
           <UserMenu displayName={displayName} avatarUrl={avatarUrl} />
