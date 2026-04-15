@@ -1,8 +1,8 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
-import { Card, CardContent } from '@/components/ui/card'
-import { cn } from '@/lib/utils'
-import type { IttenHue } from '@/types/color'
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+import type { IttenHue } from '@/types/color';
 
 /**
  * A card displaying an Itten hue group with a color swatch, name, and paint count.
@@ -35,7 +35,7 @@ export function IttenHueCard({
         style={{ backgroundColor: hue.hex_code }}
         aria-hidden="true"
       />
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 text-center">
         <h3 className="font-semibold">{hue.name}</h3>
         <p className="text-sm text-muted-foreground">
           {paintCount} {paintCount === 1 ? 'paint' : 'paints'}

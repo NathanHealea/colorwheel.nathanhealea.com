@@ -10,7 +10,23 @@ Planning and feature documentation lives in `docs/`.
 
 - Use conventional commit format: `type(scope): description`
 - Feature docs follow the `/plan` → `/implement` → `/stage` → `/release` workflow
-- For branches forked off `v1/main`, `/stage` should create the PR targeting `v1/main` (not `main`)
+
+### Feature doc metadata
+
+Feature docs created by `/plan` must include these metadata fields at the top:
+
+```markdown
+# Feature Title
+
+**Epic:** Epic Name
+**Type:** Feature
+**Status:** Todo
+**Branch:** `feature/paint-search`
+**Merge into:** `v1/main`
+```
+
+- **Branch** — The git branch for this feature. Can be explicitly set in the `/plan` input; if not provided, derived from the doc file name (e.g., `paint-search.md` → `feature/paint-search`).
+- **Merge into** — The target branch for the PR created by `/stage`. Can be explicitly set; defaults to `main` if not provided.
 
 ## Project Structure
 
@@ -123,3 +139,4 @@ Example header format:
 - **Docs directory**: `docs/`
 - **Remote type**: `github`
 - **PR template**: `github-default`
+- **Default merge target**: `v1/main`
