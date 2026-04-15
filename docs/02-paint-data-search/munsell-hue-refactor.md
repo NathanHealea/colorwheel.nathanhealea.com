@@ -2,7 +2,7 @@
 
 **Epic:** Paint Data & Search
 **Type:** Refactor
-**Status:** Todo
+**Status:** Done
 **Branch:** `refactor/munsell-hue-refactor`
 **Merge into:** `v1/main`
 
@@ -123,22 +123,22 @@ Neutral (achromatic and near-achromatic) uses a different set of names:
 
 ## Acceptance Criteria
 
-- [ ] `itten_hues` table is dropped and replaced with a `hues` table
-- [ ] `hues` table has a `slug` column (text, not null) with unique constraint scoped to `(parent_id, slug)`
-- [ ] `hues` table retains the self-referencing `parent_id` pattern
-- [ ] 10 Munsell principal hues + Neutral are seeded as top-level rows (`parent_id = NULL`)
-- [ ] 11 ISCC-NBS sub-hues per principal hue are seeded as child rows
-- [ ] Neutral has ~11 achromatic/near-achromatic sub-hues
-- [ ] `paints.itten_hue_id` column is renamed to `paints.hue_id`
-- [ ] `IttenHue` TypeScript type is renamed to `Hue` with a `slug: string` field added
-- [ ] `Paint` TypeScript type uses `hue_id` instead of `itten_hue_id`
-- [ ] Hue service methods are renamed: `getIttenHues` → `getHues`, `getIttenHueById` → `getHueById`
-- [ ] Paint service methods are renamed: all `IttenHue` references become `Hue`, `itten_hue_id` becomes `hue_id`
-- [ ] Components (`itten-hue-card.tsx`, `child-hue-card.tsx`, `paint-explorer.tsx`) use the `Hue` type
-- [ ] Route pages (`/hues/[id]`, `/paints`) use updated service method names
-- [ ] Seed generator (`scripts/generate-seed.ts`) uses the new color catalog and table name
-- [ ] RLS policies on `hues` match the previous policies (public SELECT, admin-only mutations)
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] `itten_hues` table is dropped and replaced with a `hues` table
+- [x] `hues` table has a `slug` column (text, not null) with unique constraint scoped to `(parent_id, slug)`
+- [x] `hues` table retains the self-referencing `parent_id` pattern
+- [x] 10 Munsell principal hues + Neutral are seeded as top-level rows (`parent_id = NULL`)
+- [x] 11 ISCC-NBS sub-hues per principal hue are seeded as child rows
+- [x] Neutral has ~11 achromatic/near-achromatic sub-hues
+- [x] `paints.itten_hue_id` column is renamed to `paints.hue_id`
+- [x] `IttenHue` TypeScript type is renamed to `Hue` with a `slug: string` field added
+- [x] `Paint` TypeScript type uses `hue_id` instead of `itten_hue_id`
+- [x] Hue service methods are renamed: `getIttenHues` → `getHues`, `getIttenHueById` → `getHueById`
+- [x] Paint service methods are renamed: all `IttenHue` references become `Hue`, `itten_hue_id` becomes `hue_id`
+- [x] Components (`itten-hue-card.tsx`, `child-hue-card.tsx`, `paint-explorer.tsx`) use the `Hue` type
+- [x] Route pages (`/hues/[id]`, `/paints`) use updated service method names
+- [x] Seed generator (`scripts/generate-seed.ts`) uses the new color catalog and table name
+- [x] RLS policies on `hues` match the previous policies (public SELECT, admin-only mutations)
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Database Changes
 
