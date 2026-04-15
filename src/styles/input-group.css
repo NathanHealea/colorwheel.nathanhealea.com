@@ -1,0 +1,134 @@
+/*
+ * Input Group Component
+ *
+ * Based on the daisyUI Join / Input Group pattern.
+ * https://daisyui.com/components/join/
+ *
+ * Composes an input (or textarea) with inline addons, text labels, and
+ * buttons into a single visually connected control. Uses this project's
+ * Tailwind CSS theme tokens instead of daisyUI's built-in theme system.
+ *
+ * Classes:
+ *   Base:    .input-group                — Flex container with shared border & focus ring
+ *   Control: .input-group-control        — Borderless input/textarea inside the group
+ *   Addons:  .input-group-addon          — Wrapper for addon content (icons, text, buttons)
+ *   Align:   .input-group-addon-start    — Addon at inline-start (left in LTR)
+ *            .input-group-addon-end      — Addon at inline-end (right in LTR)
+ *            .input-group-addon-top      — Addon stacked above the control
+ *            .input-group-addon-bottom   — Addon stacked below the control
+ *   Text:    .input-group-text           — Muted text/icon label inside an addon
+ *   Button:  .input-group-btn            — Compact button inside an addon
+ *            .input-group-btn-xs         — Extra-small button variant
+ *            .input-group-btn-icon-xs    — Square icon-only extra-small button
+ *            .input-group-btn-icon-sm    — Square icon-only small button
+ */
+
+/* -------------------------------------------------------------------------
+ * Base — shared border, focus-within ring
+ * ----------------------------------------------------------------------- */
+.input-group {
+  @apply relative flex h-9 w-full min-w-0 items-center rounded-lg border border-input
+    transition-colors outline-none
+    has-disabled:bg-input/50 has-disabled:opacity-50;
+}
+
+.input-group:focus-within {
+  @apply border-ring ring-3 ring-ring/50;
+}
+
+.input-group:has([aria-invalid='true']) {
+  @apply border-destructive ring-3 ring-destructive/20;
+}
+
+/* Stack vertically when a block-aligned addon is present */
+.input-group:has(> .input-group-addon-top),
+.input-group:has(> .input-group-addon-bottom) {
+  @apply h-auto flex-col;
+}
+
+/* Auto-height when containing a textarea */
+.input-group:has(> textarea) {
+  @apply h-auto;
+}
+
+/* -------------------------------------------------------------------------
+ * Control — borderless input/textarea slotted inside the group
+ * ----------------------------------------------------------------------- */
+.input-group-control {
+  @apply flex-1 rounded-none border-0 bg-transparent shadow-none ring-0
+    focus-visible:ring-0
+    disabled:bg-transparent
+    aria-invalid:ring-0;
+}
+
+/* Adjust padding when adjacent to addons */
+.input-group-addon-start + .input-group-control,
+.input-group-addon-start ~ .input-group-control {
+  @apply pl-1.5;
+}
+
+.input-group-control:has(~ .input-group-addon-end) {
+  @apply pr-1.5;
+}
+
+/* -------------------------------------------------------------------------
+ * Addon — wrapper for icons, text, or buttons beside the control
+ * ----------------------------------------------------------------------- */
+.input-group-addon {
+  @apply flex h-auto shrink-0 cursor-text items-center justify-center gap-2
+    py-1.5 text-sm font-medium text-muted-foreground select-none
+    [&>svg:not([class*='size-'])]:size-4;
+}
+
+/* --- Inline start (left in LTR) --- */
+.input-group-addon-start {
+  @apply order-first pl-2;
+}
+
+/* --- Inline end (right in LTR) --- */
+.input-group-addon-end {
+  @apply order-last pr-2;
+}
+
+/* --- Block start (stacked above) --- */
+.input-group-addon-top {
+  @apply order-first w-full justify-start px-2.5 pt-2;
+}
+
+/* --- Block end (stacked below) --- */
+.input-group-addon-bottom {
+  @apply order-last w-full justify-start px-2.5 pb-2;
+}
+
+/* -------------------------------------------------------------------------
+ * Text — muted label / icon wrapper inside an addon
+ * ----------------------------------------------------------------------- */
+.input-group-text {
+  @apply flex items-center gap-2 text-sm text-muted-foreground
+    [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4;
+}
+
+/* -------------------------------------------------------------------------
+ * Button — compact action button inside an addon
+ * ----------------------------------------------------------------------- */
+.input-group-btn {
+  @apply inline-flex h-6 shrink-0 cursor-pointer items-center justify-center gap-1
+    rounded-[calc(var(--radius)-3px)] px-1.5 text-sm shadow-none
+    transition-all select-none outline-none
+    focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50
+    disabled:pointer-events-none disabled:opacity-50
+    [&_svg:not([class*='size-'])]:size-3.5;
+}
+
+.input-group-btn-xs {
+  @apply h-6 gap-1 rounded-[calc(var(--radius)-3px)] px-1.5
+    [&_svg:not([class*='size-'])]:size-3.5;
+}
+
+.input-group-btn-icon-xs {
+  @apply size-6 rounded-[calc(var(--radius)-3px)] p-0;
+}
+
+.input-group-btn-icon-sm {
+  @apply size-8 p-0;
+}
