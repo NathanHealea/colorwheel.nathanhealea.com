@@ -98,18 +98,12 @@ Operations are applied in this order:
 
 ### Step 1: Create `hue-service.client.ts`
 
-Create a browser-side hue service factory — the same pattern used by `paint-service.client.ts`. Currently missing, but required for `PaintExplorer` to fetch hues client-side.
+Create a browser-side hue service factory — mirrors the existing `paint-service.client.ts` pattern. This is a prerequisite for `PaintExplorer` to fetch child hues client-side.
 
 **New file:** `src/modules/hues/services/hue-service.client.ts`
 
-```ts
-import { createClient } from '@/lib/supabase/client'
-import { createHueService } from '@/modules/hues/services/hue-service'
-
-export function getHueService() {
-  return createHueService(createClient())
-}
-```
+- Import `createClient` from `@/lib/supabase/client` and `createHueService` from `./hue-service`.
+- Export `getHueService()` that returns `createHueService(createClient())`.
 
 ### Step 2: Create the `PaintExplorer` client component
 
@@ -117,7 +111,7 @@ export function getHueService() {
 
 This is the core deliverable — a `'use client'` component that owns all interactive state and orchestrates search, hue filtering, and pagination on `/paints`.
 
-#### Props (SSR hydration)
+#### 2a. Props (SSR hydration)
 
 | Prop | Type | Purpose |
 |------|------|---------|
@@ -126,7 +120,7 @@ This is the core deliverable — a `'use client'` component that owns all intera
 | `ittenHues` | `IttenHue[]` | All top-level Itten hues (fetched server-side, avoids client round-trip) |
 | `huePaintCounts` | `Record<string, number>` | Paint count per top-level hue group (server-fetched) |
 
-#### Internal state
+#### 2b. Internal state
 
 | State | Type | Initialized from |
 |-------|------|-----------------|
@@ -140,16 +134,16 @@ This is the core deliverable — a `'use client'` component that owns all intera
 | `gridTotalCount` | `number` | `initialTotalCount` initially; updated on filter/search change |
 | `isFiltering` | `boolean` | Loading state during filter/search transitions |
 
-#### URL sync strategy
+#### 2c. URL sync strategy
 
 - Read URL params on mount to restore state: `q`, `hue`, `page`, `size`.
-- Write URL params via `router.replace()` on every state change using `useSearchParams()` as the base (preserves any extra params).
-- The `hue` param is a comma-separated list: `hue=red` (parent only), `hue=red,crimson` (parent + child). Names are lowercase.
-- Hue names are resolved to IDs by matching against the `ittenHues` array (for parents) or `childHues` array (for children) using case-insensitive name comparison.
+- Write URL params via `router.replace()` on every state change using `useSearchParams()` as the base (preserves existing params like `page` and `size`).
+- The `hue` param is a comma-separated list of hue names: `hue=red` (parent only), `hue=red,crimson` (parent + child). Names are lowercase.
+- Hue names are resolved to IDs by matching against the `ittenHues` prop (for parents) or the fetched `childHues` array (for children) using case-insensitive name comparison.
 
-#### Debounce implementation
+#### 2d. Debounce implementation
 
-Use a `useEffect` + `setTimeout` pattern (no external dependency):
+Use a `useEffect` + `setTimeout` pattern — no external dependency needed:
 
 ```ts
 useEffect(() => {
@@ -161,31 +155,31 @@ useEffect(() => {
 
 Fires after 300ms of inactivity. Skips queries shorter than 3 characters (except empty string, which clears the search).
 
-#### Data fetching on filter change
+#### 2e. Data fetching on filter change
 
-When `debouncedQuery`, `selectedHueName`, or `selectedChildHueName` changes:
+When `debouncedQuery`, `selectedHueName`, or `selectedChildHueName` changes, run a `useEffect` that:
 
-1. Resolve hue names → IDs from the loaded hue arrays.
-2. Build the fetch:
-   - **No search, no hue:** `paintService.getAllPaints({ limit, offset: 0 })` + `paintService.getTotalPaintCount()`
-   - **Hue only (child):** `paintService.getPaintsByIttenHueId(childHueId, { limit, offset: 0 })` + `paintService.getPaintCountByIttenHueId(childHueId)`
-   - **Hue only (parent, no child):** `paintService.getPaintsByHueGroup(parentHueId, { limit, offset: 0 })` + `paintService.getPaintCountByHueGroup(parentHueId)`
-   - **Search (with or without hue):** `paintService.searchPaints({ query, hueId?, hueIds?, limit, offset: 0 })`
-3. Update `gridPaints` and `gridTotalCount` with results.
-4. Reset pagination to page 1 (remove `page` from URL).
-5. Update URL params (`q`, `hue`).
+1. Resolves hue names to IDs from the loaded hue arrays.
+2. Determines which paint service method to call:
+   - **No search, no hue:** `getAllPaints({ limit, offset: 0 })` + `getTotalPaintCount()`
+   - **Hue only (child):** `getPaintsByIttenHueId(childHueId, { limit, offset: 0 })` + `getPaintCountByIttenHueId(childHueId)`
+   - **Hue only (parent, no child):** `getPaintsByHueGroup(parentHueId, { limit, offset: 0 })` + `getPaintCountByHueGroup(parentHueId)`
+   - **Search (with or without hue):** `searchPaints({ query, hueId?, hueIds?, limit, offset: 0 })`
+3. Updates `gridPaints` and `gridTotalCount` with results.
+4. Resets pagination to page 1 (removes `page` from URL).
+5. Updates URL params (`q`, `hue`).
 
 When a parent hue is newly selected, also fetch:
 - `hueService.getChildHues(parentHueId)` → `childHues`
 - `paintService.getPaintCountByIttenHueId(childId)` for each child → `childHuePaintCounts`
 
-#### PaginatedPaintGrid integration
+#### 2f. PaginatedPaintGrid integration
 
-Pass a `fetchPaints` callback that incorporates the current search + hue state, and use a `key` derived from the filter state (`${debouncedQuery}-${parentHueId}-${childHueId}`) to force remount when filters change. This cleanly resets PaginatedPaintGrid's internal page state to 1.
+Reuse the existing `PaginatedPaintGrid` by passing a `fetchPaints` callback that incorporates the current search + hue state. Use a `key` derived from the filter state to force remount when filters change — this cleanly resets PaginatedPaintGrid's internal page state to 1.
 
 ```tsx
 <PaginatedPaintGrid
-  key={`${debouncedQuery}-${selectedHue?.id}-${selectedChildHue?.id}`}
+  key={`${debouncedQuery}-${parentHueId}-${childHueId}`}
   initialPaints={gridPaints}
   totalCount={gridTotalCount}
   basePath="/paints"
@@ -193,106 +187,57 @@ Pass a `fetchPaints` callback that incorporates the current search + hue state, 
 />
 ```
 
-The `fetchPaintsWithFilters` callback mirrors the fetch logic above but accepts `{ limit, offset }` from PaginatedPaintGrid for pagination. PaginatedPaintGrid already preserves all existing URL params (including `q` and `hue`) when updating `page`/`size`.
+The `fetchPaintsWithFilters` callback mirrors the fetch logic from 2e but accepts `{ limit, offset }` from PaginatedPaintGrid for pagination. PaginatedPaintGrid already preserves all URL params (including `q` and `hue`) when updating `page`/`size` via `new URLSearchParams(searchParams.toString())`.
 
-#### Rendering layout
+#### 2g. Rendering layout
 
-```tsx
-<div>
-  {/* Search + Clear All row */}
-  <div className="flex gap-2">
-    <input type="text" value={searchQuery} onChange={...} placeholder="Search paints..." className="input input-bordered flex-1" />
-    <button onClick={clearAll} className="btn btn-ghost">Clear All</button>
-  </div>
-
-  {/* Top-level hue pills */}
-  <div className="flex flex-wrap gap-3">
-    {ittenHues.map(hue => (
-      <IttenHueCard hue={hue} paintCount={...} isSelected={...} onSelect={...} />
-    ))}
-  </div>
-
-  {/* Child hue pills (conditional) */}
-  {childHues.length > 0 && (
-    <div className="flex flex-wrap gap-3">
-      {childHues.map(hue => (
-        <ChildHueCard hue={hue} paintCount={...} isSelected={...} onSelect={...} />
-      ))}
-    </div>
-  )}
-
-  {/* Loading overlay */}
-  {isFiltering && <LoadingIndicator />}
-
-  {/* Paint grid */}
-  <PaginatedPaintGrid key={gridKey} ... />
-</div>
+```
+┌──────────────────────────────────────────────────┐
+│ <input class="input" />                [Clear All] │  ← search + clear row
+├──────────────────────────────────────────────────┤
+│ IttenHueCard  IttenHueCard  IttenHueCard  ...    │  ← flex-wrap row of top-level hues
+├──────────────────────────────────────────────────┤
+│ ChildHueCard  ChildHueCard  ChildHueCard  ...    │  ← conditional child hue row
+├──────────────────────────────────────────────────┤
+│ PaginatedPaintGrid                               │  ← reused grid with filtered data
+└──────────────────────────────────────────────────┘
 ```
 
-#### Clear All
+- Search input uses the `.input` class from `src/styles/input.css`.
+- Clear All button uses `.btn .btn-ghost`.
+- `IttenHueCard` rendered in filter mode (`onSelect` prop) — already has "Details" link and `ring-2 ring-primary` selected state.
+- `ChildHueCard` rendered in filter mode (`onSelect` prop) — same dual-mode support.
+- `isFiltering` state applies `opacity-50 transition-opacity` to the grid area during filter transitions.
+
+#### 2h. Clear All
 
 Resets `searchQuery`, `debouncedQuery`, `selectedHueName`, `selectedChildHueName`, `childHues` to defaults. Removes `q`, `hue`, `page` from URL. Reloads unfiltered paint data.
+
+#### 2i. Hue selection behavior
+
+- **Select parent hue:** Sets `selectedHueName`, clears `selectedChildHueName`, fetches child hues + child paint counts, fetches filtered paints.
+- **Deselect parent hue** (click same pill): Clears `selectedHueName`, `selectedChildHueName`, `childHues`. Reverts to unfiltered (or search-only) results.
+- **Select child hue:** Sets `selectedChildHueName`, fetches paints filtered to that child hue only.
+- **Deselect child hue** (click same pill): Clears `selectedChildHueName`. Reverts to parent-hue-filtered results.
 
 ### Step 3: Refactor `src/app/paints/page.tsx`
 
 Convert the server page into a thin data-fetching shell that renders `PaintExplorer`.
 
 **Changes:**
-- Import `getHueService` from `hue-service.server.ts`.
-- Fetch in parallel: `getAllPaints`, `getTotalPaintCount`, `getIttenHues`, child IDs per hue + `getPaintCountByHueGroup` for each.
+- Add import for `getHueService` from `hue-service.server.ts`.
+- Add import for `PaintExplorer`.
+- Fetch in parallel: `getAllPaints`, `getTotalPaintCount`, `getIttenHues`.
+- After hues are loaded, fetch `getPaintCountByHueGroup` for each hue (~13 parallel queries).
 - Pass all fetched data as props to `<PaintExplorer />`.
-- Keep the page heading (`<h1>Paints</h1>`) and subtitle in the server component; `PaintExplorer` receives it or renders below it.
-- Remove the search input placeholder if present — search lives in `PaintExplorer` now.
-
-```tsx
-export default async function PaintsPage({ searchParams }) {
-  const { page, size } = await searchParams
-  const pageSize = VALID_SIZES.includes(Number(size)) ? Number(size) : 50
-  const currentPage = Math.max(1, parseInt(page ?? '1', 10) || 1)
-  const offset = (currentPage - 1) * pageSize
-
-  const [paintService, hueService] = await Promise.all([
-    getPaintService(),
-    getHueService(),
-  ])
-
-  const [initialPaints, totalPaints, ittenHues] = await Promise.all([
-    paintService.getAllPaints({ limit: pageSize, offset }),
-    paintService.getTotalPaintCount(),
-    hueService.getIttenHues(),
-  ])
-
-  // Fetch paint counts per hue group
-  const hueCountEntries = await Promise.all(
-    ittenHues.map(async (hue) => [hue.id, await paintService.getPaintCountByHueGroup(hue.id)] as const)
-  )
-  const huePaintCounts = Object.fromEntries(hueCountEntries)
-
-  return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-12">
-      <div className="mb-8 flex flex-col gap-4">
-        <h1 className="text-3xl font-bold">Paints</h1>
-        <p className="text-sm text-muted-foreground">
-          Browse {totalPaints.toLocaleString()} paints.
-        </p>
-      </div>
-      <PaintExplorer
-        initialPaints={initialPaints}
-        initialTotalCount={totalPaints}
-        ittenHues={ittenHues}
-        huePaintCounts={huePaintCounts}
-      />
-    </div>
-  )
-}
-```
+- Keep the page heading and subtitle in the server component above `PaintExplorer`.
 
 ### Step 4: Verify and handle edge cases
 
-- **Empty state:** When `gridPaints` is empty after a search/filter, PaginatedPaintGrid already shows "No paints available." Verify this works correctly.
-- **Loading states:** `isFiltering` shows opacity/skeleton during filter transitions. PaginatedPaintGrid already handles `isPending` for page changes.
-- **URL bookmarkability:** Verify that loading `/paints?q=citadel&hue=red,crimson&page=2` correctly restores all state.
-- **Search edge cases:** Clearing the search input (empty string) with active hue filters should show all paints in that hue group (not all paints globally).
+- **Empty state:** When `gridPaints` is empty after a search/filter, PaginatedPaintGrid already shows "No paints available." Verify this works correctly with combined search + hue filters.
+- **Loading states:** `isFiltering` shows opacity during filter transitions. PaginatedPaintGrid already handles `isPending` for page changes via `useTransition`.
+- **URL restoration:** Verify that loading `/paints?q=citadel&hue=red,crimson&page=2` correctly restores all state — search input prefilled, parent hue selected, child hue selected, grid on page 2.
+- **Search + filter interaction:** Clearing the search input with active hue filters should show all paints in that hue group (not all paints globally).
 - **Hue toggle:** Clicking an already-selected parent hue deselects it and clears the child hue. Clicking an already-selected child hue deselects just the child (parent stays active).
 
 ### Affected Files
@@ -301,19 +246,19 @@ export default async function PaintsPage({ searchParams }) {
 |------|--------|
 | `src/modules/hues/services/hue-service.client.ts` | **New** — browser-side hue service factory |
 | `src/modules/paints/components/paint-explorer.tsx` | **New** — main interactive component (search, hue filter, grid orchestration) |
-| `src/app/paints/page.tsx` | **Modify** — refactor to thin server shell; fetch hues + counts; render PaintExplorer |
+| `src/app/paints/page.tsx` | **Modify** — add hue data fetching; render PaintExplorer with props |
 | `src/modules/paints/components/paginated-paint-grid.tsx` | **No change** — reused via `fetchPaints` prop + key-based remount |
 | `src/modules/hues/components/itten-hue-card.tsx` | **No change** — already supports filter mode (`onSelect` prop) |
 | `src/modules/hues/components/child-hue-card.tsx` | **No change** — already supports filter mode (`onSelect` prop) |
-| `src/modules/paints/services/paint-service.ts` | **No change** — `searchPaints()` already exists with hue filtering support |
+| `src/modules/paints/services/paint-service.ts` | **No change** — `searchPaints()` already exists with `hueId`/`hueIds` support |
 
 ### Risks & Considerations
 
-- **N+1 hue count queries:** Fetching paint counts per hue group requires one query per top-level hue (~13 queries). This runs server-side on initial page load and is acceptable for 13 items. Consider caching or a single aggregation query if hue count grows.
-- **`searchPaints` multi-step approach:** The current implementation does 3-4 round-trips to Supabase (brand lookup → parallel ID queries → data + count). This is fine for interactive use but could be optimized with a Postgres function if performance becomes an issue.
-- **PaginatedPaintGrid key remount:** Remounting the grid on every filter change loses scroll position and internal pagination state. This is intentional — filters always reset to page 1. However, if the remount causes a visible flash, consider adding a transition.
-- **No hue-service.client.ts exists yet:** This is a blocker — PaintExplorer cannot fetch child hues without it. Creating it is Step 1.
-- **Hue name collisions:** If two hues share the same lowercase name, URL-based resolution would be ambiguous. This is unlikely given Itten hue naming but worth noting.
+- **N+1 hue count queries:** Fetching paint counts per hue group requires one query per top-level hue (~13 queries). These run server-side in parallel on initial page load and are acceptable for 13 items. Consider a single aggregation query if the count grows.
+- **`searchPaints` round-trips:** The current implementation does 3-4 Supabase queries (brand lookup → parallel ID queries → data + count). Fine for interactive use; could be optimized with a Postgres function if latency becomes an issue.
+- **PaginatedPaintGrid key remount:** Remounting the grid on every filter change loses scroll position and internal pagination state. This is intentional — filters always reset to page 1. If the remount causes a visible flash, consider wrapping in a CSS transition.
+- **No `hue-service.client.ts`:** This is a blocker — PaintExplorer cannot fetch child hues without it. Step 1 resolves this.
+- **Hue name collisions:** URL-based name resolution would be ambiguous if two hues share the same lowercase name. Unlikely given Itten hue naming but worth noting.
 
 ## Existing Components & Services
 
