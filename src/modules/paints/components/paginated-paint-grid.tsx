@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react'
+import { useCallback, useMemo, useState, useTransition } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 import { PaintCard } from '@/modules/paints/components/paint-card'
@@ -53,17 +53,15 @@ export function PaginatedPaintGrid({
   const [pageSize, setPageSize] = useState<number>(initialSize)
   const [isPending, startTransition] = useTransition()
 
-  // Sync internal paints state when the parent provides new filtered data.
-  // Skips the first render to preserve URL-based initial page.
-  const isFirstRender = useRef(true)
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false
-      return
-    }
+  // Reset internal state when the parent provides new filtered data.
+  // Uses the "store previous props in state" pattern recommended by React
+  // to derive state during render instead of calling setState in an effect.
+  const [prevInitialPaints, setPrevInitialPaints] = useState(initialPaints)
+  if (prevInitialPaints !== initialPaints) {
+    setPrevInitialPaints(initialPaints)
     setPaints(initialPaints)
     setCurrentPage(1)
-  }, [initialPaints])
+  }
 
   const totalPages = Math.ceil(totalCount / pageSize)
 
