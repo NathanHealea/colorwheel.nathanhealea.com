@@ -112,112 +112,159 @@ function round2(n: number): number {
 }
 
 /**
- * Named colors from the itten_hues table (child rows with parent_id set,
- * seeded in migration 20260414). Each entry has the color name and hex value
- * for RGB distance matching. The seed generator uses the closest color name
- * to set `itten_hue_id` on each paint (pointing to the color-level row).
+ * ISCC-NBS sub-hues from the hues table (child rows with parent_id set,
+ * seeded in migration 20260415). Each entry has the sub-hue slug and hex value
+ * for RGB distance matching. The seed generator uses the closest sub-hue slug
+ * to set `hue_id` on each paint (pointing to the sub-hue row).
  */
-const COLOR_CATALOG: { name: string; hex: string }[] = [
-  // Red
-  { name: 'Red',        hex: '#FF0000' },
-  { name: 'Crimson',    hex: '#DC143C' },
-  { name: 'Scarlet',    hex: '#FF2400' },
-  { name: 'Blood Red',  hex: '#660000' },
-  { name: 'Cherry',     hex: '#DE3163' },
-  // Red-Orange
-  { name: 'Vermillion',    hex: '#E34234' },
-  { name: 'Rust',          hex: '#B7410E' },
-  { name: 'Burnt Sienna',  hex: '#E97451' },
-  { name: 'Terracotta',    hex: '#E2725B' },
-  { name: 'Coral',         hex: '#FF7F50' },
-  // Orange
-  { name: 'Orange',        hex: '#FF8C00' },
-  { name: 'Burnt Orange',  hex: '#CC5500' },
-  { name: 'Tangerine',     hex: '#FF9966' },
-  { name: 'Pumpkin',       hex: '#FF7518' },
-  { name: 'Copper',        hex: '#B87333' },
-  // Yellow-Orange
-  { name: 'Amber',     hex: '#FFBF00' },
-  { name: 'Gold',      hex: '#FFD700' },
-  { name: 'Marigold',  hex: '#EAA221' },
-  { name: 'Honey',     hex: '#EB9605' },
-  { name: 'Saffron',   hex: '#F4C430' },
-  // Yellow
-  { name: 'Yellow',      hex: '#FFFF00' },
-  { name: 'Lemon',       hex: '#FFF44F' },
-  { name: 'Canary',      hex: '#FFEF00' },
-  { name: 'Sunflower',   hex: '#FFDA03' },
-  { name: 'Pale Yellow', hex: '#FFFFBF' },
-  // Yellow-Green
-  { name: 'Lime',         hex: '#32CD32' },
-  { name: 'Chartreuse',   hex: '#7FFF00' },
-  { name: 'Spring Green', hex: '#00FF7F' },
-  { name: 'Olive',        hex: '#808000' },
-  { name: 'Moss',         hex: '#8A9A5B' },
-  // Green
-  { name: 'Green',        hex: '#008000' },
-  { name: 'Forest Green', hex: '#228B22' },
-  { name: 'Dark Green',   hex: '#006400' },
-  { name: 'Emerald',      hex: '#50C878' },
-  { name: 'Hunter Green', hex: '#355E3B' },
-  // Blue-Green
-  { name: 'Teal',       hex: '#008080' },
-  { name: 'Turquoise',  hex: '#40E0D0' },
-  { name: 'Cyan',       hex: '#00FFFF' },
-  { name: 'Aquamarine', hex: '#7FFFD4' },
-  { name: 'Sea Green',  hex: '#2E8B57' },
-  // Blue
-  { name: 'Blue',       hex: '#0000FF' },
-  { name: 'Navy',       hex: '#000080' },
-  { name: 'Royal Blue', hex: '#4169E1' },
-  { name: 'Sky Blue',   hex: '#87CEEB' },
-  { name: 'Cobalt',     hex: '#0047AB' },
-  // Blue-Violet
-  { name: 'Indigo',        hex: '#4B0082' },
-  { name: 'Ultramarine',   hex: '#3F00FF' },
-  { name: 'Periwinkle',    hex: '#CCCCFF' },
-  { name: 'Slate Blue',    hex: '#6A5ACD' },
-  { name: 'Midnight Blue', hex: '#191970' },
-  // Violet
-  { name: 'Violet',   hex: '#7F00FF' },
-  { name: 'Purple',   hex: '#800080' },
-  { name: 'Plum',     hex: '#8E4585' },
-  { name: 'Amethyst', hex: '#9966CC' },
-  { name: 'Lavender', hex: '#B57EDC' },
-  // Red-Violet
-  { name: 'Magenta',   hex: '#FF00FF' },
-  { name: 'Rose',      hex: '#FF007F' },
-  { name: 'Fuchsia',   hex: '#FF77FF' },
-  { name: 'Hot Pink',  hex: '#FF69B4' },
-  { name: 'Raspberry', hex: '#E30B5C' },
-  // Neutral
-  { name: 'Black',      hex: '#000000' },
-  { name: 'White',      hex: '#FFFFFF' },
-  { name: 'Grey',       hex: '#808080' },
-  { name: 'Dark Grey',  hex: '#404040' },
-  { name: 'Light Grey', hex: '#C0C0C0' },
-  { name: 'Ivory',      hex: '#FFFFF0' },
-  { name: 'Bone',       hex: '#E3DAC9' },
-  { name: 'Silver',     hex: '#C0C0C0' },
-  { name: 'Brown',      hex: '#8B4513' },
-  { name: 'Dark Brown', hex: '#3B2F2F' },
-  { name: 'Tan',        hex: '#D2B48C' },
-  { name: 'Beige',      hex: '#F5F5DC' },
+const COLOR_CATALOG: { slug: string; hex: string }[] = [
+  // Red sub-hues
+  { slug: 'vivid-red', hex: '#FF0000' },
+  { slug: 'strong-red', hex: '#CF1717' },
+  { slug: 'deep-red', hex: '#8A0F0F' },
+  { slug: 'very-deep-red', hex: '#500B0B' },
+  { slug: 'moderate-red', hex: '#BF4040' },
+  { slug: 'dark-red', hex: '#6F2A2A' },
+  { slug: 'very-dark-red', hex: '#361717' },
+  { slug: 'light-greyish-red', hex: '#CCB3B3' },
+  { slug: 'greyish-red', hex: '#996666' },
+  { slug: 'dark-greyish-red', hex: '#584141' },
+  { slug: 'blackish-red', hex: '#221C1C' },
+  // Yellow-Red sub-hues
+  { slug: 'vivid-yellow-red', hex: '#FF8C00' },
+  { slug: 'strong-yellow-red', hex: '#CF7C17' },
+  { slug: 'deep-yellow-red', hex: '#8A530F' },
+  { slug: 'very-deep-yellow-red', hex: '#50310B' },
+  { slug: 'moderate-yellow-red', hex: '#BF8640' },
+  { slug: 'dark-yellow-red', hex: '#6F502A' },
+  { slug: 'very-dark-yellow-red', hex: '#362817' },
+  { slug: 'light-greyish-yellow-red', hex: '#CCC1B3' },
+  { slug: 'greyish-yellow-red', hex: '#998266' },
+  { slug: 'dark-greyish-yellow-red', hex: '#584E41' },
+  { slug: 'blackish-yellow-red', hex: '#221F1C' },
+  // Yellow sub-hues
+  { slug: 'vivid-yellow', hex: '#FFFF00' },
+  { slug: 'strong-yellow', hex: '#CFCF17' },
+  { slug: 'deep-yellow', hex: '#8A8A0F' },
+  { slug: 'very-deep-yellow', hex: '#50500B' },
+  { slug: 'moderate-yellow', hex: '#BFBF40' },
+  { slug: 'dark-yellow', hex: '#6F6F2A' },
+  { slug: 'very-dark-yellow', hex: '#363617' },
+  { slug: 'light-greyish-yellow', hex: '#CCCCB3' },
+  { slug: 'greyish-yellow', hex: '#999966' },
+  { slug: 'dark-greyish-yellow', hex: '#585841' },
+  { slug: 'blackish-yellow', hex: '#22221C' },
+  // Green-Yellow sub-hues
+  { slug: 'vivid-green-yellow', hex: '#AAFF00' },
+  { slug: 'strong-green-yellow', hex: '#91CF17' },
+  { slug: 'deep-green-yellow', hex: '#618A0F' },
+  { slug: 'very-deep-green-yellow', hex: '#39500B' },
+  { slug: 'moderate-green-yellow', hex: '#95BF40' },
+  { slug: 'dark-green-yellow', hex: '#586F2A' },
+  { slug: 'very-dark-green-yellow', hex: '#2B3617' },
+  { slug: 'light-greyish-green-yellow', hex: '#C4CCB3' },
+  { slug: 'greyish-green-yellow', hex: '#889966' },
+  { slug: 'dark-greyish-green-yellow', hex: '#505841' },
+  { slug: 'blackish-green-yellow', hex: '#20221C' },
+  // Green sub-hues
+  { slug: 'vivid-green', hex: '#00FF00' },
+  { slug: 'strong-green', hex: '#17CF17' },
+  { slug: 'deep-green', hex: '#0F8A0F' },
+  { slug: 'very-deep-green', hex: '#0B500B' },
+  { slug: 'moderate-green', hex: '#40BF40' },
+  { slug: 'dark-green', hex: '#2A6F2A' },
+  { slug: 'very-dark-green', hex: '#173617' },
+  { slug: 'light-greyish-green', hex: '#B3CCB3' },
+  { slug: 'greyish-green', hex: '#669966' },
+  { slug: 'dark-greyish-green', hex: '#415841' },
+  { slug: 'blackish-green', hex: '#1C221C' },
+  // Blue-Green sub-hues
+  { slug: 'vivid-blue-green', hex: '#00FFFF' },
+  { slug: 'strong-blue-green', hex: '#17CFCF' },
+  { slug: 'deep-blue-green', hex: '#0F8A8A' },
+  { slug: 'very-deep-blue-green', hex: '#0B5050' },
+  { slug: 'moderate-blue-green', hex: '#40BFBF' },
+  { slug: 'dark-blue-green', hex: '#2A6F6F' },
+  { slug: 'very-dark-blue-green', hex: '#173636' },
+  { slug: 'light-greyish-blue-green', hex: '#B3CCCC' },
+  { slug: 'greyish-blue-green', hex: '#669999' },
+  { slug: 'dark-greyish-blue-green', hex: '#415858' },
+  { slug: 'blackish-blue-green', hex: '#1C2222' },
+  // Blue sub-hues
+  { slug: 'vivid-blue', hex: '#0000FF' },
+  { slug: 'strong-blue', hex: '#1717CF' },
+  { slug: 'deep-blue', hex: '#0F0F8A' },
+  { slug: 'very-deep-blue', hex: '#0B0B50' },
+  { slug: 'moderate-blue', hex: '#4040BF' },
+  { slug: 'dark-blue', hex: '#2A2A6F' },
+  { slug: 'very-dark-blue', hex: '#171736' },
+  { slug: 'light-greyish-blue', hex: '#B3B3CC' },
+  { slug: 'greyish-blue', hex: '#666699' },
+  { slug: 'dark-greyish-blue', hex: '#414158' },
+  { slug: 'blackish-blue', hex: '#1C1C22' },
+  // Purple-Blue sub-hues
+  { slug: 'vivid-purple-blue', hex: '#5500FF' },
+  { slug: 'strong-purple-blue', hex: '#5417CF' },
+  { slug: 'deep-purple-blue', hex: '#380F8A' },
+  { slug: 'very-deep-purple-blue', hex: '#220B50' },
+  { slug: 'moderate-purple-blue', hex: '#6A40BF' },
+  { slug: 'dark-purple-blue', hex: '#412A6F' },
+  { slug: 'very-dark-purple-blue', hex: '#211736' },
+  { slug: 'light-greyish-purple-blue', hex: '#BBB3CC' },
+  { slug: 'greyish-purple-blue', hex: '#776699' },
+  { slug: 'dark-greyish-purple-blue', hex: '#494158' },
+  { slug: 'blackish-purple-blue', hex: '#1E1C22' },
+  // Purple sub-hues
+  { slug: 'vivid-purple', hex: '#FF00FF' },
+  { slug: 'strong-purple', hex: '#CF17CF' },
+  { slug: 'deep-purple', hex: '#8A0F8A' },
+  { slug: 'very-deep-purple', hex: '#500B50' },
+  { slug: 'moderate-purple', hex: '#BF40BF' },
+  { slug: 'dark-purple', hex: '#6F2A6F' },
+  { slug: 'very-dark-purple', hex: '#361736' },
+  { slug: 'light-greyish-purple', hex: '#CCB3CC' },
+  { slug: 'greyish-purple', hex: '#996699' },
+  { slug: 'dark-greyish-purple', hex: '#584158' },
+  { slug: 'blackish-purple', hex: '#221C22' },
+  // Red-Purple sub-hues
+  { slug: 'vivid-red-purple', hex: '#FF0080' },
+  { slug: 'strong-red-purple', hex: '#CF1773' },
+  { slug: 'deep-red-purple', hex: '#8A0F4D' },
+  { slug: 'very-deep-red-purple', hex: '#500B2E' },
+  { slug: 'moderate-red-purple', hex: '#BF4080' },
+  { slug: 'dark-red-purple', hex: '#6F2A4D' },
+  { slug: 'very-dark-red-purple', hex: '#361726' },
+  { slug: 'light-greyish-red-purple', hex: '#CCB3BF' },
+  { slug: 'greyish-red-purple', hex: '#996680' },
+  { slug: 'dark-greyish-red-purple', hex: '#58414D' },
+  { slug: 'blackish-red-purple', hex: '#221C1F' },
+  // Neutral sub-hues
+  { slug: 'white', hex: '#FFFFFF' },
+  { slug: 'near-white', hex: '#F5F5F5' },
+  { slug: 'light-grey', hex: '#C0C0C0' },
+  { slug: 'medium-grey', hex: '#808080' },
+  { slug: 'dark-grey', hex: '#404040' },
+  { slug: 'near-black', hex: '#1A1A1A' },
+  { slug: 'black', hex: '#000000' },
+  { slug: 'brown', hex: '#8B4513' },
+  { slug: 'dark-brown', hex: '#3B2F2F' },
+  { slug: 'light-brown', hex: '#D2B48C' },
+  { slug: 'ivory', hex: '#FFFFF0' },
 ]
 
 /** Pre-computed RGB values for each color in the catalog. */
 const COLOR_CATALOG_RGB = COLOR_CATALOG.map((c) => ({
-  name: c.name,
+  slug: c.slug,
   ...hexToRgb(c.hex),
 }))
 
 /**
- * Finds the closest named color to a given RGB value using Euclidean distance.
+ * Finds the closest ISCC-NBS sub-hue to a given RGB value using Euclidean distance.
  *
- * @returns The name of the closest color from the catalog.
+ * @returns The slug of the closest sub-hue from the catalog.
  */
 function findClosestColor(r: number, g: number, b: number): string {
-  let bestName = 'Grey'
+  let bestSlug = 'medium-grey'
   let bestDist = Infinity
 
   for (const c of COLOR_CATALOG_RGB) {
@@ -227,11 +274,11 @@ function findClosestColor(r: number, g: number, b: number): string {
     const dist = dr * dr + dg * dg + db * db
     if (dist < bestDist) {
       bestDist = dist
-      bestName = c.name
+      bestSlug = c.slug
     }
   }
 
-  return bestName
+  return bestSlug
 }
 
 /**
@@ -372,7 +419,7 @@ function main(): void {
         paint.type.toLowerCase().includes('metallic') ||
         paint.type.toLowerCase().includes('metal')
       const paintType = paint.type.toLowerCase()
-      const closestColor = findClosestColor(r, g, b)
+      const closestColorSlug = findClosestColor(r, g, b)
 
       jsonIdLookup.set(paint.id, {
         uuid,
@@ -382,7 +429,7 @@ function main(): void {
       })
 
       lines.push(
-        `INSERT INTO public.paints (id, brand_paint_id, product_line_id, name, slug, hex, r, g, b, hue, saturation, lightness, itten_hue_id, is_metallic, is_discontinued, paint_type) VALUES ('${uuid}', '${esc(paint.id)}', (SELECT pl.id FROM public.product_lines pl JOIN public.brands br ON br.id = pl.brand_id WHERE br.slug = '${esc(brand.id)}' AND pl.slug = '${esc(typeSlug)}'), '${esc(paint.name)}', '${esc(paintSlug)}', '${esc(paint.hex)}', ${r}, ${g}, ${b}, ${round2(h)}, ${round2(s)}, ${round2(l)}, (SELECT id FROM public.itten_hues WHERE name = '${esc(closestColor)}' AND parent_id IS NOT NULL LIMIT 1), ${isMetallic}, false, '${esc(paintType)}');`
+        `INSERT INTO public.paints (id, brand_paint_id, product_line_id, name, slug, hex, r, g, b, hue, saturation, lightness, hue_id, is_metallic, is_discontinued, paint_type) VALUES ('${uuid}', '${esc(paint.id)}', (SELECT pl.id FROM public.product_lines pl JOIN public.brands br ON br.id = pl.brand_id WHERE br.slug = '${esc(brand.id)}' AND pl.slug = '${esc(typeSlug)}'), '${esc(paint.name)}', '${esc(paintSlug)}', '${esc(paint.hex)}', ${r}, ${g}, ${b}, ${round2(h)}, ${round2(s)}, ${round2(l)}, (SELECT id FROM public.hues WHERE slug = '${esc(closestColorSlug)}' AND parent_id IS NOT NULL LIMIT 1), ${isMetallic}, false, '${esc(paintType)}');`
       )
 
       // Collect references
