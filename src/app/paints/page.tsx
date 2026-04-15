@@ -1,3 +1,4 @@
+import { getHueService } from '@/modules/hues/services/hue-service.server'
 import { PaintExplorer } from '@/modules/paints/components/paint-explorer'
 import { getPaintService } from '@/modules/paints/services/paint-service.server'
 
@@ -9,17 +10,26 @@ export default async function PaintsPage({
 }: {
   searchParams: Promise<{ page?: string; size?: string }>
 }) {
-  const { page, size } = await searchParams
+  const { size } = await searchParams
   const pageSize = VALID_SIZES.includes(Number(size)) ? Number(size) : 50
-  const currentPage = Math.max(1, parseInt(page ?? '1', 10) || 1)
-  const offset = (currentPage - 1) * pageSize
 
   const paintService = await getPaintService()
+  const hueService = await getHueService()
 
-  const [initialPaints, totalPaints] = await Promise.all([
-    paintService.getAllPaints({ limit: pageSize, offset }),
+  const [initialPaints, totalPaints, ittenHues] = await Promise.all([
+    paintService.getAllPaints({ limit: pageSize, offset: 0 }),
     paintService.getTotalPaintCount(),
+    hueService.getIttenHues(),
   ])
+
+  // Fetch paint counts per hue group in parallel
+  const hueCountEntries = await Promise.all(
+    ittenHues.map(async (hue) => {
+      const count = await paintService.getPaintCountByHueGroup(hue.id)
+      return [hue.name.toLowerCase(), count] as const
+    })
+  )
+  const huePaintCounts = Object.fromEntries(hueCountEntries)
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -33,6 +43,8 @@ export default async function PaintsPage({
       <PaintExplorer
         initialPaints={initialPaints}
         initialTotalCount={totalPaints}
+        ittenHues={ittenHues}
+        huePaintCounts={huePaintCounts}
       />
     </div>
   )
