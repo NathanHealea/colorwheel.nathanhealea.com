@@ -10,6 +10,7 @@ Planning and feature documentation lives in `docs/`.
 
 - Use conventional commit format: `type(scope): description`
 - Feature docs follow the `/plan` → `/implement` → `/stage` → `/release` workflow
+- For branches forked off `v1/main`, `/stage` should create the PR targeting `v1/main` (not `main`)
 
 ## Project Structure
 
