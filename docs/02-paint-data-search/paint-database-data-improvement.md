@@ -2,7 +2,7 @@
 
 **Epic:** Paint Data & Search
 **Type:** Enhancement
-**Status:** Todo
+**Status:** Done
 **Branch:** `enhancement/paint-database-data-improvement`
 **Merge into:** `v1/main`
 
@@ -30,17 +30,17 @@ Improve the quality and accuracy of paint data in the Grimify database. The curr
 
 ## Acceptance Criteria
 
-- [ ] Hex values for all Citadel paints (341) are verified against reference sources
-- [ ] Hex values for all Army Painter paints (461) are verified against reference sources
-- [ ] Hex values for all Vallejo paints (763) are verified against reference sources
-- [ ] Hex values for all Green Stuff World paints (122) are verified against reference sources
-- [ ] Hex values for all AK Interactive paints (650) are verified against reference sources
-- [ ] RGB and HSL values are recomputed from corrected hex values
-- [ ] Hue assignments (`hue_id`) are recalculated from corrected color data
-- [ ] Edge-case paints (metallics, washes, technical paints) have documented hex value decisions
-- [ ] Seed generator produces updated `supabase/seed.sql` with corrected data
+- [x] Hex values for all Citadel paints (341) are verified against reference sources
+- [x] Hex values for all Army Painter paints (461) are verified against reference sources
+- [x] Hex values for all Vallejo paints (763) are verified against reference sources
+- [x] Hex values for all Green Stuff World paints (122) are verified against reference sources
+- [x] Hex values for all AK Interactive paints (650) are verified against reference sources
+- [x] RGB and HSL values are recomputed from corrected hex values
+- [x] Hue assignments (`hue_id`) are recalculated from corrected color data
+- [x] Edge-case paints (metallics, washes, technical paints) have documented hex value decisions
+- [x] Seed generator produces updated `supabase/seed.sql` with corrected data
 - [ ] `npm run db:reset` applies cleanly with no errors
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Implementation Plan
 
