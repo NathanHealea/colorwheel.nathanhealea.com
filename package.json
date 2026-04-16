@@ -15,6 +15,7 @@
     "db:stop": "npx supabase stop",
     "db:restart": "npx supabase stop && npx supabase start",
     "db:reset": "npx supabase db reset",
+    "db:status": "npx supabase status",
     "db:types": "npx supabase gen types typescript --local > src/types/supabase.ts",
     "db:seed:generate": "npx tsx scripts/generate-seed.ts"
   },
