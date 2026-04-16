@@ -140,8 +140,36 @@ a reasonable distribution:
   chromatic rather than neutral; this is acceptable since they retain their color
   identity (e.g. dark green, dark blue)
 
-No changes to the `NEUTRAL_SATURATION_THRESHOLD`, `HUE_ANGLE_RANGES`, or
-`COLOR_CATALOG` values were needed.
+### Sub-Hue Assignment from PaintPad By-Colour Pages
+
+In addition to hex color verification from brand product pages, sub-hue assignments
+were sourced from PaintPad's ISCC-NBS colour classification system at
+`https://paintpad.app/paints/by-colour/{hue-slug}`.
+
+**Process:**
+1. Fetched all 29 by-colour pages (red, orange, brown, yellow, green, blue, purple,
+   pink, white, grey, black, and intermediate hues)
+2. Parsed 267 ISCC-NBS sub-hue sections across all pages
+3. Extracted section sample hex colors from `<span class="paint-sample paint-sample--small">`
+   elements — these are the canonical ISCC-NBS centroid colors
+4. Matched 6,774 paint entries to our 2,337 database paints by name + brand
+5. Resolved 343 conflicts (paints appearing on multiple pages) by selecting the
+   assignment whose section hex is closest to the paint's actual hex
+
+**Coverage:**
+- 2,193 / 2,337 paints (93.8%) use PaintPad-sourced sub-hue assignments
+- 144 paints fall back to algorithmic RGB distance matching (from `findClosestColor()`)
+- Fallback paints are mostly from Green Stuff World product lines not indexed on PaintPad
+
+**ISCC-NBS Reference Colors:**
+The `COLOR_CATALOG` hex values in `generate-seed.ts` were updated with official
+ISCC-NBS centroid colors from PaintPad's section sample swatches (99 of 121 sub-hues
+updated; 22 retained synthetic values where no PaintPad data was available).
+
+**Data files:**
+- `scripts/data/paintpad-hue-assignments.json` — raw parsed data from all by-colour pages
+- `scripts/data/hue-overrides.json` — resolved paint-to-sub-hue mapping (keyed by paint JSON id)
+- `scripts/data/paintpad-section-colors.json` — section → DB sub-hue mapping with hex colors
 
 ## Methodology
 
