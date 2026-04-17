@@ -32,10 +32,10 @@ Admins can grant or revoke the `admin` role through an admin interface. The `use
 
 ### `roles` Table
 
-| Column | Type     | Constraints      |
-| ------ | -------- | ---------------- |
-| `id`   | `serial` | Primary key      |
-| `name` | `text`   | Unique, not null |
+| Column | Type   | Constraints                     |
+| ------ | ------ | ------------------------------- |
+| `id`   | `uuid` | Primary key, default generated  |
+| `name` | `text` | Unique, not null                |
 
 Seeded with two rows: `user`, `admin`.
 
@@ -44,7 +44,7 @@ Seeded with two rows: `user`, `admin`.
 | Column        | Type          | Constraints                                                 |
 | ------------- | ------------- | ----------------------------------------------------------- |
 | `user_id`     | `uuid`        | FK to `profiles.id` on delete cascade, part of composite PK |
-| `role_id`     | `int`         | FK to `roles.id`, part of composite PK                      |
+| `role_id`     | `uuid`        | FK to `roles.id`, part of composite PK                      |
 | `assigned_at` | `timestamptz` | Not null, default `now()`                                   |
 
 Composite primary key on `(user_id, role_id)`.
