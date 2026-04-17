@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 import { createClient } from '@/lib/supabase/server'
 import {
   Card,
@@ -88,19 +90,20 @@ export default async function AdminDashboardPage() {
             <ul className="divide-y divide-border">
               {recentUsers.map((user) => (
                 <li key={user.id} className="flex items-center gap-3 py-3">
-                  <div className="avatar avatar-sm">
-                    {user.avatar_url ? (
-                      <img
-                        src={user.avatar_url}
-                        alt={user.display_name ?? 'User avatar'}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <span className="avatar-placeholder avatar-sm">
-                        {(user.display_name ?? '?').charAt(0)}
-                      </span>
-                    )}
-                  </div>
+                  {user.avatar_url ? (
+                    <Image
+                      src={user.avatar_url}
+                      alt={user.display_name ?? 'User avatar'}
+                      width={32}
+                      height={32}
+                      className="size-8 rounded-full"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <span className="avatar avatar-sm avatar-placeholder">
+                      {(user.display_name ?? '?').charAt(0)}
+                    </span>
+                  )}
                   <div className="flex-1 truncate">
                     <p className="truncate text-sm font-medium">
                       {user.display_name ?? 'Unnamed user'}
