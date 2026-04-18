@@ -152,6 +152,7 @@ Core functionality:
 - [ ] [User account management](./08-user-management/02-user-account-management.md)
 - [ ] [Admin profile editing](./08-user-management/03-admin-profile-editing.md)
 - [ ] [Profile and account merging](./08-user-management/04-profile-merging.md)
+- [ ] [User profile deletion (self-service)](./08-user-management/05-user-profile-deletion.md)
 
 ### Epic: Color Management
 
