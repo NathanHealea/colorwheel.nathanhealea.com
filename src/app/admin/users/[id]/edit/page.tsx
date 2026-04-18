@@ -87,24 +87,22 @@ export default async function AdminEditUserPage({
           </CardContent>
         </Card>
 
-        {/* Roles — hidden when editing own account */}
-        {!isSelf && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Roles</CardTitle>
-              <CardDescription>
-                Role changes take effect immediately — no need to save the profile.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <AdminUserRolesEditor
-                userId={profile.id}
-                initialAssigned={assignedRoles}
-                allRoles={allRoles}
-              />
-            </CardContent>
-          </Card>
-        )}
+        {/* Roles */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Roles</CardTitle>
+            <CardDescription>
+              Role changes take effect immediately — no need to save the profile.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <AdminUserRolesEditor
+              userId={profile.id}
+              initialAssigned={assignedRoles}
+              allRoles={allRoles}
+            />
+          </CardContent>
+        </Card>
 
         {/* Danger zone — hidden when editing own account */}
         {!isSelf && (
