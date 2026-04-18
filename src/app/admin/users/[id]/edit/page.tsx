@@ -43,11 +43,11 @@ export default async function AdminEditUserPage({
     notFound()
   }
 
-  // Protect the owner account from edits
+  // Protect the owner account from edits by other admins
   const isOwner = assignedRoles.some((r) => r.name === 'owner')
   const isSelf = id === currentUser.id
 
-  if (isOwner) {
+  if (isOwner && !isSelf) {
     notFound()
   }
 
