@@ -35,9 +35,17 @@ export async function updateProfileAsAdmin(
   _prev: AdminEditProfileState,
   formData: FormData,
 ): Promise<AdminEditProfileState> {
-  const roles = await getUserRoles(userId)
+  const supabase = await createClient()
 
-  if (roles.some((r) => r.name === 'owner')) {
+  const {
+    data: { user: currentUser },
+  } = await supabase.auth.getUser()
+
+  // Block editing the owner account unless the owner is editing their own profile
+  const roles = await getUserRoles(userId)
+  const isSelf = currentUser?.id === userId
+
+  if (roles.some((r) => r.name === 'owner') && !isSelf) {
     return { error: 'The owner account cannot be edited.' }
   }
 
@@ -52,8 +60,6 @@ export async function updateProfileAsAdmin(
   if (bio.length > 500) {
     return { errors: { bio: 'Bio must be 500 characters or fewer.' } }
   }
-
-  const supabase = await createClient()
 
   const { error } = await supabase
     .from('profiles')
