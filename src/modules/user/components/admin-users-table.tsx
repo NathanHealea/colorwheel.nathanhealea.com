@@ -130,9 +130,7 @@ function UserRow({ user, isSelf }: { user: UserWithRoles; isSelf: boolean }) {
         {joinedDate}
       </td>
       <td className="px-4 py-3 text-right">
-        {isSelf ? (
-          <span className="text-xs text-muted-foreground">Cannot modify own account</span>
-        ) : isOwner ? (
+        { !isSelf && isOwner ? (
           <span className="text-xs text-muted-foreground">Protected</span>
         ) : (
           <AdminUserActionsMenu
