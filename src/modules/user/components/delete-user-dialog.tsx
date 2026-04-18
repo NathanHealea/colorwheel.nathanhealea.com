@@ -7,13 +7,14 @@ import { deleteUser } from '@/modules/user/actions/delete-user'
 /**
  * Modal confirmation dialog for permanently deleting a user account.
  *
- * Built on the native `<dialog>` element (no extra primitive). Renders
- * nothing when `open` is false. Calling the {@link deleteUser} server
- * action on confirm — the action calls the `admin_delete_user` RPC which
- * removes the row from `auth.users` and cascades the profile.
+ * Built on the native `<dialog>` element (no extra primitive). Requires
+ * the admin to type the user's display name before the delete button becomes
+ * active, preventing accidental deletions. Calls the {@link deleteUser}
+ * server action on confirm — which calls `admin_delete_user` RPC, removing
+ * the row from `auth.users` and cascading to `profiles` and `user_roles`.
  *
  * @param props.userId - UUID of the account to delete.
- * @param props.displayName - Name shown in the confirmation prompt.
+ * @param props.displayName - Name shown in the confirmation prompt and required for type-to-confirm.
  * @param props.open - Whether the dialog is visible.
  * @param props.onClose - Called when the dialog should close (cancel or success).
  */
@@ -31,7 +32,9 @@ export function DeleteUserDialog({
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const [confirmValue, setConfirmValue] = useState('')
 
+  // Open/close the native dialog element
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
@@ -39,6 +42,14 @@ export function DeleteUserDialog({
       dialog.showModal()
     } else if (!open && dialog.open) {
       dialog.close()
+    }
+  }, [open])
+
+  // Reset the confirmation input whenever the dialog opens
+  useEffect(() => {
+    if (open) {
+      setConfirmValue('')
+      setError(null)
     }
   }, [open])
 
@@ -54,6 +65,8 @@ export function DeleteUserDialog({
     })
   }
 
+  const canConfirm = confirmValue === displayName && !isPending
+
   return (
     <dialog
       ref={dialogRef}
@@ -65,10 +78,26 @@ export function DeleteUserDialog({
         <div>
           <h2 className="text-lg font-semibold">Delete user?</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Permanently delete <span className="font-medium">{displayName}</span>
-            . This removes their account, profile, and all related data. This
-            action cannot be undone.
+            Permanently delete{' '}
+            <span className="font-medium">{displayName}</span>. This removes
+            their account, profile, and all related data. This action cannot be
+            undone.
           </p>
+        </div>
+
+        <div className="form-item">
+          <label className="form-label text-sm" htmlFor="confirm-name">
+            Type <span className="font-medium">{displayName}</span> to confirm
+          </label>
+          <input
+            id="confirm-name"
+            type="text"
+            value={confirmValue}
+            onChange={(e) => setConfirmValue(e.target.value)}
+            className="input input-sm w-full"
+            placeholder={displayName}
+            autoComplete="off"
+          />
         </div>
 
         {error && (
@@ -89,7 +118,7 @@ export function DeleteUserDialog({
           <button
             type="button"
             onClick={handleConfirm}
-            disabled={isPending}
+            disabled={!canConfirm}
             className="btn btn-sm btn-destructive"
           >
             {isPending ? 'Deleting...' : 'Delete user'}
