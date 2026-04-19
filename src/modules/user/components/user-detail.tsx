@@ -2,11 +2,17 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import type { User } from '@supabase/supabase-js'
+import { useState } from 'react'
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { DeactivateUserButton } from '@/modules/user/components/deactivate-user-button'
 import { DeleteUserDialog } from '@/modules/user/components/delete-user-dialog'
-import { useState } from 'react'
 
 type Profile = {
   id: string
@@ -25,6 +31,23 @@ type Role = {
 }
 
 /**
+ * Serializable auth metadata extracted from the Supabase Admin API user record.
+ *
+ * Only the fields rendered in the UI are included. `null` when the Admin API
+ * is unavailable or the user cannot be found.
+ */
+export type AuthInfo = {
+  /** Auth email (may differ from `profiles.email` during a change). */
+  email: string | null
+  /** OAuth provider names (e.g. `['google', 'discord']`). */
+  providers: string[]
+  /** ISO-8601 timestamp of the user's last sign-in, or `null`. */
+  lastSignInAt: string | null
+  /** ISO-8601 timestamp until which the user is banned, or `null`. */
+  bannedUntil: string | null
+} | null
+
+/**
  * Admin user detail view with profile, roles, auth info, and account actions.
  *
  * Renders four sections: Profile info, assigned roles, auth provider details,
@@ -33,18 +56,18 @@ type Role = {
  *
  * @param props.profile - The target user's profile row.
  * @param props.roles - Roles assigned to this user.
- * @param props.authUser - Supabase auth user from the Admin API (may be null on error).
+ * @param props.authInfo - Extracted auth metadata from the Admin API (may be null).
  * @param props.currentUserId - The authenticated admin's UUID (for self-protection).
  */
 export function UserDetail({
   profile,
   roles,
-  authUser,
+  authInfo,
   currentUserId,
 }: {
   profile: Profile
   roles: Role[]
-  authUser: User | null
+  authInfo: AuthInfo
   currentUserId: string
 }) {
   const [deleteOpen, setDeleteOpen] = useState(false)
@@ -52,11 +75,9 @@ export function UserDetail({
   const isOwner = roles.some((r) => r.name === 'owner')
 
   const isBanned =
-    authUser?.banned_until != null &&
-    new Date(authUser.banned_until) > new Date()
+    authInfo?.bannedUntil != null && new Date(authInfo.bannedUntil) > new Date()
 
-  const providers =
-    authUser?.identities?.map((identity) => identity.provider) ?? []
+  const providers = authInfo?.providers ?? []
 
   const initials = (profile.display_name ?? '?')
     .split(/\s+/)
@@ -102,11 +123,11 @@ export function UserDetail({
       </div>
 
       {/* Profile section */}
-      <div className="card">
-        <div className="card-header">
-          <h2 className="text-base font-semibold">Profile</h2>
-        </div>
-        <div className="card-body space-y-3 text-sm">
+      <Card>
+        <CardHeader>
+          <CardTitle>Profile</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm">
           <Row label="Display name" value={profile.display_name ?? '—'} />
           <Row label="Bio" value={profile.bio ?? '—'} />
           <Row
@@ -129,15 +150,18 @@ export function UserDetail({
               year: 'numeric',
             })}
           />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Roles section */}
-      <div className="card">
-        <div className="card-header">
-          <h2 className="text-base font-semibold">Roles</h2>
-        </div>
-        <div className="card-body">
+      <Card>
+        <CardHeader>
+          <CardTitle>Roles</CardTitle>
+          <CardDescription>
+            Roles currently assigned to this user.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
           {roles.length === 0 ? (
             <p className="text-sm text-muted-foreground">No roles assigned.</p>
           ) : (
@@ -159,16 +183,19 @@ export function UserDetail({
               ))}
             </div>
           )}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Auth info section */}
-      <div className="card">
-        <div className="card-header">
-          <h2 className="text-base font-semibold">Auth Info</h2>
-        </div>
-        <div className="card-body space-y-3 text-sm">
-          <Row label="Email" value={authUser?.email ?? '—'} />
+      <Card>
+        <CardHeader>
+          <CardTitle>Auth Info</CardTitle>
+          <CardDescription>
+            Authentication provider and sign-in history.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm">
+          <Row label="Email" value={authInfo?.email ?? '—'} />
           <Row
             label="Provider(s)"
             value={providers.length > 0 ? providers.join(', ') : '—'}
@@ -176,8 +203,8 @@ export function UserDetail({
           <Row
             label="Last sign-in"
             value={
-              authUser?.last_sign_in_at
-                ? new Date(authUser.last_sign_in_at).toLocaleString('en-US', {
+              authInfo?.lastSignInAt
+                ? new Date(authInfo.lastSignInAt).toLocaleString('en-US', {
                     month: 'short',
                     day: 'numeric',
                     year: 'numeric',
@@ -187,29 +214,29 @@ export function UserDetail({
                 : '—'
             }
           />
-          {isBanned && authUser?.banned_until && (
+          {isBanned && authInfo?.bannedUntil && (
             <Row
               label="Banned until"
-              value={new Date(authUser.banned_until).toLocaleString('en-US', {
+              value={new Date(authInfo.bannedUntil).toLocaleString('en-US', {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric',
               })}
             />
           )}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Actions section — hidden for own account or owner account */}
       {!isSelf && !isOwner && (
-        <div className="card border-destructive/20">
-          <div className="card-header">
-            <h2 className="text-base font-semibold">Account Actions</h2>
-            <p className="text-xs text-muted-foreground">
+        <Card className="border-destructive/20">
+          <CardHeader>
+            <CardTitle>Account Actions</CardTitle>
+            <CardDescription>
               These actions are irreversible or impactful. Proceed with care.
-            </p>
-          </div>
-          <div className="card-body flex flex-wrap gap-3">
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-3">
             <DeactivateUserButton userId={profile.id} isBanned={isBanned} />
 
             <button
@@ -219,8 +246,8 @@ export function UserDetail({
             >
               Delete account
             </button>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       )}
 
       <DeleteUserDialog

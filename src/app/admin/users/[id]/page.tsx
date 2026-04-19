@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { createClient } from '@/lib/supabase/server'
+import type { AuthInfo } from '@/modules/user/components/user-detail'
 import { UserDetail } from '@/modules/user/components/user-detail'
 import { getAuthUser } from '@/modules/user/services/auth-user-service'
 import { getProfileById } from '@/modules/user/services/profile-service'
@@ -34,6 +35,19 @@ export default async function AdminUserDetailPage({
     notFound()
   }
 
+  // Extract only the fields needed by the UI into a plain serializable object.
+  // Avoids passing the full Supabase User type (which contains complex metadata)
+  // across the server → client component boundary.
+  const authInfo: AuthInfo = authUser
+    ? {
+        email: authUser.email ?? null,
+        providers:
+          authUser.identities?.map((identity) => identity.provider) ?? [],
+        lastSignInAt: authUser.last_sign_in_at ?? null,
+        bannedUntil: authUser.banned_until ?? null,
+      }
+    : null
+
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12">
       <div className="mb-6">
@@ -48,7 +62,7 @@ export default async function AdminUserDetailPage({
       <UserDetail
         profile={profile}
         roles={roles}
-        authUser={authUser}
+        authInfo={authInfo}
         currentUserId={currentUser.id}
       />
     </div>

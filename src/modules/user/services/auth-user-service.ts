@@ -13,9 +13,13 @@ import { createAdminClient } from '@/lib/supabase/admin'
  * @returns The Supabase {@link User} object, or `null`.
  */
 export async function getAuthUser(userId: string): Promise<User | null> {
-  const adminClient = createAdminClient()
-  const { data } = await adminClient.auth.admin.getUserById(userId)
-  return data?.user ?? null
+  try {
+    const adminClient = createAdminClient()
+    const { data } = await adminClient.auth.admin.getUserById(userId)
+    return data?.user ?? null
+  } catch {
+    return null
+  }
 }
 
 /**
