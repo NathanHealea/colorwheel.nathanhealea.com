@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import type { Hue } from '@/types/color'
+import { CollectionToggle } from '@/modules/collection/components/collection-toggle'
 import type { PaintWithRelationsAndHue } from '@/modules/paints/services/paint-service'
 
 /**
@@ -10,15 +11,24 @@ import type { PaintWithRelationsAndHue } from '@/modules/paints/services/paint-s
  * paint type, color values (hex, RGB, HSL), hue classification links,
  * and status badges for metallic or discontinued paints.
  *
+ * Renders a {@link CollectionToggle} next to the paint name when `isAuthenticated`
+ * is provided.
+ *
  * @param props.paint - The paint record with joined product line, brand, and hue data.
  * @param props.parentHue - The parent Munsell principal hue, if the paint has a sub-hue.
+ * @param props.isInCollection - Whether the paint is in the user's collection.
+ * @param props.isAuthenticated - Whether the current user is signed in.
  */
 export function PaintDetail({
   paint,
   parentHue,
+  isInCollection = false,
+  isAuthenticated = false,
 }: {
   paint: PaintWithRelationsAndHue
   parentHue: Hue | null
+  isInCollection?: boolean
+  isAuthenticated?: boolean
 }) {
   const brand = paint.product_lines.brands
   const productLine = paint.product_lines
@@ -34,7 +44,16 @@ export function PaintDetail({
           aria-label={`Color swatch for ${paint.name}`}
         />
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold">{paint.name}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-3xl font-bold">{paint.name}</h1>
+            <CollectionToggle
+              paintId={paint.id}
+              isInCollection={isInCollection}
+              isAuthenticated={isAuthenticated}
+              size="md"
+              revalidatePath={`/paints/${paint.id}`}
+            />
+          </div>
           <p className="text-muted-foreground">
             <Link href={`/brands/${brand.id}`} className="underline hover:text-foreground">
               {brand.name}

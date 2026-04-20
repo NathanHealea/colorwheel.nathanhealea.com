@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '@/components/breadcrumbs'
+import { createClient } from '@/lib/supabase/server'
+import { getCollectionService } from '@/modules/collection/services/collection-service.server'
 import { getHueService } from '@/modules/hues/services/hue-service.server'
 import { PaintDetail } from '@/modules/paints/components/paint-detail'
 import { PaintReferences } from '@/modules/paints/components/paint-references'
@@ -16,17 +18,30 @@ export default async function PaintDetailPage({ params }: { params: Promise<{ id
     notFound()
   }
 
-  const [references, parentHue] = await Promise.all([
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const [references, parentHue, isInCollection] = await Promise.all([
     paintService.getPaintReferences(id),
     paint.hues?.parent_id
       ? (await getHueService()).getHueById(paint.hues.parent_id)
       : null,
+    user
+      ? (await getCollectionService()).isInCollection(user.id, paint.id)
+      : false,
   ])
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-12">
       <Breadcrumbs items={[{ label: 'Paints', href: '/paints' }, { label: paint.name }]} />
-      <PaintDetail paint={paint} parentHue={parentHue} />
+      <PaintDetail
+        paint={paint}
+        parentHue={parentHue}
+        isInCollection={isInCollection}
+        isAuthenticated={user !== null}
+      />
 
       {references.length > 0 && (
         <div className="mt-12">
