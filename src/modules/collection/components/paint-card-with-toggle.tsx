@@ -1,3 +1,5 @@
+'use client'
+
 import { PaintCard } from '@/modules/paints/components/paint-card'
 import { CollectionToggle } from '@/modules/collection/components/collection-toggle'
 
