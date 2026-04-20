@@ -14,153 +14,8 @@ INSERT INTO public.brands (name, slug, website_url) VALUES ('Green Stuff World',
 INSERT INTO public.brands (name, slug, website_url) VALUES ('AK Interactive', 'ak-interactive', 'https://ak-interactive.com') ON CONFLICT (slug) DO NOTHING;
 
 -- ----------------------------------------------------------
--- Hues (11 Munsell principal hues + 121 ISCC-NBS sub-hues)
+-- Hues: seeded by migration 20260415000000_replace_itten_with_munsell_hues.sql
 -- ----------------------------------------------------------
-
-INSERT INTO public.hues (id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Red', 'red', '#FF0000', 1) ON CONFLICT (slug) WHERE parent_id IS NULL DO NOTHING;
-INSERT INTO public.hues (id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Yellow-Red', 'yellow-red', '#FF8C00', 2) ON CONFLICT (slug) WHERE parent_id IS NULL DO NOTHING;
-INSERT INTO public.hues (id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Yellow', 'yellow', '#FFFF00', 3) ON CONFLICT (slug) WHERE parent_id IS NULL DO NOTHING;
-INSERT INTO public.hues (id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Green-Yellow', 'green-yellow', '#9ACD32', 4) ON CONFLICT (slug) WHERE parent_id IS NULL DO NOTHING;
-INSERT INTO public.hues (id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Green', 'green', '#008000', 5) ON CONFLICT (slug) WHERE parent_id IS NULL DO NOTHING;
-INSERT INTO public.hues (id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Blue-Green', 'blue-green', '#008080', 6) ON CONFLICT (slug) WHERE parent_id IS NULL DO NOTHING;
-INSERT INTO public.hues (id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Blue', 'blue', '#0000FF', 7) ON CONFLICT (slug) WHERE parent_id IS NULL DO NOTHING;
-INSERT INTO public.hues (id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Purple-Blue', 'purple-blue', '#4B0082', 8) ON CONFLICT (slug) WHERE parent_id IS NULL DO NOTHING;
-INSERT INTO public.hues (id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Purple', 'purple', '#800080', 9) ON CONFLICT (slug) WHERE parent_id IS NULL DO NOTHING;
-INSERT INTO public.hues (id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Red-Purple', 'red-purple', '#FF00FF', 10) ON CONFLICT (slug) WHERE parent_id IS NULL DO NOTHING;
-INSERT INTO public.hues (id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'Neutral', 'neutral', '#808080', 11) ON CONFLICT (slug) WHERE parent_id IS NULL DO NOTHING;
-
--- Red sub-hues
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Vivid Red', 'vivid-red', '#BE0032', 1) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Strong Red', 'strong-red', '#BC3F4A', 2) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Deep Red', 'deep-red', '#841B2D', 3) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Very Deep Red', 'very-deep-red', '#5C0923', 4) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Moderate Red', 'moderate-red', '#AB4E52', 5) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Dark Red', 'dark-red', '#722F37', 6) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Very Dark Red', 'very-dark-red', '#3F1728', 7) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Light Greyish Red', 'light-greyish-red', '#AD8884', 8) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Greyish Red', 'greyish-red', '#905D5D', 9) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Dark Greyish Red', 'dark-greyish-red', '#543D3F', 10) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('c77d1779-90c7-4011-89ac-178c9bbbf697', 'Blackish Red', 'blackish-red', '#2E1D21', 11) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
--- Yellow-Red sub-hues
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Vivid Yellow-Red', 'vivid-yellow-red', '#F38400', 1) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Strong Yellow-Red', 'strong-yellow-red', '#E66721', 2) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Deep Yellow-Red', 'deep-yellow-red', '#AA381E', 3) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Very Deep Yellow-Red', 'very-deep-yellow-red', '#593319', 4) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Moderate Yellow-Red', 'moderate-yellow-red', '#F99379', 5) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Dark Yellow-Red', 'dark-yellow-red', '#6F4E37', 6) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Very Dark Yellow-Red', 'very-dark-yellow-red', '#3E322C', 7) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Light Greyish Yellow-Red', 'light-greyish-yellow-red', '#FFB7A5', 8) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Greyish Yellow-Red', 'greyish-yellow-red', '#C48379', 9) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Dark Greyish Yellow-Red', 'dark-greyish-yellow-red', '#635147', 10) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('6724a2fe-600e-44d2-8d13-6483622c162e', 'Blackish Yellow-Red', 'blackish-yellow-red', '#28201C', 11) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
--- Yellow sub-hues
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Vivid Yellow', 'vivid-yellow', '#F3C300', 1) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Strong Yellow', 'strong-yellow', '#D4AF37', 2) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Deep Yellow', 'deep-yellow', '#AF8D13', 3) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Very Deep Yellow', 'very-deep-yellow', '#50500B', 4) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Moderate Yellow', 'moderate-yellow', '#C9AE5D', 5) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Dark Yellow', 'dark-yellow', '#AB9144', 6) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Very Dark Yellow', 'very-dark-yellow', '#3B3121', 7) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Light Greyish Yellow', 'light-greyish-yellow', '#FBC97F', 8) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Greyish Yellow', 'greyish-yellow', '#C2B280', 9) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Dark Greyish Yellow', 'dark-greyish-yellow', '#A18F60', 10) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('459269d1-bbe4-42af-b021-f031193ac558', 'Blackish Yellow', 'blackish-yellow', '#22221C', 11) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
--- Green-Yellow sub-hues
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Vivid Green-Yellow', 'vivid-green-yellow', '#DCD300', 1) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Strong Green-Yellow', 'strong-green-yellow', '#8DB600', 2) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Deep Green-Yellow', 'deep-green-yellow', '#9B9400', 3) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Very Deep Green-Yellow', 'very-deep-green-yellow', '#39500B', 4) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Moderate Green-Yellow', 'moderate-green-yellow', '#E9E450', 5) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Dark Green-Yellow', 'dark-green-yellow', '#867E36', 6) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Very Dark Green-Yellow', 'very-dark-green-yellow', '#403D21', 7) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Light Greyish Green-Yellow', 'light-greyish-green-yellow', '#EAE679', 8) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Greyish Green-Yellow', 'greyish-green-yellow', '#8C8767', 9) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Dark Greyish Green-Yellow', 'dark-greyish-green-yellow', '#5B5842', 10) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('541969d8-4dc1-406d-90f4-035376c3eadc', 'Blackish Green-Yellow', 'blackish-green-yellow', '#25241D', 11) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
--- Green sub-hues
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Vivid Green', 'vivid-green', '#008856', 1) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Strong Green', 'strong-green', '#007959', 2) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Deep Green', 'deep-green', '#00543D', 3) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Very Deep Green', 'very-deep-green', '#00622D', 4) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Moderate Green', 'moderate-green', '#3B7861', 5) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Dark Green', 'dark-green', '#1B4D3E', 6) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Very Dark Green', 'very-dark-green', '#1C352D', 7) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Light Greyish Green', 'light-greyish-green', '#B6E5AF', 8) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Greyish Green', 'greyish-green', '#5E716A', 9) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Dark Greyish Green', 'dark-greyish-green', '#3A4B47', 10) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('f08b9676-84eb-4497-b137-a412dc1d384b', 'Blackish Green', 'blackish-green', '#1A2421', 11) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
--- Blue-Green sub-hues
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Vivid Blue-Green', 'vivid-blue-green', '#00FFFF', 1) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Strong Blue-Green', 'strong-blue-green', '#17CFCF', 2) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Deep Blue-Green', 'deep-blue-green', '#008882', 3) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Very Deep Blue-Green', 'very-deep-blue-green', '#00443F', 4) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Moderate Blue-Green', 'moderate-blue-green', '#239EBA', 5) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Dark Blue-Green', 'dark-blue-green', '#317873', 6) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Very Dark Blue-Green', 'very-dark-blue-green', '#002A29', 7) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Light Greyish Blue-Green', 'light-greyish-blue-green', '#96DED1', 8) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Greyish Blue-Green', 'greyish-blue-green', '#66ADA4', 9) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Dark Greyish Blue-Green', 'dark-greyish-blue-green', '#415858', 10) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('50f50da8-f6f2-495c-a4fb-ff3fa4ed29b8', 'Blackish Blue-Green', 'blackish-blue-green', '#1C2222', 11) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
--- Blue sub-hues
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Vivid Blue', 'vivid-blue', '#00A1C2', 1) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Strong Blue', 'strong-blue', '#0067A5', 2) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Deep Blue', 'deep-blue', '#00416A', 3) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Very Deep Blue', 'very-deep-blue', '#0B0B50', 4) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Moderate Blue', 'moderate-blue', '#436B95', 5) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Dark Blue', 'dark-blue', '#00304E', 6) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Very Dark Blue', 'very-dark-blue', '#171736', 7) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Light Greyish Blue', 'light-greyish-blue', '#A1CAF1', 8) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Greyish Blue', 'greyish-blue', '#536878', 9) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Dark Greyish Blue', 'dark-greyish-blue', '#36454F', 10) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('7b915eb5-64a3-46f6-9f31-09d78090b8b1', 'Blackish Blue', 'blackish-blue', '#202830', 11) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
--- Purple-Blue sub-hues
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Vivid Purple-Blue', 'vivid-purple-blue', '#5500FF', 1) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Strong Purple-Blue', 'strong-purple-blue', '#5417CF', 2) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Deep Purple-Blue', 'deep-purple-blue', '#380F8A', 3) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Very Deep Purple-Blue', 'very-deep-purple-blue', '#272458', 4) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Moderate Purple-Blue', 'moderate-purple-blue', '#9065CA', 5) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Dark Purple-Blue', 'dark-purple-blue', '#30267A', 6) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Very Dark Purple-Blue', 'very-dark-purple-blue', '#252440', 7) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Light Greyish Purple-Blue', 'light-greyish-purple-blue', '#B3BCE2', 8) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Greyish Purple-Blue', 'greyish-purple-blue', '#6C79B8', 9) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Dark Greyish Purple-Blue', 'dark-greyish-purple-blue', '#4E5180', 10) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('cdc7e05d-2f37-4d49-8fba-79cbadf032dd', 'Blackish Purple-Blue', 'blackish-purple-blue', '#1E1C22', 11) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
--- Purple sub-hues
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Vivid Purple', 'vivid-purple', '#9A4EAE', 1) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Strong Purple', 'strong-purple', '#875692', 2) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Deep Purple', 'deep-purple', '#602F6B', 3) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Very Deep Purple', 'very-deep-purple', '#401A4C', 4) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Moderate Purple', 'moderate-purple', '#86608E', 5) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Dark Purple', 'dark-purple', '#563C5C', 6) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Very Dark Purple', 'very-dark-purple', '#301934', 7) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Light Greyish Purple', 'light-greyish-purple', '#D399E6', 8) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Greyish Purple', 'greyish-purple', '#796878', 9) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Dark Greyish Purple', 'dark-greyish-purple', '#50404D', 10) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a9b6dc8b-c8c4-4e39-b685-3084ab1a6564', 'Blackish Purple', 'blackish-purple', '#291E29', 11) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
--- Red-Purple sub-hues
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Vivid Red-Purple', 'vivid-red-purple', '#FF0080', 1) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Strong Red-Purple', 'strong-red-purple', '#CF1773', 2) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Deep Red-Purple', 'deep-red-purple', '#870074', 3) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Very Deep Red-Purple', 'very-deep-red-purple', '#54133B', 4) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Moderate Red-Purple', 'moderate-red-purple', '#E4717A', 5) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Dark Red-Purple', 'dark-red-purple', '#702963', 6) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Very Dark Red-Purple', 'very-dark-red-purple', '#341731', 7) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Light Greyish Red-Purple', 'light-greyish-red-purple', '#FFB5BA', 8) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Greyish Red-Purple', 'greyish-red-purple', '#C08081', 9) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Dark Greyish Red-Purple', 'dark-greyish-red-purple', '#5D3954', 10) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('9394e72f-2744-4258-8158-a2673b331f33', 'Blackish Red-Purple', 'blackish-red-purple', '#221C1F', 11) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
--- Neutral sub-hues
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'White', 'white', '#FFFFFF', 1) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'Near White', 'near-white', '#F5F5F5', 2) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'Light Grey', 'light-grey', '#B9B8B5', 3) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'Medium Grey', 'medium-grey', '#848482', 4) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'Dark Grey', 'dark-grey', '#555555', 5) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'Near Black', 'near-black', '#1A1A1A', 6) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'Black', 'black', '#000000', 7) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'Brown', 'brown', '#8B4513', 8) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'Dark Brown', 'dark-brown', '#422518', 9) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'Light Brown', 'light-brown', '#A67B5B', 10) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
-INSERT INTO public.hues (parent_id, name, slug, hex_code, sort_order) VALUES ('a73fca87-fb09-4924-90a2-4564c0310657', 'Ivory', 'ivory', '#FFFFF0', 11) ON CONFLICT (parent_id, slug) WHERE parent_id IS NOT NULL DO NOTHING;
 
 -- ----------------------------------------------------------
 -- Product Lines
@@ -2904,3 +2759,79 @@ INSERT INTO public.paint_references (paint_id, related_paint_id, relationship, s
 -- ==========================================================
 -- Summary: 5 brands, 2337 paints, 334 references
 -- ==========================================================
+
+-- ----------------------------------------------------------
+-- Seed users (local development only)
+-- Password for all seed users: "password"
+-- ----------------------------------------------------------
+
+-- admin@grimify.app — receives admin + user roles
+INSERT INTO auth.users (
+  id, instance_id, aud, role, email, encrypted_password,
+  email_confirmed_at, raw_app_meta_data, raw_user_meta_data,
+  created_at, updated_at, confirmation_token, email_change,
+  email_change_token_new, recovery_token
+) VALUES (
+  '1afe2a76-52d3-472f-bd83-401f34846974',
+  '00000000-0000-0000-0000-000000000000',
+  'authenticated', 'authenticated',
+  'admin@grimify.app',
+  crypt('password', gen_salt('bf')),
+  now(),
+  '{"provider":"email","providers":["email"]}',
+  '{}',
+  now(), now(),
+  '', '', '', ''
+) ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO auth.identities (
+  id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at, provider_id
+) VALUES (
+  '1afe2a76-52d3-472f-bd83-401f34846974',
+  '1afe2a76-52d3-472f-bd83-401f34846974',
+  jsonb_build_object('sub', '1afe2a76-52d3-472f-bd83-401f34846974', 'email', 'admin@grimify.app'),
+  'email',
+  now(), now(), now(),
+  'admin@grimify.app'
+) ON CONFLICT (provider_id, provider) DO NOTHING;
+
+UPDATE public.profiles SET display_name = 'Admin', has_setup_profile = true WHERE id = '1afe2a76-52d3-472f-bd83-401f34846974';
+
+-- user@grimify.app — receives user role only
+INSERT INTO auth.users (
+  id, instance_id, aud, role, email, encrypted_password,
+  email_confirmed_at, raw_app_meta_data, raw_user_meta_data,
+  created_at, updated_at, confirmation_token, email_change,
+  email_change_token_new, recovery_token
+) VALUES (
+  'fac22210-bcb2-4f1d-a9be-78bc374cd740',
+  '00000000-0000-0000-0000-000000000000',
+  'authenticated', 'authenticated',
+  'user@grimify.app',
+  crypt('password', gen_salt('bf')),
+  now(),
+  '{"provider":"email","providers":["email"]}',
+  '{}',
+  now(), now(),
+  '', '', '', ''
+) ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO auth.identities (
+  id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at, provider_id
+) VALUES (
+  'fac22210-bcb2-4f1d-a9be-78bc374cd740',
+  'fac22210-bcb2-4f1d-a9be-78bc374cd740',
+  jsonb_build_object('sub', 'fac22210-bcb2-4f1d-a9be-78bc374cd740', 'email', 'user@grimify.app'),
+  'email',
+  now(), now(), now(),
+  'user@grimify.app'
+) ON CONFLICT (provider_id, provider) DO NOTHING;
+
+UPDATE public.profiles SET display_name = 'User', has_setup_profile = true WHERE id = 'fac22210-bcb2-4f1d-a9be-78bc374cd740';
+
+-- Assign admin role to the admin user (user role is auto-assigned by trigger)
+INSERT INTO public.user_roles (user_id, role_id)
+SELECT '1afe2a76-52d3-472f-bd83-401f34846974', id
+FROM public.roles
+WHERE name = 'admin'
+ON CONFLICT DO NOTHING;
