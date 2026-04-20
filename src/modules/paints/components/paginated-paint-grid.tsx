@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useState, useTransition } from 'react'
 import { useSearchParams } from 'next/navigation'
 
+import { PaintCardWithToggle } from '@/modules/collection/components/paint-card-with-toggle'
 import { PaintCard } from '@/modules/paints/components/paint-card'
 import { getPaintService } from '@/modules/paints/services/paint-service.client'
 import type { PaintWithBrand } from '@/modules/paints/services/paint-service'
@@ -23,21 +24,32 @@ const MAX_VISIBLE_PAGES = 7
  * current view is shareable. Fetches pages asynchronously via the browser
  * Supabase client without a full page reload.
  *
+ * When `isAuthenticated` is true and `userPaintIds` is provided, renders
+ * {@link PaintCardWithToggle} with the initial collection state. Newly-fetched
+ * pages default to `isInCollection=false` — clicking the toggle still works
+ * correctly via server actions.
+ *
  * @param props.initialPaints - First page of paints (server-rendered).
  * @param props.totalCount - Total number of paints in the database.
  * @param props.basePath - URL path prefix for pagination links (e.g., "/paints" or "/hues/abc").
  * @param props.fetchPaints - Optional custom fetch function. Defaults to fetching all paints.
+ * @param props.userPaintIds - Set of paint IDs in the current user's collection.
+ * @param props.isAuthenticated - Whether the current user is signed in.
  */
 export function PaginatedPaintGrid({
   initialPaints,
   totalCount,
   basePath = '/paints',
   fetchPaints,
+  userPaintIds,
+  isAuthenticated = false,
 }: {
   initialPaints: PaintWithBrand[]
   totalCount: number
   basePath?: string
   fetchPaints?: (options: { limit: number; offset: number }) => Promise<PaintWithBrand[]>
+  userPaintIds?: Set<string>
+  isAuthenticated?: boolean
 }) {
   const searchParams = useSearchParams()
 
@@ -167,9 +179,23 @@ export function PaginatedPaintGrid({
       <div className={isPending ? 'opacity-50 transition-opacity' : ''}>
         {paints.length > 0 ? (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {paints.map((paint) => (
-              <PaintCard key={paint.id} id={paint.id} name={paint.name} hex={paint.hex} brand={paint.product_lines.brands.name} paintType={paint.paint_type} />
-            ))}
+            {paints.map((paint) =>
+              isAuthenticated ? (
+                <PaintCardWithToggle
+                  key={paint.id}
+                  id={paint.id}
+                  name={paint.name}
+                  hex={paint.hex}
+                  brand={paint.product_lines.brands.name}
+                  paintType={paint.paint_type}
+                  isInCollection={userPaintIds?.has(paint.id) ?? false}
+                  isAuthenticated={isAuthenticated}
+                  revalidatePath={basePath}
+                />
+              ) : (
+                <PaintCard key={paint.id} id={paint.id} name={paint.name} hex={paint.hex} brand={paint.product_lines.brands.name} paintType={paint.paint_type} />
+              )
+            )}
           </div>
         ) : (
           <p className="text-sm text-muted-foreground">No paints available.</p>
