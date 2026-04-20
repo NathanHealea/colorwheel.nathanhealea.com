@@ -15,15 +15,21 @@ import { getPaintService } from '@/modules/paints/services/paint-service.client'
  * @param props.hueId - The child hue UUID to filter paints by.
  * @param props.initialPaints - First page of paints (server-rendered).
  * @param props.totalCount - Total number of paints for this child hue.
+ * @param props.userPaintIds - Set of paint IDs in the current user's collection.
+ * @param props.isAuthenticated - Whether the current user is signed in.
  */
 export function HuePaintGrid({
   hueId,
   initialPaints,
   totalCount,
+  userPaintIds,
+  isAuthenticated,
 }: {
   hueId: string
   initialPaints: PaintWithBrand[]
   totalCount: number
+  userPaintIds?: Set<string>
+  isAuthenticated?: boolean
 }) {
   const fetchPaints = useCallback(
     async (options: { limit: number; offset: number }) => {
@@ -39,6 +45,8 @@ export function HuePaintGrid({
       totalCount={totalCount}
       basePath={`/hues/${hueId}`}
       fetchPaints={fetchPaints}
+      userPaintIds={userPaintIds}
+      isAuthenticated={isAuthenticated}
     />
   )
 }
