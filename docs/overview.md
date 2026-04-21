@@ -77,6 +77,7 @@ Core functionality:
 - [x] [Social media login (Google, Discord)](./01-authentication-and-user-accounts/04-social-media-login.md)
 - [x] [User password reset and change](./01-authentication-and-user-accounts/05-user-reset-password.md)
 - [x] [OAuth profile setup redirect bug](./01-authentication-and-user-accounts/06-oauth-profile-setup-redirect.md)
+- [ ] [Edit user profile](./01-authentication-and-user-accounts/07-edit-user-profile.md)
 
 ### Epic: Paint Data & Search
 
