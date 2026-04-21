@@ -28,15 +28,16 @@ export function AdminAddPaintForm({ userId }: { userId: string }) {
     if (debounceRef.current) clearTimeout(debounceRef.current)
 
     const trimmed = query.trim()
-    if (!trimmed) {
-      setSuggestions([])
-      return
-    }
+    const delay = trimmed ? 250 : 0
 
     debounceRef.current = setTimeout(async () => {
+      if (!trimmed) {
+        setSuggestions([])
+        return
+      }
       const result = await searchPaintsForPicker(trimmed)
       setSuggestions('paints' in result ? result.paints : [])
-    }, 250)
+    }, delay)
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current)
