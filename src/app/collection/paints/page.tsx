@@ -7,7 +7,7 @@ import { getCollectionService } from '@/modules/collection/services/collection-s
 /** Valid page sizes that the paginated grid supports. */
 const VALID_SIZES = [25, 50, 100, 200]
 
-export default async function CollectionPage({
+export default async function CollectionPaintsPage({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string; size?: string }>
