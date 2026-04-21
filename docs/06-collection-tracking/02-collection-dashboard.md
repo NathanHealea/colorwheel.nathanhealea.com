@@ -2,7 +2,7 @@
 
 **Epic:** Collection Tracking
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 **Branch:** `feature/collection-dashboard`
 **Merge into:** `v1/main`
 
@@ -14,14 +14,14 @@ The dashboard is a higher-level overview surface that complements the full colle
 
 ## Acceptance Criteria
 
-- [ ] Route `/collection` renders the dashboard and requires authentication (redirects unauthenticated users to `/sign-in?next=/collection`)
-- [ ] Dashboard shows collection overview statistics: total paints, paints grouped by brand (top 5), paints grouped by paint type
-- [ ] When the user has no paints, stat cards render empty-state copy with a CTA linking to `/paints`
-- [ ] Dashboard includes a search input that filters the user's collection by paint name, hex, brand, or type (scoped to `user_paints` only)
-- [ ] Search results render as a grid of paint cards (reuses the existing paint card component)
-- [ ] Dashboard includes a "Recently viewed palettes" section rendered as a clearly-labelled placeholder / stub (no backing data, uses a disabled / "coming soon" visual treatment)
-- [ ] Authenticated users see a "Collection" link in the navbar that targets `/collection`
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] Route `/collection` renders the dashboard and requires authentication (redirects unauthenticated users to `/sign-in?next=/collection`)
+- [x] Dashboard shows collection overview statistics: total paints, paints grouped by brand (top 5), paints grouped by paint type
+- [x] When the user has no paints, stat cards render empty-state copy with a CTA linking to `/paints`
+- [x] Dashboard includes a search input that filters the user's collection by paint name, hex, brand, or type (scoped to `user_paints` only)
+- [x] Search results render as a grid of paint cards (reuses the existing paint card component)
+- [x] Dashboard includes a "Recently viewed palettes" section rendered as a clearly-labelled placeholder / stub (no backing data, uses a disabled / "coming soon" visual treatment)
+- [x] Authenticated users see a "Collection" link in the navbar that targets `/collection`
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Routes
 
