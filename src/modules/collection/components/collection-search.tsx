@@ -25,18 +25,20 @@ export function CollectionSearch() {
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
 
-    if (!query.trim()) {
-      setResults([])
-      setIsLoading(false)
-      return
-    }
+    const trimmed = query.trim()
+    const delay = trimmed ? 250 : 0
 
-    setIsLoading(true)
     debounceRef.current = setTimeout(async () => {
-      const result = await searchCollection(query.trim())
+      if (!trimmed) {
+        setResults([])
+        setIsLoading(false)
+        return
+      }
+      setIsLoading(true)
+      const result = await searchCollection(trimmed)
       setResults('paints' in result ? result.paints : [])
       setIsLoading(false)
-    }, 250)
+    }, delay)
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current)
