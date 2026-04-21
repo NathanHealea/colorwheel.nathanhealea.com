@@ -7,7 +7,7 @@ import type { PaintWithBrand } from '@/modules/paints/services/paint-service'
 /**
  * Server action that searches paints by name or hex for the admin paint picker.
  *
- * Returns up to 10 results. Used by {@link AdminAddPaintForm} to power the
+ * Returns up to 20 results. Used by {@link AdminAddPaintForm} to power the
  * searchable paint-picker input.
  *
  * @param query - Search string. Prefix with `#` to match hex codes.
@@ -21,6 +21,6 @@ export async function searchPaintsForPicker(
   const supabase = await createClient()
   const service = createPaintService(supabase)
 
-  const { paints } = await service.searchPaints({ query, limit: 10 })
+  const { paints } = await service.searchPaints({ query, limit: 20 })
   return { paints }
 }
