@@ -35,13 +35,13 @@ The dashboard is a higher-level overview surface that complements the full colle
 | ------ | ------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | Create | `src/app/collection/page.tsx`                                             | Collection dashboard route (thin wrapper, server component)      |
 | Create | `src/modules/collection/services/collection-service.ts`                   | Supabase queries for user collection stats and search            |
-| Create | `src/modules/collection/services/collection-service.server.ts`            | Server-side factory for the collection service                   |
+| Update | `src/modules/collection/services/collection-service.server.ts`            | Server-side factory for the collection service (already exists)  |
 | Create | `src/modules/collection/components/collection-stats.tsx`                  | Stat cards (total paints, by brand, by type)                     |
 | Create | `src/modules/collection/components/collection-search.tsx`                 | Client component — search input + results grid                   |
 | Create | `src/modules/collection/components/recent-palettes-placeholder.tsx`       | Stubbed "Recently viewed palettes" section                       |
 | Create | `src/modules/collection/types/collection-stats.ts`                        | `CollectionStats` type                                           |
 | Create | `src/modules/collection/types/collection-paint.ts`                        | `CollectionPaint` type (user_paints row joined with paint data)  |
-| Update | `src/components/navbar.tsx`                                               | Add "Collection" link visible to authenticated users             |
+| N/A    | `src/components/navbar.tsx`                                               | "Collection" link already present — no changes needed            |
 
 ## Dependencies
 
@@ -74,10 +74,10 @@ export type CollectionStats = {
 }
 ```
 
-**`src/modules/collection/types/collection-paint.ts`** — new file. Narrow `PaintWithBrand` (from `@/types/paint`) adding `added_at`:
+**`src/modules/collection/types/collection-paint.ts`** — new file. Narrow `PaintWithBrand` (from `@/modules/paints/services/paint-service`) adding `added_at`:
 
 ```ts
-import type { PaintWithBrand } from '@/types/paint'
+import type { PaintWithBrand } from '@/modules/paints/services/paint-service'
 
 export type CollectionPaint = PaintWithBrand & {
   added_at: string
