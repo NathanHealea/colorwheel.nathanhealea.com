@@ -79,7 +79,9 @@ Extend `src/modules/purchase-list/services/purchase-list-service.ts` with:
 - `getPurchaseListPaints(userId, { limit?, offset? })` — Returns `PurchaseListPaint[]`, ordered by `added_at DESC`. Select join: `user_purchase_list → paints → product_lines → brands`.
 - `getPurchaseListPaintCount(userId)` — Returns `number`.
 - `searchPurchaseList(userId, { query, limit? })` — Case-insensitive search on paint name, hex (prefix `#`), brand name, and paint type. Mirrors `searchCollection` in `collection-service.ts`.
-- `getStats(userId)` — Fetches all paints for the user (using `getPurchaseListPaints`) and aggregates brand and type counts in JavaScript, capped at top 5 brands. Mirrors `getStats` in `collection-service.ts`.
+- `getStats(userId)` — **Preferred:** two targeted `COUNT(*)/GROUP BY` queries via `Promise.all` (one for type breakdown, one for top 5 brands by count), rather than fetching all rows and aggregating in JavaScript. The JS-aggregation approach transfers every row on every dashboard load, which becomes expensive as lists grow. The dashboard page calls `Promise.all([getStats, getPurchaseListPaints])` — if `getStats` internally fetches all rows, that is a second full-table read running in parallel with the `limit: 10` fetch. SQL aggregation avoids this double-fetch entirely. Mirrors the intent of `getStats` in `collection-service.ts` but with a more efficient implementation.
+
+After adding these methods, ensure the new methods are accessible through the existing `purchase-list-service.server.ts` and `purchase-list-service.client.ts` wrappers created in `01-purchase-list-toggle.md`. The wrappers just call the factory (`createPurchaseListService(client)`) — no changes to the wrappers are needed as long as the new methods are added to the core service factory return value.
 
 Commit: `feat(purchase-list): add dashboard service methods`
 
@@ -117,7 +119,7 @@ Commit: `feat(purchase-list): add PurchaseListSearch component`
 Create `src/modules/purchase-list/components/purchase-list-paint-grid.tsx` — mirrors `collection-paint-grid.tsx`:
 - Client component using browser Supabase client.
 - Wraps `PaginatedPaintGrid` with purchase list data.
-- Fetches `getPurchaseListPaints` via `purchaseListService.client`.
+- Calls `getPurchaseListService()` (the browser-client accessor from `purchase-list-service.client.ts`) to fetch `getPurchaseListPaints`. Mirror how `collection-paint-grid.tsx` calls `getCollectionService()`.
 - Passes `isOnPurchaseList` state to each `PaintCardWithPurchaseToggle`.
 
 Commit: `feat(purchase-list): add PurchaseListPaintGrid component`
