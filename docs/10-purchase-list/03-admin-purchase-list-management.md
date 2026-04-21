@@ -107,12 +107,13 @@ npm run db:types
 
 Commit: `feat(purchase-list): add admin RLS policies on user_purchase_list`
 
-### Step 2: Admin collection service
+### Step 2: Admin purchase list service
 
 Create `src/modules/admin/services/purchase-list-service.ts` — mirrors `collection-service.ts` in the admin module (see `docs/08-user-management/06-collection-management.md` Step 2 for the exact shape):
 
 - `listUserPurchaseLists({ q, sizeFilter, offset, limit })` — Returns `{ users, count }`:
-  - Joins `profiles` with `user_purchase_list` count per user and `MAX(updated_at)` as `last_activity`.
+  - Use PostgREST's embedded-count syntax to avoid a per-user N+1: `supabase.from('profiles').select('id, display_name, email, avatar_url, user_purchase_list(count)', { count: 'exact' })`. This gives each profile a paint count in a single query.
+  - `MAX(updated_at)` for last activity is not directly expressible through PostgREST's embedded aggregates. Options: (a) a database view `v_user_purchase_list_summary` that pre-computes both `count` and `max_updated_at`, or (b) a second query fetching the latest `updated_at` per user with `.select('user_id, updated_at').order('updated_at', { ascending: false }).limit(1)` inside the loop (acceptable at `PAGE_SIZE = 20`). Do not block the feature on `last_activity` — defer to v2 if the query is awkward, matching the guidance in `06-collection-management.md`.
   - `q` → case-insensitive partial match on `display_name` and `email`.
   - `sizeFilter === 'non-empty'` → filter to users with at least one row.
   - `sizeFilter === 'empty'` → filter to users with no rows.
@@ -219,12 +220,11 @@ const NAV_ITEMS = [
   { href: '/admin', label: 'Dashboard', exact: true },
   { href: '/admin/users', label: 'Users' },
   { href: '/admin/roles', label: 'Roles' },
-  { href: '/admin/collections', label: 'Collections' },   // if implemented
   { href: '/admin/purchase-lists', label: 'Purchase Lists' },
 ]
 ```
 
-If the Collections nav item from `06-collection-management.md` has not yet been implemented, omit it — do not create a dependency on an unmerged feature.
+If the Collections feature from `06-collection-management.md` has already been merged, also add `{ href: '/admin/collections', label: 'Collections' }` before the Purchase Lists entry. Do not add it if the route does not yet exist.
 
 Commit: `feat(purchase-list): add Purchase Lists link to admin sidebar`
 
