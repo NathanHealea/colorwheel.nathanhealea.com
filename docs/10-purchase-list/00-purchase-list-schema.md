@@ -20,6 +20,10 @@ Create the `user_purchase_list` table that backs the purchase list feature. Esta
 - [ ] `npm run db:types` regenerates types without errors
 - [ ] `npm run build` and `npm run lint` pass with no errors
 
+## Routes
+
+None — this feature is schema-only.
+
 ## Database
 
 ### Migration — `XXXXXX_create_user_purchase_list_table.sql`
@@ -34,7 +38,8 @@ CREATE TABLE public.user_purchase_list (
   PRIMARY KEY (user_id, paint_id)
 );
 
--- Index on paint_id for cascade-delete lookups and reverse joins (user_id is covered by the PK)
+-- Indexes
+CREATE INDEX idx_user_purchase_list_user_id  ON public.user_purchase_list (user_id);
 CREATE INDEX idx_user_purchase_list_paint_id ON public.user_purchase_list (paint_id);
 
 -- updated_at trigger
@@ -112,4 +117,4 @@ Commit: `feat(purchase-list): add user_purchase_list table with RLS and updated_
 
 - **Dependency on `profiles` and `paints` tables.** Both must exist before this migration runs; they are established in earlier migrations.
 - **`notes` column.** Nullable, reserved for future admin editing — no user-facing UI in this feature.
-- **`updated_at` trigger.** Before creating `set_user_purchase_list_updated_at`, check existing migrations for a generic `set_updated_at()` or `handle_updated_at()` trigger function. If one exists, use it instead of adding a new per-table function. The function name here is unique to this table so there is no collision if a generic one is absent.
+- **`updated_at` trigger.** Mirrors the pattern proposed in `docs/08-user-management/06-collection-management.md` for `user_paints`. If that feature has not landed, the trigger function name here is unique (`set_user_purchase_list_updated_at`) so there is no collision.
