@@ -19,6 +19,10 @@ Add a shopping-cart toggle icon to paint cards so authenticated users can add or
 - [ ] The toggle does not trigger card navigation (click stops propagation)
 - [ ] `npm run build` and `npm run lint` pass with no errors
 
+## Routes
+
+None — this feature adds UI to existing browse routes.
+
 ## Database
 
 Depends on the `user_purchase_list` table from `00-purchase-list-schema.md`. No new migrations in this feature.
@@ -80,7 +84,7 @@ Commit: `feat(purchase-list): add purchase list types`
 
 Create `src/modules/purchase-list/services/purchase-list-service.ts` accepting a `SupabaseClient` parameter — mirrors `collection-service.ts`:
 
-- `getUserPurchaseListIds(userId)` — Returns `Set<string>` of `paint_id` values for O(1) membership checks. Add an explicit `.limit(5000)` to the query; PostgREST silently caps results at 1,000 rows by default, which would cause toggles to show incorrect state for users with large lists.
+- `getUserPurchaseListIds(userId)` — Returns `Set<string>` of `paint_id` values for O(1) membership checks.
 - `isOnPurchaseList(userId, paintId)` — Boolean.
 - `addPaint(userId, paintId)` — Insert into `user_purchase_list`; handle unique-constraint violation (23505) silently (idempotent).
 - `removePaint(userId, paintId)` — Delete row; idempotent.
