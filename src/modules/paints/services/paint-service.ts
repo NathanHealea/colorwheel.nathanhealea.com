@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
+import type { ColorWheelPaint } from '@/modules/color-wheel/types/color-wheel-paint'
 import type { Brand, Paint, PaintReference, ProductLine } from '@/types/paint'
 
 /** Paint row joined with its product line and brand. */
@@ -416,6 +417,38 @@ export function createPaintService(supabase: SupabaseClient) {
         paints: (data as PaintWithBrand[] | null) ?? [],
         count: count ?? 0,
       }
+    },
+
+    /**
+     * Fetches all non-discontinued paints with the fields needed to render the
+     * color wheel: position data (hue, saturation, lightness), display data
+     * (hex, is_metallic), and tooltip data (brand name, product line name).
+     *
+     * @returns Array of {@link ColorWheelPaint} ordered by hue ascending.
+     */
+    async getColorWheelPaints(): Promise<ColorWheelPaint[]> {
+      const { data } = await supabase
+        .from('paints')
+        .select('id, name, hex, hue, saturation, lightness, is_metallic, product_lines!inner(name, brands!inner(name))')
+        .eq('is_discontinued', false)
+        .order('hue', { ascending: true })
+
+      if (!data) return []
+
+      return data.map((row) => {
+        const line = row.product_lines as unknown as { name: string; brands: { name: string } }
+        return {
+          id: row.id,
+          name: row.name,
+          hex: row.hex,
+          hue: row.hue,
+          saturation: row.saturation,
+          lightness: row.lightness,
+          is_metallic: row.is_metallic,
+          brand_name: line.brands.name,
+          product_line_name: line.name,
+        }
+      })
     },
 
     /**
