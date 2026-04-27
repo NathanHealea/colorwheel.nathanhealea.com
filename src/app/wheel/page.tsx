@@ -2,7 +2,7 @@ import { getHueService } from '@/modules/hues/services/hue-service.server'
 import { ColorWheel } from '@/modules/color-wheel/components/color-wheel'
 import { getPaintService } from '@/modules/paints/services/paint-service.server'
 
-export default async function Home() {
+export default async function WheelPage() {
   const [paintService, hueService] = await Promise.all([getPaintService(), getHueService()])
   const [paints, hues] = await Promise.all([
     paintService.getColorWheelPaints(),
