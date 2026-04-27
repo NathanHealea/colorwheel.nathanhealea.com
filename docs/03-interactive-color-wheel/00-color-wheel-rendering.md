@@ -2,7 +2,7 @@
 
 **Epic:** Interactive Color Wheel
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 **Branch:** `feature/color-wheel-rendering`
 **Merge into:** `v1/main`
 
@@ -12,14 +12,14 @@ Render an interactive color wheel that maps paints by hue (angle) and lightness 
 
 ## Acceptance Criteria
 
-- [ ] A color wheel is rendered on the page using Canvas or SVG
-- [ ] Paints are plotted as dots/markers on the wheel based on their hue and lightness
-- [ ] Hue determines the angular position (0-360 degrees)
-- [ ] Lightness determines the radial position (lighter = closer to center)
-- [ ] The wheel is responsive and scales to the viewport
-- [ ] Paint markers show a tooltip or popover with paint name and brand on hover/tap
-- [ ] The wheel loads paint data from the database
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] A color wheel is rendered on the page using Canvas or SVG
+- [x] Paints are plotted as dots/markers on the wheel based on their hue and lightness
+- [x] Hue determines the angular position (0-360 degrees)
+- [x] Lightness determines the radial position (lighter = closer to center)
+- [x] The wheel is responsive and scales to the viewport
+- [x] Paint markers show a tooltip or popover with paint name and brand on hover/tap
+- [x] The wheel loads paint data from the database
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Routes
 
