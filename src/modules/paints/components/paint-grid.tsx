@@ -6,7 +6,7 @@ import type { PaintWithBrand } from '@/modules/paints/services/paint-service'
  * Dumb grid of paint cards.
  *
  * Renders whatever `renderCard` returns for each paint — callers decide which
- * card variant to use (e.g. {@link PaintCard}, {@link PaintCardWithToggle}, or
+ * card variant to use (e.g. {@link PaintCard}, {@link CollectionPaintCard}, or
  * an admin card with an action overlay). The grid is responsible only for the
  * grid layout and empty-state copy.
  *
@@ -27,7 +27,7 @@ export function PaintGrid({
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
       {paints.map((paint) => (
-        <div key={paint.id}>{renderCard(paint)}</div>
+        <div key={paint.id} className='flex'>{renderCard(paint)}</div>
       ))}
     </div>
   )
