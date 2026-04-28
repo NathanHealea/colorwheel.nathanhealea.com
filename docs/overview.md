@@ -102,6 +102,7 @@ Core functionality:
 - [x] [Color wheel rendering and paint mapping](./03-interactive-color-wheel/00-color-wheel-rendering.md)
 - [ ] [Zoom, pan, and paint detail interaction](./03-interactive-color-wheel/01-wheel-interaction.md)
 - [ ] [Filter wheel by brand, collection, or owned paints](./03-interactive-color-wheel/02-wheel-filters.md)
+- [ ] [HSL color wheel](./03-interactive-color-wheel/03-hls-color-wheel.md)
 
 ### Epic: Cross-Brand Comparison
 
