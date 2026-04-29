@@ -2,7 +2,7 @@
 
 **Epic:** Interactive Color Wheel
 **Type:** Feature
-**Status:** Todo
+**Status:** Completed
 **Branch:** `feature/wheel-interaction`
 **Merge into:** `v1/main`
 
@@ -12,13 +12,13 @@ Add zoom, pan, and click-to-detail interactions to the color wheel so users can 
 
 ## Acceptance Criteria
 
-- [ ] Users can zoom in/out on the color wheel (scroll wheel, pinch gesture, or zoom controls)
-- [ ] Users can pan/drag the wheel when zoomed in
-- [ ] Clicking a paint marker opens a detail panel or modal with full paint info
-- [ ] Paint detail shows: name, brand, product line, hex code, color swatch, and paint type
-- [ ] Zoom level persists during the session
-- [ ] Touch gestures work on mobile (pinch-to-zoom, drag-to-pan)
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] Users can zoom in/out on the color wheel (scroll wheel, pinch gesture, or zoom controls)
+- [x] Users can pan/drag the wheel when zoomed in
+- [x] Clicking a paint marker opens a detail panel or modal with full paint info
+- [x] Paint detail shows: name, brand, product line, hex code, color swatch, and paint type
+- [x] Zoom level persists during the session
+- [x] Touch gestures work on mobile (pinch-to-zoom, drag-to-pan)
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Key Files
 
