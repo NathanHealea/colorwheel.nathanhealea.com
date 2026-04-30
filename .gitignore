@@ -47,7 +47,6 @@ next-env.d.ts
 .claude/
 .mcp.json
 .context.*
-!.context.*.md
 
 # git worktrees
 .worktrees/
