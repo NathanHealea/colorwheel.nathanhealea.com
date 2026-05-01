@@ -79,9 +79,9 @@ export function ColorWheelContainer({
       />
 
       {view === 'munsell' ? (
-        <MunsellColorWheel paints={filteredPaints} hues={hues} />
+        <MunsellColorWheel paints={filteredPaints} hues={hues} userPaintIds={userPaintIds} />
       ) : (
-        <HslColorWheel paints={filteredPaints} />
+        <HslColorWheel paints={filteredPaints} userPaintIds={userPaintIds} />
       )}
     </div>
   )
