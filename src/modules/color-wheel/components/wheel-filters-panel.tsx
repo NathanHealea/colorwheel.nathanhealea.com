@@ -54,6 +54,7 @@ export function WheelFiltersPanel({
     state.paintTypes.length +
     (state.ownedOnly ? 1 : 0)
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const visibleProductLines = state.brandIds.length > 0
     ? options.productLines.filter((pl) => state.brandIds.includes(pl.brand_id))
     : options.productLines
@@ -65,6 +66,7 @@ export function WheelFiltersPanel({
     onBrandChange(next)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function toggleProductLine(id: string) {
     const next = state.productLineIds.includes(id)
       ? state.productLineIds.filter((l) => l !== id)
@@ -72,6 +74,7 @@ export function WheelFiltersPanel({
     onProductLineChange(next)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function togglePaintType(type: string) {
     const next = state.paintTypes.includes(type)
       ? state.paintTypes.filter((t) => t !== type)
@@ -176,33 +179,8 @@ export function WheelFiltersPanel({
             </FilterSection>
           )}
 
-          {/* Product lines */}
-          {visibleProductLines.length > 0 && (
-            <FilterSection label="Product line">
-              {visibleProductLines.map((line) => (
-                <CheckRow
-                  key={line.id}
-                  label={line.name}
-                  checked={state.productLineIds.includes(line.id)}
-                  onChange={() => toggleProductLine(line.id)}
-                />
-              ))}
-            </FilterSection>
-          )}
-
-          {/* Paint types */}
-          {options.paintTypes.length > 0 && (
-            <FilterSection label="Paint type">
-              {options.paintTypes.map((type) => (
-                <CheckRow
-                  key={type}
-                  label={type}
-                  checked={state.paintTypes.includes(type)}
-                  onChange={() => togglePaintType(type)}
-                />
-              ))}
-            </FilterSection>
-          )}
+          {/* Product lines — hidden for now, logic retained */}
+          {/* Paint types — hidden for now, logic retained */}
 
           {/* My collection toggle */}
           {showOwnedFilter && (
