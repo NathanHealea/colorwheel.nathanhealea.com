@@ -2,7 +2,7 @@
 
 **Epic:** Interactive Color Wheel
 **Type:** Refactor
-**Status:** Done
+**Status:** Completed
 **Branch:** `refactor/hsl-wheel-itten-segment-rendering`
 **Merge into:** `v1/main`
 
