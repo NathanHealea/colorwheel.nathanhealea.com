@@ -89,6 +89,13 @@ export function useWheelTransform(baseViewBox: [number, number, number, number])
     sessionStorage.setItem(SESSION_KEY, String(zoom))
   }, [zoom])
 
+  // rAF throttle refs for wheel events — accumulate factor per frame, apply once
+  const rafId = useRef<number | null>(null)
+  const pendingFactor = useRef<number>(1)
+  const pendingClientX = useRef<number>(0)
+  const pendingClientY = useRef<number>(0)
+  const pendingRect = useRef<DOMRect | null>(null)
+
   // Drag state
   const isDragging = useRef(false)
   const dragStart = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null)
@@ -120,28 +127,44 @@ export function useWheelTransform(baseViewBox: [number, number, number, number])
     [totalSize]
   )
 
+  // Applies the accumulated wheel factor in one rAF, capping renders at ~60fps.
+  const flushWheel = useCallback(() => {
+    rafId.current = null
+    const factor = pendingFactor.current
+    pendingFactor.current = 1
+    const rect = pendingRect.current
+    if (!rect || factor === 1) return
+
+    const currentZoom = zoomRef.current
+    const currentPan = panRef.current
+    const newZoom = clamp(currentZoom * factor, MIN_ZOOM, MAX_ZOOM)
+    if (newZoom === MIN_ZOOM) {
+      setZoom(MIN_ZOOM)
+      setPan({ x: 0, y: 0 })
+      return
+    }
+    const pivot = clientToSvg(pendingClientX.current, pendingClientY.current, rect)
+    const ratio = currentZoom / newZoom
+    setZoom(newZoom)
+    setPan({
+      x: pivot.x - (pivot.x - currentPan.x) * ratio,
+      y: pivot.y - (pivot.y - currentPan.y) * ratio,
+    })
+  }, [clientToSvg])
+
   const onWheel = useCallback(
     (e: WheelEvent<HTMLDivElement>) => {
       e.preventDefault()
-      const currentZoom = zoomRef.current
-      const currentPan = panRef.current
-      const factor = e.deltaY > 0 ? 0.9 : 1.1
-      const newZoom = clamp(currentZoom * factor, MIN_ZOOM, MAX_ZOOM)
-      if (newZoom === MIN_ZOOM) {
-        setZoom(newZoom)
-        setPan({ x: 0, y: 0 })
-        return
+      // Accumulate multiplicative factor so rapid events compound correctly.
+      pendingFactor.current *= e.deltaY > 0 ? 0.9 : 1.1
+      pendingClientX.current = e.clientX
+      pendingClientY.current = e.clientY
+      pendingRect.current = e.currentTarget.getBoundingClientRect()
+      if (rafId.current === null) {
+        rafId.current = requestAnimationFrame(flushWheel)
       }
-      const rect = e.currentTarget.getBoundingClientRect()
-      const pivot = clientToSvg(e.clientX, e.clientY, rect)
-      const ratio = currentZoom / newZoom
-      setZoom(newZoom)
-      setPan({
-        x: pivot.x - (pivot.x - currentPan.x) * ratio,
-        y: pivot.y - (pivot.y - currentPan.y) * ratio,
-      })
     },
-    [clientToSvg]
+    [flushWheel]
   )
 
   const onPointerDown = useCallback((e: PointerEvent<HTMLDivElement>) => {
