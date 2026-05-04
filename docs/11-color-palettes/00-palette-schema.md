@@ -2,7 +2,7 @@
 
 **Epic:** Color Palettes
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 **Branch:** `feature/palette-schema`
 **Merge into:** `v1/main`
 
@@ -14,15 +14,15 @@ A palette is a user-owned, ordered list of paints (owned or not) with an optiona
 
 ## Acceptance Criteria
 
-- [ ] `palettes` table exists with `id`, `user_id`, `name`, `description`, `is_public`, `created_at`, `updated_at`
-- [ ] `palette_paints` table exists keyed on `(palette_id, position)` with `paint_id` and an optional `note`
-- [ ] RLS allows owners full access to their palettes, public read access to `is_public = true` palettes
-- [ ] `palette_paints` policies derive ownership through the parent `palettes` row
-- [ ] `updated_at` is maintained by a trigger that fires on `UPDATE`
-- [ ] `src/modules/palettes/` is scaffolded with `actions/`, `components/`, `services/`, `types/`, `utils/`, `validation.ts`
-- [ ] Service layer exposes `getPaletteById`, `listPalettesForUser`, `listPublicPalettes`, `createPalette`, `updatePalette`, `deletePalette`, `setPalettePaints`
-- [ ] Generated Supabase TypeScript types include the new tables
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] `palettes` table exists with `id`, `user_id`, `name`, `description`, `is_public`, `created_at`, `updated_at`
+- [x] `palette_paints` table exists keyed on `(palette_id, position)` with `paint_id` and an optional `note`
+- [x] RLS allows owners full access to their palettes, public read access to `is_public = true` palettes
+- [x] `palette_paints` policies derive ownership through the parent `palettes` row
+- [x] `updated_at` is maintained by a trigger that fires on `UPDATE`
+- [x] `src/modules/palettes/` is scaffolded with `actions/`, `components/`, `services/`, `types/`, `utils/`, `validation.ts`
+- [x] Service layer exposes `getPaletteById`, `listPalettesForUser`, `listPublicPalettes`, `createPalette`, `updatePalette`, `deletePalette`, `setPalettePaints`
+- [x] Generated Supabase TypeScript types include the new tables
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Database
 
