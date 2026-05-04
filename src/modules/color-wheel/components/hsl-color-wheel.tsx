@@ -1,7 +1,7 @@
 'use client'
 
 import type { MouseEvent, PointerEvent } from 'react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import type { ColorWheelPaint } from '@/modules/color-wheel/types/color-wheel-paint'
 import type { ColorScheme } from '@/modules/color-wheel/types/color-scheme'
@@ -96,9 +96,11 @@ export function HslColorWheel({
 
   const isSchemeActive = !!colorScheme && !!selectedHue
 
+  const [hoveredGroupKey, setHoveredGroupKey] = useState<string | null>(null)
+
   // Adapter: PaintDot passes a PaintGroup; useWheelHover expects a ColorWheelPaint + MouseEvent
   function handleGroupHover(group: PaintGroup | null, event: PointerEvent<SVGCircleElement>) {
-    // Pass the rep paint so the existing tooltip display logic works unchanged
+    setHoveredGroupKey(group?.key ?? null)
     handleHover(group?.rep ?? null, event as unknown as MouseEvent<SVGElement>)
   }
 
@@ -151,9 +153,12 @@ export function HslColorWheel({
         {/* Color scheme wedge overlays */}
         {schemeWedgeOverlays && <g id="scheme-wedge-overlays" pointerEvents="none">{schemeWedgeOverlays}</g>}
 
-        {/* Paint dots — one per unique hex, with rings and badge */}
+        {/* Paint dots — one per unique hex, with rings and badge.
+            Hovered group is rendered last so it paints on top of all others. */}
         <g id="paint-dots">
-          {paintGroups.map((group) => {
+          {[...paintGroups.filter((g) => g.key !== hoveredGroupKey),
+            ...paintGroups.filter((g) => g.key === hoveredGroupKey),
+          ].map((group) => {
             const isOwned = userPaintIds
               ? group.paints.some((p) => userPaintIds.has(p.id))
               : false
