@@ -1,3 +1,4 @@
+import { Main } from '@/components/main'
 import { createClient } from '@/lib/supabase/server'
 import { CreateRoleForm } from '@/modules/admin/components/create-role-form'
 import { RoleListTable } from '@/modules/admin/components/role-list-table'
@@ -20,7 +21,7 @@ export default async function AdminRolesPage() {
   }))
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-12">
+    <Main>
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Role Management</h1>
         <p className="text-sm text-muted-foreground">
@@ -34,6 +35,6 @@ export default async function AdminRolesPage() {
       </div>
 
       <RoleListTable roles={roles} />
-    </div>
+    </Main>
   )
 }

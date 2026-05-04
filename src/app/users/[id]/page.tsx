@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Main } from '@/components/main'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function UserProfilePage({
@@ -36,7 +37,7 @@ export default async function UserProfilePage({
     : null
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-12">
+    <Main>
       <Card>
         <CardHeader className="flex flex-row items-center gap-4">
           {profile.avatar_url ? (
@@ -74,6 +75,6 @@ export default async function UserProfilePage({
           )}
         </CardContent>
       </Card>
-    </div>
+    </Main>
   )
 }

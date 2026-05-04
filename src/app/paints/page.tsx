@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getHueService } from '@/modules/hues/services/hue-service.server'
 import { PaintExplorer } from '@/modules/paints/components/paint-explorer'
 import { getPaintService } from '@/modules/paints/services/paint-service.server'
+import { Main } from '@/components/main'
 
 /** Valid page sizes that the paginated grid supports. */
 const VALID_SIZES = [25, 50, 100, 200]
@@ -16,9 +17,7 @@ export default async function PaintsPage({
   const currentPage = Math.max(1, parseInt(page ?? '1', 10) || 1)
   const offset = (currentPage - 1) * pageSize
   const query = q?.trim() ?? ''
-  const [parentHueName, childHueName] = (hue ?? '')
-    .split(',')
-    .map((s) => s.trim().toLowerCase())
+  const [parentHueName, childHueName] = (hue ?? '').split(',').map((s) => s.trim().toLowerCase())
 
   const supabase = await createClient()
   const {
@@ -31,9 +30,7 @@ export default async function PaintsPage({
   const [topLevelHues] = await Promise.all([hueService.getHues()])
 
   // Resolve hue names from URL to IDs for the SSR prefetch
-  const parentHue = parentHueName
-    ? topLevelHues.find((h) => h.name.toLowerCase() === parentHueName)
-    : undefined
+  const parentHue = parentHueName ? topLevelHues.find((h) => h.name.toLowerCase() === parentHueName) : undefined
 
   let hueIds: string[] | undefined
 
@@ -49,22 +46,18 @@ export default async function PaintsPage({
   }
 
   // Single unified call for SSR prefetch — same logic the client hook uses
-  const { paints: initialPaints, count: initialTotalCount } =
-    await paintService.searchPaintsUnified({
-      query: query || undefined,
-      hueIds,
-      scope: 'all',
-      limit: pageSize,
-      offset,
-    })
+  const { paints: initialPaints, count: initialTotalCount } = await paintService.searchPaintsUnified({
+    query: query || undefined,
+    hueIds,
+    scope: 'all',
+    limit: pageSize,
+    offset,
+  })
 
   // Fetch user's collection paint IDs for toggle state (authenticated users only)
   let userPaintIds: Set<string> | undefined
   if (user) {
-    const { data: userPaints } = await supabase
-      .from('user_paints')
-      .select('paint_id')
-      .eq('user_id', user.id)
+    const { data: userPaints } = await supabase.from('user_paints').select('paint_id').eq('user_id', user.id)
     userPaintIds = new Set(userPaints?.map((r) => r.paint_id) ?? [])
   }
 
@@ -78,14 +71,11 @@ export default async function PaintsPage({
   const huePaintCounts = Object.fromEntries(hueCountEntries)
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-12">
+    <Main>
       <div className="mb-8 flex flex-col gap-4">
         <h1 className="text-3xl font-bold">Paints</h1>
-        <p className="text-sm text-muted-foreground">
-          Browse {initialTotalCount.toLocaleString()} paints.
-        </p>
+        <p className="text-sm text-muted-foreground">Browse {initialTotalCount.toLocaleString()} paints.</p>
       </div>
-
       <PaintExplorer
         initialPaints={initialPaints}
         initialTotalCount={initialTotalCount}
@@ -98,6 +88,6 @@ export default async function PaintsPage({
         isAuthenticated={!!user}
         userPaintIds={userPaintIds}
       />
-    </div>
+    </Main>
   )
 }

@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Main } from '@/components/main'
 import { createClient } from '@/lib/supabase/server'
 import { ChangePasswordForm } from '@/modules/user/components/change-password-form'
 
@@ -13,7 +14,7 @@ export default async function ProfileEditPage() {
   const hasEmailIdentity = user?.identities?.some((identity) => identity.provider === 'email') ?? false
 
   return (
-    <div className="flex min-h-screen w-full justify-center px-4 py-24">
+    <Main>
       <div className="w-full max-w-md space-y-6">
         <h1 className="text-2xl font-bold">Edit Profile</h1>
 
@@ -40,6 +41,6 @@ export default async function ProfileEditPage() {
           </Card>
         )}
       </div>
-    </div>
+    </Main>
   )
 }

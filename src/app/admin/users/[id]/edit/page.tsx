@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Main } from '@/components/main'
 import { createClient } from '@/lib/supabase/server'
 import { listRoles } from '@/modules/admin/services/role-service'
 import { AdminDeleteUserSection } from '@/modules/user/components/admin-delete-user-section'
@@ -52,7 +53,7 @@ export default async function AdminEditUserPage({
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-12">
+    <Main>
       <div className="mb-6">
         <Link
           href={`/admin/users/${id}`}
@@ -123,6 +124,6 @@ export default async function AdminEditUserPage({
           </Card>
         )}
       </div>
-    </div>
+    </Main>
   )
 }
