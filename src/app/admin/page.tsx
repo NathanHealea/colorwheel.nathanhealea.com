@@ -1,5 +1,6 @@
 import Image from 'next/image'
 
+import { Main } from '@/components/main'
 import { createClient } from '@/lib/supabase/server'
 import {
   Card,
@@ -47,7 +48,7 @@ export default async function AdminDashboardPage() {
     .limit(5)
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
+    <Main>
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Admin Dashboard</h1>
         <p className="text-sm text-muted-foreground">
@@ -129,6 +130,6 @@ export default async function AdminDashboardPage() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </Main>
   )
 }

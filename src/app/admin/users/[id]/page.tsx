@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { Main } from '@/components/main'
 import { createClient } from '@/lib/supabase/server'
 import type { AuthInfo } from '@/modules/user/components/user-detail'
 import { UserDetail } from '@/modules/user/components/user-detail'
@@ -49,7 +50,7 @@ export default async function AdminUserDetailPage({
     : null
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-12">
+    <Main>
       <div className="mb-6 flex items-center justify-between">
         <Link
           href="/admin/users"
@@ -71,6 +72,6 @@ export default async function AdminUserDetailPage({
         authInfo={authInfo}
         currentUserId={currentUser.id}
       />
-    </div>
+    </Main>
   )
 }

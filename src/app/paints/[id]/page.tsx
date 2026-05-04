@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '@/components/breadcrumbs'
+import { Main } from '@/components/main'
 import { createClient } from '@/lib/supabase/server'
 import { getCollectionService } from '@/modules/collection/services/collection-service.server'
 import { getHueService } from '@/modules/hues/services/hue-service.server'
@@ -34,7 +35,7 @@ export default async function PaintDetailPage({ params }: { params: Promise<{ id
   ])
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-12">
+    <Main>
       <Breadcrumbs items={[{ label: 'Paints', href: '/paints' }, { label: paint.name }]} />
       <PaintDetail
         paint={paint}
@@ -48,6 +49,6 @@ export default async function PaintDetailPage({ params }: { params: Promise<{ id
           <PaintReferences references={references} />
         </div>
       )}
-    </div>
+    </Main>
   )
 }
