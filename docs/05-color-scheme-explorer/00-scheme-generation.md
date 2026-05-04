@@ -141,7 +141,7 @@ Client component. Props:
 Two modes toggled by a button group: **"Search Paints"** | **"Custom Color"**
 
 - **Search mode**: controlled text input; filter `paints` by substring on `name` (case-insensitive); render a dropdown list (max 8 results) with a color swatch and paint name per row; selecting a row emits `BaseColor` from the paint's `hue`, `saturation`, `lightness`, `hex`, `name`
-- **Custom mode**: `<input type="text" placeholder="#RRGGBB" />`; on valid 6-digit hex parse with `hexToHsl` and emit; show live color swatch preview
+- **Custom mode**: `<input type="text" placeholder="#RRGGBB" />`; validate with a 6-digit hex regex; on valid input call `hexToHsl(hex)` (from `@/modules/color-wheel/utils/hex-to-hsl`) — it returns `{ r, g, b, h, s, l }` where `h` is 0–360 and `s, l` are 0–100, so map directly into `BaseColor` as `{ hue: h, saturation: s, lightness: l, hex }` (no `name`); show live color swatch preview
 
 ### Step 5 — Scheme type selector
 
@@ -158,8 +158,8 @@ Client component. Props:
 }
 ```
 
-- Renders a 5-button tab strip with `ColorScheme` values
-- When `value === 'analogous'`, renders a range slider below: `15–60°`, label "Spread: N°"
+- Renders a 5-button tab strip — no dedicated tab primitive exists in `src/components/ui/`, so build it as a flex row of `Button` (or `.btn`) elements; apply `.btn-active` (or equivalent active styling) to the selected one
+- When `value === 'analogous'`, renders a range slider below: native `<input type="range" min={15} max={60} step={1} />` (no slider primitive exists yet) styled with Tailwind classes; label "Spread: N°" derived from `analogousAngle`
 
 ### Step 6 — Scheme swatch
 
@@ -171,7 +171,7 @@ Layout per swatch:
 1. Large square color block (`style={{ backgroundColor: color.hex }}`)
 2. Label (e.g. "Base")
 3. Hex value + hue angle (e.g. `#FF8C00  30°`)
-4. Up to 5 nearest paint cards below — use existing `PaintCard` from `@/modules/paints/components/paint-card`
+4. Up to 5 nearest paint cards below — use existing `PaintCard` from `@/modules/paints/components/paint-card`. `PaintCard` props are `{ id, name, hex, brand?, paintType? }`, so map each `ColorWheelPaint` as `<PaintCard id={p.id} name={p.name} hex={p.hex} brand={p.brand_name} paintType={p.paint_type} />`
 
 **`src/modules/color-schemes/components/scheme-swatch-grid.tsx`**
 
@@ -208,7 +208,13 @@ Layout:
       <SchemeSwatchGrid colors={schemeColors} />
     </>
   )}
-  {!baseColor && <EmptyState text="Select a base color to generate a scheme." />}
+  {!baseColor && (
+    <Card>
+      <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
+        <p className="text-muted-foreground">Select a base color to generate a scheme.</p>
+      </CardContent>
+    </Card>
+  )}
 </section>
 ```
 
@@ -219,11 +225,12 @@ Layout:
 Server component:
 
 ```tsx
-import { paintServiceServer } from '@/modules/paints/services/paint-service.server'
+import { getPaintService } from '@/modules/paints/services/paint-service.server'
 import { SchemeExplorer } from '@/modules/color-schemes/components/scheme-explorer'
 
 export default async function SchemesPage() {
-  const paints = await paintServiceServer.getColorWheelPaints()
+  const paintService = await getPaintService()
+  const paints = await paintService.getColorWheelPaints()
   return (
     <main>
       <h1>Color Scheme Explorer</h1>
@@ -238,6 +245,9 @@ No authentication required.
 ## Notes
 
 - `ColorScheme` type and `hslToHex` / `hexToHsl` utilities are imported from the existing `color-wheel` module — do not duplicate.
+- `hslToHex` expects saturation and lightness as **0–1 fractions**; `BaseColor` stores them as **0–100 percentages**, so the call site must divide by 100 (`hslToHex(hue, saturation / 100, lightness / 100)`).
+- Hue offsets in `generateScheme` must mirror those in `src/modules/color-wheel/utils/get-scheme-wedges.ts` so the wheel's overlay wedges and the explorer's swatch grid stay in sync. Treat `getSchemeWedges` as the source of truth for angles — if a future change adjusts wedge angles there, mirror it here.
 - Scheme generation operates on hue only. Saturation and lightness are inherited from the base color but can be adjusted in a future iteration.
 - Nearest-paint matching uses hue proximity only (v1). Full RGB color distance (for Cross-Brand Comparison) is not needed here.
+- No `EmptyState` primitive exists in `src/components/ui/` yet — this plan uses an inline `Card` + `CardContent` pattern. If a shared `EmptyState` is introduced later, swap it in.
 - This feature works without authentication — anyone can explore schemes.
