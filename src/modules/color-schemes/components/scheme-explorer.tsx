@@ -46,7 +46,7 @@ export function SchemeExplorer({
 
   return (
     <section className="flex flex-col gap-6">
-      <BaseColorPicker paints={paints} value={baseColor} onChange={setBaseColor} />
+      <BaseColorPicker paints={paints} onChange={setBaseColor} />
 
       {baseColor && (
         <>
