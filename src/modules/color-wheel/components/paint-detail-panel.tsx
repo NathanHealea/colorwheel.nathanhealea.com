@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useTransition } from 'react'
+import { useEffect, useTransition, useState } from 'react'
 
 import type { ColorWheelPaint } from '@/modules/color-wheel/types/color-wheel-paint'
 import { addToCollection } from '@/modules/collection/actions/add-to-collection'
@@ -35,12 +35,6 @@ export function PaintDetailPanel({
   const [owned, setOwned] = useState(isOwned ?? false)
   const [isPending, startTransition] = useTransition()
   const [actionError, setActionError] = useState<string | null>(null)
-
-  // Sync external isOwned changes (e.g. when the selected paint changes)
-  useEffect(() => {
-    setOwned(isOwned ?? false)
-    setActionError(null)
-  }, [paint.id, isOwned])
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {

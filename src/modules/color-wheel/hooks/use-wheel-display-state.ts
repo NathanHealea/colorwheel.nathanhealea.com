@@ -1,9 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const BRAND_RING_KEY = 'wheel:showBrandRing'
 const OWNED_RING_KEY = 'wheel:showOwnedRing'
+
+function readBool(key: string): boolean {
+  if (typeof window === 'undefined') return false
+  try { return sessionStorage.getItem(key) === 'true' } catch { return false }
+}
 
 /**
  * Manages the boolean display toggles for the HSL color wheel dot decorations.
@@ -15,17 +20,8 @@ const OWNED_RING_KEY = 'wheel:showOwnedRing'
  * @returns `showBrandRing`, `showOwnedRing`, and their respective setters.
  */
 export function useWheelDisplayState() {
-  const [showBrandRing, setShowBrandRingState] = useState(false)
-  const [showOwnedRing, setShowOwnedRingState] = useState(false)
-
-  useEffect(() => {
-    try {
-      setShowBrandRingState(sessionStorage.getItem(BRAND_RING_KEY) === 'true')
-      setShowOwnedRingState(sessionStorage.getItem(OWNED_RING_KEY) === 'true')
-    } catch {
-      // sessionStorage unavailable — keep defaults
-    }
-  }, [])
+  const [showBrandRing, setShowBrandRingState] = useState(() => readBool(BRAND_RING_KEY))
+  const [showOwnedRing, setShowOwnedRingState] = useState(() => readBool(OWNED_RING_KEY))
 
   function setShowBrandRing(value: boolean) {
     setShowBrandRingState(value)

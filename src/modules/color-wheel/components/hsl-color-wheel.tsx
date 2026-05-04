@@ -209,6 +209,7 @@ export function HslColorWheel({
 
       {selectedPaint && (
         <PaintDetailPanel
+          key={selectedPaint.id}
           paint={selectedPaint}
           isOwned={userPaintIds ? userPaintIds.has(selectedPaint.id) : undefined}
           onClose={clearSelection}
