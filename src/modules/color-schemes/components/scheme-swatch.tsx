@@ -1,12 +1,13 @@
 'use client'
 
-import { CollectionPaintCard } from '@/modules/collection/components/collection-paint-card'
+import { SchemePaintMatchCard } from '@/modules/color-schemes/components/scheme-paint-match-card'
 import type { SchemeColor } from '@/modules/color-schemes/types/scheme-color'
 
 /**
  * Displays a single computed scheme color — swatch block, label, hex/hue values, and nearest paint cards.
  *
- * Each nearest paint card includes a collection toggle for authenticated users.
+ * Each nearest paint card shows a ΔE badge and includes a collection toggle for authenticated users.
+ * When all candidates are filtered out an inline empty-state message is shown.
  *
  * @param props.color - The computed {@link SchemeColor} to display.
  * @param props.isAuthenticated - Whether the current user is signed in.
@@ -32,22 +33,19 @@ export function SchemeSwatch({
       <p className="font-mono text-xs text-muted-foreground">
         {color.hex} &nbsp; {Math.round(color.hue)}°
       </p>
-      {color.nearestPaints.length > 0 && (
+      {color.nearestPaints.length > 0 ? (
         <div className="flex flex-col gap-2">
-          {color.nearestPaints.map((paint) => (
-            <CollectionPaintCard
-              key={paint.id}
-              id={paint.id}
-              name={paint.name}
-              hex={paint.hex}
-              brand={paint.brand_name}
-              paintType={paint.paint_type}
-              isInCollection={ownedIds.has(paint.id)}
+          {color.nearestPaints.map((match) => (
+            <SchemePaintMatchCard
+              key={match.paint.id}
+              match={match}
+              isOwned={ownedIds.has(match.paint.id)}
               isAuthenticated={isAuthenticated}
-              revalidatePath="/schemes"
             />
           ))}
         </div>
+      ) : (
+        <p className="text-xs text-muted-foreground">No matching paints with the current filters.</p>
       )}
     </div>
   )
