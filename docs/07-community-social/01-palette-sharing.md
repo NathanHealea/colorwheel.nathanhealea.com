@@ -1,8 +1,10 @@
 # Curated Palette Sharing
 
+> **⚠️ Superseded:** This placeholder is replaced by the dedicated **[Color Palettes](../11-color-palettes/)** epic, which delivers personal palette CRUD, scheme-explorer integration, drag-and-drop reorder, and hue-locked HSL paint swap. Public palette sharing UI lives alongside that epic's read view; the community surfaces (feed, profiles) consume the palette data exposed there. This file is kept for historical context.
+
 **Epic:** Community & Social
 **Type:** Feature
-**Status:** Todo
+**Status:** Superseded — see [Epic 11: Color Palettes](../11-color-palettes/)
 **Branch:** `feature/palette-sharing`
 **Merge into:** `v1/main`
 
