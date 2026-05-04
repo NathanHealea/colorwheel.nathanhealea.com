@@ -1,4 +1,4 @@
-import type { MouseEvent } from 'react'
+import type { MouseEvent, PointerEvent } from 'react'
 
 import type { PaintGroup } from '@/modules/color-wheel/types/paint-group'
 import { BrandRingArcs } from '@/modules/color-wheel/components/brand-ring-arcs'
@@ -26,7 +26,7 @@ const DOT_RADIUS = 5
  * @param schemeDimmed - Whether this group is additionally dimmed by a color-scheme mismatch.
  * @param searchHighlight - Whether this group matches the active search query (renders glow ring).
  * @param isOwned - Whether the current user owns at least one paint in this group.
- * @param onHover - Called with the group on pointer enter, `null` on pointer leave.
+ * @param onHover - Called with the group and pointer event on enter, `null` on leave.
  * @param onClick - Called with the group when the dot is clicked.
  */
 export function PaintDot({
@@ -49,7 +49,7 @@ export function PaintDot({
   schemeDimmed: boolean
   searchHighlight: boolean
   isOwned: boolean
-  onHover: (group: PaintGroup | null) => void
+  onHover: (group: PaintGroup | null, event: PointerEvent<SVGCircleElement>) => void
   onClick: (group: PaintGroup) => void
 }) {
   const { rep, paints } = group
@@ -113,8 +113,8 @@ export function PaintDot({
         stroke="rgba(0,0,0,0.5)"
         strokeWidth={1}
         style={{ cursor: 'pointer' }}
-        onPointerEnter={() => onHover(group)}
-        onPointerLeave={() => onHover(null)}
+        onPointerEnter={(e: PointerEvent<SVGCircleElement>) => onHover(group, e)}
+        onPointerLeave={(e: PointerEvent<SVGCircleElement>) => onHover(null, e)}
         onClick={(e: MouseEvent<SVGCircleElement>) => {
           e.stopPropagation()
           onClick(group)
