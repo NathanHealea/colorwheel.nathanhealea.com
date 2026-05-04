@@ -2,7 +2,7 @@
 
 **Epic:** Interactive Color Wheel
 **Type:** Refactor
-**Status:** Done
+**Status:** Completed
 **Branch:** `refactor/paint-rendering`
 **Merge into:** `v1/main`
 
