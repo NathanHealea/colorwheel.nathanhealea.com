@@ -34,6 +34,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      armies: {
+        Row: {
+          created_at: string
+          icon_url: string | null
+          id: string
+          name: string
+          parent_id: string | null
+          slug: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          icon_url?: string | null
+          id?: string
+          name: string
+          parent_id?: string | null
+          slug: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          icon_url?: string | null
+          id?: string
+          name?: string
+          parent_id?: string | null
+          slug?: string
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "armies_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "armies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       brands: {
         Row: {
           created_at: string
@@ -99,6 +137,74 @@ export type Database = {
           },
         ]
       }
+      paint_gradient_group_members: {
+        Row: {
+          group_id: string
+          paint_id: string
+          position: number
+        }
+        Insert: {
+          group_id: string
+          paint_id: string
+          position: number
+        }
+        Update: {
+          group_id?: string
+          paint_id?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "paint_gradient_group_members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "paint_gradient_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paint_gradient_group_members_paint_id_fkey"
+            columns: ["paint_id"]
+            isOneToOne: true
+            referencedRelation: "paints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      paint_gradient_groups: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          position: number
+          product_line_id: number
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          position: number
+          product_line_id: number
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          position?: number
+          product_line_id?: number
+          slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "paint_gradient_groups_product_line_id_fkey"
+            columns: ["product_line_id"]
+            isOneToOne: false
+            referencedRelation: "product_lines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       paint_references: {
         Row: {
           created_at: string
@@ -158,6 +264,7 @@ export type Database = {
           paint_type: string | null
           product_line_id: number
           r: number
+          relative_luminance: number | null
           saturation: number
           slug: string
           updated_at: string
@@ -178,6 +285,7 @@ export type Database = {
           paint_type?: string | null
           product_line_id: number
           r: number
+          relative_luminance?: number | null
           saturation: number
           slug: string
           updated_at?: string
@@ -198,6 +306,7 @@ export type Database = {
           paint_type?: string | null
           product_line_id?: number
           r?: number
+          relative_luminance?: number | null
           saturation?: number
           slug?: string
           updated_at?: string
@@ -219,9 +328,81 @@ export type Database = {
           },
         ]
       }
+      palette_group_paints: {
+        Row: {
+          added_at: string
+          group_id: string
+          id: string
+          palette_paint_id: string
+          position: number
+        }
+        Insert: {
+          added_at?: string
+          group_id: string
+          id?: string
+          palette_paint_id: string
+          position: number
+        }
+        Update: {
+          added_at?: string
+          group_id?: string
+          id?: string
+          palette_paint_id?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "palette_group_paints_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "palette_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "palette_group_paints_palette_paint_id_fkey"
+            columns: ["palette_paint_id"]
+            isOneToOne: false
+            referencedRelation: "palette_paints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      palette_groups: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          palette_id: string
+          position: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          palette_id: string
+          position: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          palette_id?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "palette_groups_palette_id_fkey"
+            columns: ["palette_id"]
+            isOneToOne: false
+            referencedRelation: "palettes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       palette_paints: {
         Row: {
           added_at: string
+          id: string
           note: string | null
           paint_id: string
           palette_id: string
@@ -229,6 +410,7 @@ export type Database = {
         }
         Insert: {
           added_at?: string
+          id?: string
           note?: string | null
           paint_id: string
           palette_id: string
@@ -236,6 +418,7 @@ export type Database = {
         }
         Update: {
           added_at?: string
+          id?: string
           note?: string | null
           paint_id?: string
           palette_id?: string
@@ -260,6 +443,7 @@ export type Database = {
       }
       palettes: {
         Row: {
+          army_id: string | null
           created_at: string
           description: string | null
           id: string
@@ -269,6 +453,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          army_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -278,6 +463,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          army_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -287,6 +473,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "palettes_army_id_fkey"
+            columns: ["army_id"]
+            isOneToOne: false
+            referencedRelation: "armies"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "palettes_user_id_fkey"
             columns: ["user_id"]
@@ -717,6 +910,7 @@ export type Database = {
     }
     Functions: {
       admin_delete_user: { Args: { target_id: string }; Returns: undefined }
+      delete_own_account: { Args: never; Returns: undefined }
       extract_oauth_display_name: { Args: { meta: Json }; Returns: string }
       generate_profile_name: { Args: never; Returns: string }
       get_user_roles: { Args: { user_uuid: string }; Returns: string[] }
@@ -728,8 +922,20 @@ export type Database = {
         Args: { p_step_id: string }
         Returns: boolean
       }
-      replace_palette_paints: {
-        Args: { p_palette_id: string; p_rows: Json }
+      merge_preview: {
+        Args: { source_uuid: string; target_uuid: string }
+        Returns: Json
+      }
+      merge_profiles: {
+        Args: { source_uuid: string; target_uuid: string }
+        Returns: Json
+      }
+      reorder_palette_group_paints: {
+        Args: { p_group_id: string; p_palette_paint_ids: string[] }
+        Returns: undefined
+      }
+      reorder_palette_paints_v2: {
+        Args: { p_palette_id: string; p_palette_paint_ids: string[] }
         Returns: undefined
       }
       replace_recipe_step_paints: {

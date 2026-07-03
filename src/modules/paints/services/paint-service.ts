@@ -1164,7 +1164,7 @@ export function createPaintService(supabase: SupabaseClient) {
         paints: { id: string; name: string; slug: string; hex: string } | null
       }
 
-      const members = (group.paint_gradient_group_members as MemberRow[])
+      const members = (group.paint_gradient_group_members as unknown as MemberRow[])
         .filter((member) => member.paints !== null)
         .map((member) => ({ ...member.paints!, position: member.position }))
         .sort((a, b) => a.position - b.position)
