@@ -2,7 +2,7 @@
 
 **Epic:** Paint Data & Search
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 **Branch:** `feature/paint-gradient-scale`
 **Merge into:** `main`
 
@@ -42,27 +42,48 @@ changes.
 
 ## Acceptance Criteria
 
-- [ ] New tables `paint_gradient_groups` and `paint_gradient_group_members` exist with
+- [x] New tables `paint_gradient_groups` and `paint_gradient_group_members` exist with
       public read-only RLS (mirroring the `paints` table policies).
-- [ ] Seed migration populates 27 Army Painter Fanatic groups and 162 memberships with
+- [x] Seed migration populates 27 Army Painter Fanatic groups and 162 memberships with
       dark→light positions 1–6; group names match the naming chart.
-- [ ] Paint details page for a grouped paint (e.g., Ash Grey) shows the gradient scale:
+- [x] Paint details page for a grouped paint (e.g., Ash Grey) shows the gradient scale:
       group name label, 6 swatch bars increasing in height dark→light, triangle indicator
       above the current paint's bar, current bar visually emphasized.
-- [ ] Non-current positions link to their sibling paint's details page and show the paint
+- [x] Non-current positions link to their sibling paint's details page and show the paint
       name as a tooltip; the current position is not a link.
-- [ ] Paints with no group (Speedpaint, Scale75, metallics, washes, …) render the details
+- [x] Paints with no group (Speedpaint, Scale75, metallics, washes, …) render the details
       page unchanged — no gradient section, no errors.
-- [ ] `GradientScale` component is purely presentational and brand-agnostic: props are
+- [x] `GradientScale` component is purely presentational and brand-agnostic: props are
       `label`, `items` (`{ hex, label?, href? }[]`), `currentIndex` — no brand, paint, or
       DB types in its props.
-- [ ] Component works for any item count (not hardcoded to 6).
-- [ ] All exports have JSDoc per `CLAUDE.md`; no barrel files; route page stays thin.
-- [ ] `npm run build` and `npm run lint` pass.
+- [x] Component works for any item count (not hardcoded to 6).
+- [x] All exports have JSDoc per `CLAUDE.md`; no barrel files; route page stays thin.
+- [x] `npm run build` and `npm run lint` pass.
 
 ## Implementation
 
 All app code lives in the existing **`paints` module** (`src/modules/paints/`).
+
+### Deviations from the original plan
+
+1. **Chart order is authoritative, not luminance sorting.** The curated JSON
+   (`scripts/data/paint-groups/army-painter-fanatic.json`) stores each group's members
+   already in official chart order (dark→light). The generator uses relative luminance
+   only as a sanity check: it fails if a group runs light→dark overall and warns on local
+   inversions while keeping the chart order. One known inversion exists — Deep Greens'
+   Eternal Hunt (`#329149`, officially "Very Dark Green") is brighter than its neighbors
+   but stays at chart position 1. Deep Green-Blues' JSON id order deviates from the chart
+   (`ap-34`/`ap-35` swapped), so its member order is explicitly
+   `ap-31, ap-32, ap-35, ap-33, ap-34, ap-36`.
+2. **Dual-file seed output.** Locally, `supabase db reset` runs migrations *before*
+   `seed.sql`, and Army Painter paints only exist locally via `seed.sql` — so a seed
+   migration alone would insert nothing on a fresh local reset. The generator therefore
+   emits identical idempotent `INSERT … SELECT … JOIN` statements (which no-op when the
+   referenced paints are absent) into **both** the committed migration
+   `20260702000001_seed_army_painter_fanatic_gradient_groups.sql` (effective in
+   production) and `supabase/seeds/gradient-groups.sql` (effective locally; registered
+   after `./seed.sql` in `config.toml`'s `sql_paths`). Regenerate both with
+   `npm run db:seed:generate:gradient-groups`.
 
 ### Step 1 — Migration: gradient group tables
 
