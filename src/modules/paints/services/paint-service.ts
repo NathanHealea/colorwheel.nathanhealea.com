@@ -2,6 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 
 import type { ColorWheelPaint } from '@/modules/color-wheel/types/color-wheel-paint'
 import type { PaintFacetCounts } from '@/modules/paints/types/paint-facet-counts'
+import type { PaintGradientGroup } from '@/modules/paints/types/paint-gradient-group'
 import { UNTYPED_PAINT_TYPE } from '@/modules/paints/types/similar-paints-filter-state'
 import type { Brand, Paint, PaintReference, ProductLine } from '@/types/paint'
 
@@ -1119,6 +1120,56 @@ export function createPaintService(supabase: SupabaseClient) {
         .eq('paint_id', paintId)
 
       return (data as PaintReferenceWithRelated[] | null) ?? []
+    },
+
+    /**
+     * Fetches the gradient color group a paint belongs to, with all member
+     * paints ordered dark to light by position.
+     *
+     * @param paintId - The paint's UUID.
+     * @returns The paint's {@link PaintGradientGroup}, or `null` when the
+     *   paint belongs to no gradient group or a fetch error occurs.
+     */
+    async getGradientGroupForPaint(paintId: string): Promise<PaintGradientGroup | null> {
+      const { data: membership } = await supabase
+        .from('paint_gradient_group_members')
+        .select('group_id')
+        .eq('paint_id', paintId)
+        .maybeSingle()
+
+      if (!membership) return null
+
+      const { data: group } = await supabase
+        .from('paint_gradient_groups')
+        .select(`
+          id,
+          name,
+          paint_gradient_group_members (
+            position,
+            paints (
+              id,
+              name,
+              slug,
+              hex
+            )
+          )
+        `)
+        .eq('id', membership.group_id)
+        .maybeSingle()
+
+      if (!group) return null
+
+      type MemberRow = {
+        position: number
+        paints: { id: string; name: string; slug: string; hex: string } | null
+      }
+
+      const members = (group.paint_gradient_group_members as MemberRow[])
+        .filter((member) => member.paints !== null)
+        .map((member) => ({ ...member.paints!, position: member.position }))
+        .sort((a, b) => a.position - b.position)
+
+      return { id: group.id, name: group.name, paints: members }
     },
   }
 }
