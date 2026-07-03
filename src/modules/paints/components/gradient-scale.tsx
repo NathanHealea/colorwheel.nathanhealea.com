@@ -51,7 +51,7 @@ export function GradientScale({
       <h2 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
         {label}
       </h2>
-      <ol className="flex h-20 max-w-md items-end gap-1 pt-5">
+      <ol className="flex h-20 max-w-md items-end gap-1 pt-5" aria-label={label}>
         {items.map((item, index) => {
           const isCurrent = index === currentIndex
           return (
@@ -81,7 +81,11 @@ export function GradientScale({
                   title={item.label}
                   aria-label={item.label}
                   aria-current={isCurrent ? 'true' : undefined}
-                  className="h-full w-full rounded-sm border border-border"
+                  className={
+                    isCurrent
+                      ? 'h-full w-full rounded-sm border border-border ring-2 ring-primary'
+                      : 'h-full w-full rounded-sm border border-border'
+                  }
                   style={{ backgroundColor: item.hex }}
                 />
               )}
