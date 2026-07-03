@@ -115,6 +115,7 @@ Core functionality:
 - [x] [Paint explorer sort options (Hue, Lightness, Contrast)](./02-paint-data-search/11-paint-explorer-sort.md)
 - [ ] [Paint explorer compact list view](./02-paint-data-search/12-paint-explorer-list-view.md)
 - [ ] [Reactive hue filter counts](./02-paint-data-search/13-paint-explorer-reactive-hue-counts.md)
+- [ ] [Paint gradient scale](./02-paint-data-search/14-paint-gradient-scale.md)
 - [x] [Scale75 paint indexing](./02-paint-data-search/scale75-paints.md)
 - [ ] [Army Painter Effects paint line](./02-paint-data-search/army-painter-effects.md)
 
