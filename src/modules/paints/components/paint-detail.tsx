@@ -7,9 +7,11 @@ import { CollectionToggle } from '@/modules/collection/components/collection-tog
 import { AddToPaletteButton } from '@/modules/palettes/components/add-to-palette-button'
 import { DiscontinuedBadge } from '@/modules/paints/components/discontinued-badge'
 import { FindSimilarButton } from '@/modules/paints/components/find-similar-button'
+import { GradientScale } from '@/modules/paints/components/gradient-scale'
 import { PaintSectionsToggle } from '@/modules/paints/components/paint-sections-toggle'
 import { PaintSubstitutes } from '@/modules/paints/components/paint-substitutes'
 import type { PaintWithRelationsAndHue } from '@/modules/paints/services/paint-service'
+import type { PaintGradientGroup } from '@/modules/paints/types/paint-gradient-group'
 import type { Brand } from '@/types/paint'
 
 /**
@@ -24,6 +26,9 @@ import type { Brand } from '@/types/paint'
  *
  * @param props.paint - The paint record with joined product line, brand, and hue data.
  * @param props.parentHue - The parent Munsell principal hue, if the paint has a sub-hue.
+ * @param props.gradientGroup - The paint's brand-defined gradient color group,
+ *   rendered as a {@link GradientScale} below the hue classification. `null`
+ *   when the paint belongs to no group.
  * @param props.isInCollection - Whether the paint is in the user's collection.
  * @param props.isAuthenticated - Whether the current user is signed in.
  * @param props.adminEditHref - When provided (admin users only), renders an edit link pointing to this URL.
@@ -41,6 +46,7 @@ import type { Brand } from '@/types/paint'
 export function PaintDetail({
   paint,
   parentHue,
+  gradientGroup = null,
   isInCollection = false,
   isAuthenticated = false,
   adminEditHref,
@@ -51,6 +57,7 @@ export function PaintDetail({
 }: {
   paint: PaintWithRelationsAndHue
   parentHue: Hue | null
+  gradientGroup?: PaintGradientGroup | null
   isInCollection?: boolean
   isAuthenticated?: boolean
   adminEditHref?: string
@@ -173,6 +180,19 @@ export function PaintDetail({
             </Link>
           </div>
         </div>
+      )}
+
+      {/* Gradient scale */}
+      {gradientGroup && (
+        <GradientScale
+          label={gradientGroup.name}
+          items={gradientGroup.paints.map((member) => ({
+            hex: member.hex,
+            label: member.name,
+            href: member.id === paint.id ? undefined : `/paints/${member.id}`,
+          }))}
+          currentIndex={gradientGroup.paints.findIndex((member) => member.id === paint.id)}
+        />
       )}
 
       <PaintSectionsToggle
