@@ -71,21 +71,23 @@ export default async function PaintDetailPage({ params }: { params: Promise<{ id
     ? await supabase.rpc('get_user_roles', { user_uuid: user.id }).then(({ data }) => (data ?? []).includes('admin'))
     : false
 
-  const [references, parentHue, isInCollection, brands, paintTypes, paints, collectionPaintIdsSet] = await Promise.all([
-    paintService.getPaintReferences(id),
-    paint.hues?.parent_id
-      ? (await getHueService()).getHueById(paint.hues.parent_id)
-      : null,
-    user
-      ? (await getCollectionService()).isInCollection(user.id, paint.id)
-      : false,
-    (await getBrandService()).getAllBrands(),
-    paintService.listDistinctPaintTypes(),
-    paintService.getColorWheelPaints(),
-    user
-      ? (await getCollectionService()).getUserPaintIds(user.id)
-      : new Set<string>(),
-  ])
+  const [references, gradientGroup, parentHue, isInCollection, brands, paintTypes, paints, collectionPaintIdsSet] =
+    await Promise.all([
+      paintService.getPaintReferences(id),
+      paintService.getGradientGroupForPaint(id),
+      paint.hues?.parent_id
+        ? (await getHueService()).getHueById(paint.hues.parent_id)
+        : null,
+      user
+        ? (await getCollectionService()).isInCollection(user.id, paint.id)
+        : false,
+      (await getBrandService()).getAllBrands(),
+      paintService.listDistinctPaintTypes(),
+      paintService.getColorWheelPaints(),
+      user
+        ? (await getCollectionService()).getUserPaintIds(user.id)
+        : new Set<string>(),
+    ])
 
   const collectionPaintIds = [...collectionPaintIdsSet]
 
@@ -95,6 +97,7 @@ export default async function PaintDetailPage({ params }: { params: Promise<{ id
       <PaintDetail
         paint={paint}
         parentHue={parentHue}
+        gradientGroup={gradientGroup}
         isInCollection={isInCollection}
         isAuthenticated={user !== null}
         adminEditHref={isAdmin ? `/admin/paints/${id}` : undefined}

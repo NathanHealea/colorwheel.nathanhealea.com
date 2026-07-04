@@ -1,0 +1,330 @@
+{
+  "brandSlug": "army-painter",
+  "productLineSlug": "fanatic",
+  "groups": [
+    {
+      "name": "Black & Greys",
+      "slug": "black-and-greys",
+      "paintIds": [
+        "ap-1",
+        "ap-2",
+        "ap-3",
+        "ap-4",
+        "ap-5",
+        "ap-6"
+      ]
+    },
+    {
+      "name": "Warm Greys & Whites",
+      "slug": "warm-greys-and-whites",
+      "paintIds": [
+        "ap-7",
+        "ap-8",
+        "ap-9",
+        "ap-10",
+        "ap-11",
+        "ap-12"
+      ]
+    },
+    {
+      "name": "Desaturated Blue-Greys",
+      "slug": "desaturated-blue-greys",
+      "paintIds": [
+        "ap-13",
+        "ap-14",
+        "ap-15",
+        "ap-16",
+        "ap-17",
+        "ap-18"
+      ]
+    },
+    {
+      "name": "Strong Pale Blues",
+      "slug": "strong-pale-blues",
+      "paintIds": [
+        "ap-24",
+        "ap-23",
+        "ap-22",
+        "ap-21",
+        "ap-20",
+        "ap-19"
+      ]
+    },
+    {
+      "name": "Vivid Blues",
+      "slug": "vivid-blues",
+      "paintIds": [
+        "ap-30",
+        "ap-29",
+        "ap-28",
+        "ap-27",
+        "ap-26",
+        "ap-25"
+      ]
+    },
+    {
+      "name": "Deep Green-Blues",
+      "slug": "deep-green-blues",
+      "paintIds": [
+        "ap-31",
+        "ap-32",
+        "ap-35",
+        "ap-33",
+        "ap-34",
+        "ap-36"
+      ]
+    },
+    {
+      "name": "Turquoises",
+      "slug": "turquoises",
+      "paintIds": [
+        "ap-42",
+        "ap-41",
+        "ap-40",
+        "ap-39",
+        "ap-38",
+        "ap-37"
+      ]
+    },
+    {
+      "name": "Teals",
+      "slug": "teals",
+      "paintIds": [
+        "ap-48",
+        "ap-47",
+        "ap-46",
+        "ap-45",
+        "ap-44",
+        "ap-43"
+      ]
+    },
+    {
+      "name": "Deep Greens",
+      "slug": "deep-greens",
+      "paintIds": [
+        "ap-54",
+        "ap-53",
+        "ap-52",
+        "ap-51",
+        "ap-50",
+        "ap-49"
+      ]
+    },
+    {
+      "name": "Vibrant Greens",
+      "slug": "vibrant-greens",
+      "paintIds": [
+        "ap-60",
+        "ap-59",
+        "ap-58",
+        "ap-57",
+        "ap-56",
+        "ap-55"
+      ]
+    },
+    {
+      "name": "Desaturated Cool Greens",
+      "slug": "desaturated-cool-greens",
+      "paintIds": [
+        "ap-66",
+        "ap-65",
+        "ap-64",
+        "ap-63",
+        "ap-62",
+        "ap-61"
+      ]
+    },
+    {
+      "name": "Olive Greens",
+      "slug": "olive-greens",
+      "paintIds": [
+        "ap-72",
+        "ap-71",
+        "ap-70",
+        "ap-69",
+        "ap-68",
+        "ap-67"
+      ]
+    },
+    {
+      "name": "Browns",
+      "slug": "browns",
+      "paintIds": [
+        "ap-78",
+        "ap-77",
+        "ap-76",
+        "ap-75",
+        "ap-74",
+        "ap-73"
+      ]
+    },
+    {
+      "name": "Ochres & Tans",
+      "slug": "ochres-and-tans",
+      "paintIds": [
+        "ap-84",
+        "ap-83",
+        "ap-82",
+        "ap-81",
+        "ap-80",
+        "ap-79"
+      ]
+    },
+    {
+      "name": "Light Neutrals",
+      "slug": "light-neutrals",
+      "paintIds": [
+        "ap-90",
+        "ap-89",
+        "ap-88",
+        "ap-87",
+        "ap-86",
+        "ap-85"
+      ]
+    },
+    {
+      "name": "Yellows",
+      "slug": "yellows",
+      "paintIds": [
+        "ap-96",
+        "ap-95",
+        "ap-94",
+        "ap-93",
+        "ap-92",
+        "ap-91"
+      ]
+    },
+    {
+      "name": "Oranges",
+      "slug": "oranges",
+      "paintIds": [
+        "ap-102",
+        "ap-101",
+        "ap-100",
+        "ap-99",
+        "ap-98",
+        "ap-97"
+      ]
+    },
+    {
+      "name": "Warm Reds",
+      "slug": "warm-reds",
+      "paintIds": [
+        "ap-108",
+        "ap-107",
+        "ap-106",
+        "ap-105",
+        "ap-104",
+        "ap-103"
+      ]
+    },
+    {
+      "name": "Ruddy Browns",
+      "slug": "ruddy-browns",
+      "paintIds": [
+        "ap-114",
+        "ap-113",
+        "ap-112",
+        "ap-111",
+        "ap-110",
+        "ap-109"
+      ]
+    },
+    {
+      "name": "Cool Reds",
+      "slug": "cool-reds",
+      "paintIds": [
+        "ap-120",
+        "ap-119",
+        "ap-118",
+        "ap-117",
+        "ap-116",
+        "ap-115"
+      ]
+    },
+    {
+      "name": "Pinks",
+      "slug": "pinks",
+      "paintIds": [
+        "ap-126",
+        "ap-125",
+        "ap-124",
+        "ap-123",
+        "ap-122",
+        "ap-121"
+      ]
+    },
+    {
+      "name": "Purples",
+      "slug": "purples",
+      "paintIds": [
+        "ap-132",
+        "ap-131",
+        "ap-130",
+        "ap-129",
+        "ap-128",
+        "ap-127"
+      ]
+    },
+    {
+      "name": "Magentas",
+      "slug": "magentas",
+      "paintIds": [
+        "ap-138",
+        "ap-137",
+        "ap-136",
+        "ap-135",
+        "ap-134",
+        "ap-133"
+      ]
+    },
+    {
+      "name": "Desaturated Violets",
+      "slug": "desaturated-violets",
+      "paintIds": [
+        "ap-144",
+        "ap-143",
+        "ap-142",
+        "ap-141",
+        "ap-140",
+        "ap-139"
+      ]
+    },
+    {
+      "name": "Rose Skin Tones",
+      "slug": "rose-skin-tones",
+      "paintIds": [
+        "ap-150",
+        "ap-149",
+        "ap-148",
+        "ap-147",
+        "ap-146",
+        "ap-145"
+      ]
+    },
+    {
+      "name": "Warm Skin Tones",
+      "slug": "warm-skin-tones",
+      "paintIds": [
+        "ap-156",
+        "ap-155",
+        "ap-154",
+        "ap-153",
+        "ap-152",
+        "ap-151"
+      ]
+    },
+    {
+      "name": "Deep Skin Tones",
+      "slug": "deep-skin-tones",
+      "paintIds": [
+        "ap-162",
+        "ap-161",
+        "ap-160",
+        "ap-159",
+        "ap-158",
+        "ap-157"
+      ]
+    }
+  ]
+}
