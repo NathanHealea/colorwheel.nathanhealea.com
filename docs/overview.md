@@ -118,7 +118,7 @@ Core functionality:
 - [x] [Paint gradient scale](./02-paint-data-search/14-paint-gradient-scale.md)
 - [x] [Scale75 paint indexing](./02-paint-data-search/scale75-paints.md)
 - [ ] [Army Painter Effects paint line](./02-paint-data-search/army-painter-effects.md)
-- [ ] [Citadel Shades & Army Painter Speedpaint 2.0 data refresh + gradient swatches](./02-paint-data-search/database-enhancements-washes-and-speedpaint.md)
+- [x] [Citadel Shades & Army Painter Speedpaint 2.0 data refresh + gradient swatches](./02-paint-data-search/database-enhancements-washes-and-speedpaint.md)
 
 ### Epic: Interactive Color Wheel
 

@@ -2,7 +2,7 @@
 
 **Epic:** Paint Data & Search
 **Type:** Feature
-**Status:** In Progress
+**Status:** Completed
 **Branch:** `feature/database-enhancements-washes-and-speedpaint`
 **Merge into:** `main`
 
