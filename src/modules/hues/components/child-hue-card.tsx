@@ -13,24 +13,30 @@ import type { Hue } from '@/types/color'
  * @param props.hue - The child hue (named color) data to display.
  * @param props.paintCount - Number of paints assigned to this child hue.
  * @param props.isSelected - Whether this child hue is actively selected (visual highlight).
+ * @param props.isEmpty - Whether this child hue has zero matching paints under
+ *   the current filters. Renders muted (de-emphasised) but stays visible and
+ *   clickable.
  * @param props.onSelect - Filter callback. When provided, pill click triggers filter instead of navigation.
  */
 export function ChildHueCard({
   hue,
   paintCount,
   isSelected,
+  isEmpty,
   onSelect,
 }: {
   hue: Hue
   paintCount: number
   isSelected?: boolean
+  isEmpty?: boolean
   onSelect?: () => void
 }) {
   const sharedClasses = cn(
     'inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs transition-colors',
     isSelected
       ? 'border-primary bg-primary/10 text-foreground'
-      : 'bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
+      : 'bg-background text-muted-foreground hover:bg-muted hover:text-foreground',
+    isEmpty && !isSelected && 'opacity-60'
   )
 
   const content = (
