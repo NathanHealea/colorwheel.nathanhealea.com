@@ -142,7 +142,6 @@ export function PaintExplorer({
   initialPaints,
   initialTotalCount,
   hues,
-  huePaintCounts,
   brands = [],
   paintTypes = [],
   productLines = [],
@@ -271,6 +270,8 @@ export function PaintExplorer({
   const { counts: facetCounts } = usePaintFacetCounts({
     query: state.q,
     hueIds,
+    parentHueId: hueFilter.selectedParentId ?? undefined,
+    childHueId: hueFilter.selectedChildId ?? undefined,
     filters: paintFilters.state,
     initialCounts: initialFacetCounts,
   })
@@ -480,9 +481,9 @@ export function PaintExplorer({
 
       <HueFilterBar
         hues={hues}
-        huePaintCounts={huePaintCounts}
+        huePaintCounts={facetCounts.hue}
         childHues={hueFilter.childHues}
-        childHuePaintCounts={hueFilter.childHuePaintCounts}
+        childHuePaintCounts={facetCounts.childHue}
         selectedParentName={hueFilter.selectedParent?.name.toLowerCase() ?? null}
         selectedChildName={hueFilter.selectedChild?.name.toLowerCase() ?? null}
         onSelectParent={handleSelectParent}

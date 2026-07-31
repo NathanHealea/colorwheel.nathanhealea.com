@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { getHueService } from '@/modules/hues/services/hue-service.client'
-import { getPaintService } from '@/modules/paints/services/paint-service.client'
 import type { Hue } from '@/types/color'
 
 /**
@@ -14,7 +13,6 @@ import type { Hue } from '@/types/color'
  * @param selectedParentId - UUID of the selected parent hue, or `null`.
  * @param selectedChildId - UUID of the selected child hue, or `null`.
  * @param childHues - Child hues loaded for the active parent, or `[]`.
- * @param childHuePaintCounts - Paint counts per child hue name (lowercased).
  * @param selectParent - Selects a parent hue by name; deselects if already selected.
  * @param selectChild - Selects a child hue by name; deselects if already selected.
  * @param clear - Clears all hue selections.
@@ -25,7 +23,6 @@ export type HueFilterState = {
   selectedParentId: string | null
   selectedChildId: string | null
   childHues: Hue[]
-  childHuePaintCounts: Record<string, number>
   selectParent: (name: string) => void
   selectChild: (name: string) => void
   clear: () => void
@@ -34,8 +31,10 @@ export type HueFilterState = {
 /**
  * Manages parent/child hue selection for the paint explorer filter bar.
  *
- * Fetches child hues and their paint counts when a parent is selected.
+ * Fetches the structural list of child hues when a parent is selected.
  * Requests are cancelled if the parent selection changes before they complete.
+ * Per-hue paint counts are NOT fetched here — they come from the shared
+ * {@link usePaintFacetCounts} hook so they react to the full filter context.
  *
  * Resolves hue names to IDs so callers can pass the derived IDs directly to
  * `searchPaintsUnified` without an extra lookup.
@@ -58,18 +57,17 @@ export function useHueFilter(options: {
     initialChildName ?? null
   )
   const [childHues, setChildHues] = useState<Hue[]>([])
-  const [childHuePaintCounts, setChildHuePaintCounts] = useState<Record<string, number>>({})
 
   const selectedParent = hues.find((h) => h.name.toLowerCase() === selectedParentName) ?? null
   const selectedChild =
     childHues.find((h) => h.name.toLowerCase() === selectedChildName) ?? null
 
-  // Fetch child hues + paint counts when parent changes
+  // Fetch the structural list of child hues when the parent changes. Paint
+  // counts are sourced from usePaintFacetCounts, not fetched here.
   useEffect(() => {
     if (!selectedParent) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setChildHues([])
-      setChildHuePaintCounts({})
       return
     }
 
@@ -77,21 +75,10 @@ export function useHueFilter(options: {
 
     async function fetchChildren() {
       const hueService = getHueService()
-      const paintService = getPaintService()
       const children = await hueService.getChildHues(selectedParent!.id)
 
       if (cancelled) return
       setChildHues(children)
-
-      const entries = await Promise.all(
-        children.map(async (child) => {
-          const count = await paintService.getPaintCountByHueId(child.id)
-          return [child.name.toLowerCase(), count] as const
-        })
-      )
-
-      if (cancelled) return
-      setChildHuePaintCounts(Object.fromEntries(entries))
     }
 
     fetchChildren()
@@ -117,7 +104,6 @@ export function useHueFilter(options: {
     setSelectedParentName(null)
     setSelectedChildName(null)
     setChildHues([])
-    setChildHuePaintCounts({})
   }, [])
 
   return {
@@ -126,7 +112,6 @@ export function useHueFilter(options: {
     selectedParentId: selectedParent?.id ?? null,
     selectedChildId: selectedChild?.id ?? null,
     childHues,
-    childHuePaintCounts,
     selectParent,
     selectChild,
     clear,
