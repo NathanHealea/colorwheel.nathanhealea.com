@@ -7,7 +7,13 @@ import type { PaintFacetCounts } from '@/modules/paints/types/paint-facet-counts
 import type { PaintFilterState } from '@/modules/paints/types/paint-filter-state'
 
 /** Empty facet counts used as a loading fallback. */
-const EMPTY_FACET_COUNTS: PaintFacetCounts = { brand: {}, type: {}, line: {} }
+const EMPTY_FACET_COUNTS: PaintFacetCounts = {
+  brand: {},
+  type: {},
+  line: {},
+  hue: {},
+  childHue: {},
+}
 
 /**
  * Fetches per-option paint counts whenever filters change, with AbortController
