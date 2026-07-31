@@ -117,6 +117,8 @@ That "filter-aware" recount means counts must be re-derived on the client whenev
 
 If perf testing shows facet-count latency causing visible jank, we can flip to strategy (B) in a follow-on PR without changing the URL contract or the component API.
 
+> **Coordination:** Reactive counts for the **hue** dimension (parent + child pills in `HueFilterBar`) are covered by [13-paint-explorer-reactive-hue-counts.md](./13-paint-explorer-reactive-hue-counts.md), which extends this plan's `getPaintFacetCounts` surface with `hue`/`childHue` maps rather than adding a parallel hue-only path.
+
 ## URL state contract
 
 The existing explorer URL uses:
