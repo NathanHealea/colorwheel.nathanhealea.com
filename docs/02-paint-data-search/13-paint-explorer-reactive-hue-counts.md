@@ -2,7 +2,7 @@
 
 **Epic:** Paint Data & Search
 **Type:** Enhancement
-**Status:** Todo
+**Status:** Completed
 **Branch:** `enhancement/reactive-hue-filter-counts`
 **Merge into:** `main`
 
@@ -315,20 +315,20 @@ Phased so each phase is self-contained, ships green types/lint, and can be split
 
 ## Acceptance Criteria
 
-- [ ] Typing a query that narrows the result set updates every parent-hue count in `HueFilterBar` once the debounced query settles.
-- [ ] Toggling a brand (or any other non-hue filter from plan 10) updates every parent-hue count.
-- [ ] Selecting a parent hue updates every **child-hue** count for that parent (held-out child) but does **not** zero out the other parent-hue counts.
-- [ ] Selecting a child hue does not zero out its sibling child counts.
-- [ ] Counts are computed against the AND-across-dimensions filter set, holding the hue dimension out (parent and child both held out when computing parent counts; child held out, parent kept active via its children's IDs when computing child counts).
-- [ ] A hue option with zero matching paints renders with a muted visual treatment but remains visible and clickable.
-- [ ] Clicking a zero-count hue commits the selection to the URL and renders the explorer's empty-state panel (plan 10's empty-state contract).
-- [ ] Visiting `/paints?q=…&hue=…&brand=…` directly hydrates with the correct narrowed hue counts on first paint — no flash of stale full-library counts.
-- [ ] Back / Forward retraces the count state correctly across navigation.
-- [ ] The legacy `huePaintCounts` prop is either removed from `PaintExplorer` or is sourced from the same facet-counts call (single source of truth).
-- [ ] `useHueFilter` no longer fetches child paint counts (it only fetches the structural list of child hues).
-- [ ] `PaintFacetCounts.hue` and `.childHue` exist on the shared type and are populated by `getPaintFacetCounts`.
-- [ ] No new TypeScript or lint errors.
-- [ ] All new exports / new args have JSDoc per `CLAUDE.md`.
+- [x] Typing a query that narrows the result set updates every parent-hue count in `HueFilterBar` once the debounced query settles.
+- [x] Toggling a brand (or any other non-hue filter from plan 10) updates every parent-hue count.
+- [x] Selecting a parent hue updates every **child-hue** count for that parent (held-out child) but does **not** zero out the other parent-hue counts.
+- [x] Selecting a child hue does not zero out its sibling child counts.
+- [x] Counts are computed against the AND-across-dimensions filter set, holding the hue dimension out (parent and child both held out when computing parent counts; child held out, parent kept active via its children's IDs when computing child counts).
+- [x] A hue option with zero matching paints renders with a muted visual treatment but remains visible and clickable.
+- [x] Clicking a zero-count hue commits the selection to the URL and renders the explorer's empty-state panel (plan 10's empty-state contract).
+- [x] Visiting `/paints?q=…&hue=…&brand=…` directly hydrates with the correct narrowed hue counts on first paint — no flash of stale full-library counts.
+- [x] Back / Forward retraces the count state correctly across navigation.
+- [x] The legacy `huePaintCounts` prop is either removed from `PaintExplorer` or is sourced from the same facet-counts call (single source of truth).
+- [x] `useHueFilter` no longer fetches child paint counts (it only fetches the structural list of child hues).
+- [x] `PaintFacetCounts.hue` and `.childHue` exist on the shared type and are populated by `getPaintFacetCounts`.
+- [x] No new TypeScript or lint errors.
+- [x] All new exports / new args have JSDoc per `CLAUDE.md`.
 
 ## Risks & Considerations
 

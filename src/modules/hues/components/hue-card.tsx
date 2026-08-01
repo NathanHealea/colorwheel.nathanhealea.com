@@ -13,24 +13,30 @@ import type { Hue } from '@/types/color';
  * @param props.hue - The hue data to display.
  * @param props.paintCount - Number of paints assigned to this hue group.
  * @param props.isSelected - Whether this hue is actively selected (visual highlight).
+ * @param props.isEmpty - Whether this hue has zero matching paints under the
+ *   current filters. Renders muted (de-emphasised) but stays visible and
+ *   clickable so the dimension remains discoverable without reflow.
  * @param props.onSelect - Filter callback. When provided, pill click triggers filter instead of navigation.
  */
 export function HueCard({
   hue,
   paintCount,
   isSelected,
+  isEmpty,
   onSelect,
 }: {
   hue: Hue
   paintCount: number
   isSelected?: boolean
+  isEmpty?: boolean
   onSelect?: () => void
 }) {
   const sharedClasses = cn(
     'inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm transition-colors',
     isSelected
       ? 'border-primary bg-primary/10 text-foreground'
-      : 'bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
+      : 'bg-background text-muted-foreground hover:bg-muted hover:text-foreground',
+    isEmpty && !isSelected && 'opacity-60'
   )
 
   const content = (

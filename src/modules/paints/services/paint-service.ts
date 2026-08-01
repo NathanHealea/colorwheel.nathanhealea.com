@@ -769,17 +769,31 @@ export function createPaintService(supabase: SupabaseClient) {
      * (strategy B) without changing the caller API or URL contract.
      *
      * @param filters.query - Optional text search string.
-     * @param filters.hueIds - Active hue UUIDs.
+     * @param filters.hueIds - Active hue UUIDs. Kept active (ANDed) when counting
+     *   the non-hue dimensions (brand, type, line). Pass a single ID for a child
+     *   hue or the expanded child IDs for a parent group.
+     * @param filters.parentHueId - Selected top-level hue UUID. Used only to
+     *   enumerate the child hues to count. The hue dimension is held out when
+     *   computing the hue and childHue maps, so this never narrows those counts
+     *   against itself.
+     * @param filters.childHueId - Selected child hue UUID. Held out when
+     *   computing the childHue map so sibling child counts are not zeroed.
      * @param filters.brandIds - Active brand IDs (held out when counting brand options).
      * @param filters.paintTypes - Active paint type strings (held out when counting type options).
      * @param filters.productLineIds - Active product line IDs (held out when counting line options).
      * @param filters.discontinued - Active discontinued tri-state.
      * @param filters.metallicOnly - Active metallic filter.
-     * @returns {@link PaintFacetCounts} with per-option counts for brand, type, and line.
+     * @returns {@link PaintFacetCounts} with per-option counts for brand, type,
+     *   line, hue, and childHue. The hue/childHue maps apply the OR-within-dimension
+     *   hold-out rule: the hue dimension is excluded from its own narrowing so each
+     *   option's count answers "what would I see if I picked this hue instead?".
+     *   See `docs/02-paint-data-search/13-paint-explorer-reactive-hue-counts.md`.
      */
     async getPaintFacetCounts(filters: {
       query?: string
       hueIds?: string[]
+      parentHueId?: string
+      childHueId?: string
       brandIds?: number[]
       paintTypes?: string[]
       productLineIds?: number[]
@@ -789,6 +803,7 @@ export function createPaintService(supabase: SupabaseClient) {
       const {
         query,
         hueIds,
+        parentHueId,
         brandIds,
         paintTypes,
         productLineIds,
@@ -962,6 +977,109 @@ export function createPaintService(supabase: SupabaseClient) {
         })
       )
 
+      // Parent-hue counts: hold the entire hue dimension out (ignore parent/child
+      // selection). For each top-level hue, count paints whose hue_id is one of
+      // that parent's children, ANDed against every other active filter. The
+      // hold-out is what keeps sibling hue counts from zeroing when a hue is
+      // selected. Filter handling mirrors the type-count loop above.
+      const { data: topLevelHues } = await supabase
+        .from('hues')
+        .select('id, name')
+        .is('parent_id', null)
+        .order('sort_order', { ascending: true })
+
+      const hueCountEntries = await Promise.all(
+        (topLevelHues ?? []).map(async (parent) => {
+          const { data: kids } = await supabase
+            .from('hues')
+            .select('id')
+            .eq('parent_id', parent.id)
+          const childIds = kids?.map((k) => k.id) ?? []
+          if (childIds.length === 0) return [parent.name.toLowerCase(), 0] as const
+
+          let q = supabase
+            .from('paints')
+            .select(
+              brandIds && brandIds.length > 0 ? '*, product_lines!inner(brand_id)' : '*',
+              { count: 'exact', head: true }
+            )
+            .in('hue_id', childIds)
+
+          if (brandIds && brandIds.length > 0) q = q.in('product_lines.brand_id', brandIds)
+          if (query) {
+            const pattern = `%${query}%`
+            q = q.or(`name.ilike.${pattern},paint_type.ilike.${pattern}`)
+          }
+          if (paintTypes && paintTypes.length > 0) {
+            const hasUntyped = paintTypes.includes(UNTYPED_PAINT_TYPE)
+            const concreteTypes = paintTypes.filter((t) => t !== UNTYPED_PAINT_TYPE)
+            if (hasUntyped && concreteTypes.length > 0) {
+              q = q.or(`paint_type.in.(${concreteTypes.join(',')}),paint_type.is.null`)
+            } else if (hasUntyped) {
+              q = q.is('paint_type', null)
+            } else {
+              q = q.in('paint_type', concreteTypes)
+            }
+          }
+          if (productLineIds && productLineIds.length > 0) q = q.in('product_line_id', productLineIds)
+          if (discontinued === 'exclude') q = q.eq('is_discontinued', false)
+          else if (discontinued === 'only') q = q.eq('is_discontinued', true)
+          if (metallicOnly) q = q.eq('is_metallic', true)
+
+          const { count: c } = await q
+          return [parent.name.toLowerCase(), c ?? 0] as const
+        })
+      )
+
+      // Child-hue counts: only when a parent is selected. Each child is counted
+      // independently by its own hue_id (which inherently holds the selected child
+      // out), while the parent stays active via its children. ANDed against every
+      // other filter. Empty (`[]`) when no parent is selected.
+      let childHueCountEntries: (readonly [string, number])[] = []
+      if (parentHueId) {
+        const { data: children } = await supabase
+          .from('hues')
+          .select('id, name')
+          .eq('parent_id', parentHueId)
+          .order('name')
+
+        childHueCountEntries = await Promise.all(
+          (children ?? []).map(async (child) => {
+            let q = supabase
+              .from('paints')
+              .select(
+                brandIds && brandIds.length > 0 ? '*, product_lines!inner(brand_id)' : '*',
+                { count: 'exact', head: true }
+              )
+              .eq('hue_id', child.id)
+
+            if (brandIds && brandIds.length > 0) q = q.in('product_lines.brand_id', brandIds)
+            if (query) {
+              const pattern = `%${query}%`
+              q = q.or(`name.ilike.${pattern},paint_type.ilike.${pattern}`)
+            }
+            if (paintTypes && paintTypes.length > 0) {
+              const hasUntyped = paintTypes.includes(UNTYPED_PAINT_TYPE)
+              const concreteTypes = paintTypes.filter((t) => t !== UNTYPED_PAINT_TYPE)
+              if (hasUntyped && concreteTypes.length > 0) {
+                q = q.or(`paint_type.in.(${concreteTypes.join(',')}),paint_type.is.null`)
+              } else if (hasUntyped) {
+                q = q.is('paint_type', null)
+              } else {
+                q = q.in('paint_type', concreteTypes)
+              }
+            }
+            if (productLineIds && productLineIds.length > 0) q = q.in('product_line_id', productLineIds)
+            if (discontinued === 'exclude') q = q.eq('is_discontinued', false)
+            else if (discontinued === 'only') q = q.eq('is_discontinued', true)
+            if (metallicOnly) q = q.eq('is_metallic', true)
+
+            const { count: c } = await q
+            return [child.name.toLowerCase(), c ?? 0] as const
+          })
+        )
+      }
+
       return {
         brand: Object.fromEntries(brandCountEntries),
         type: {
@@ -969,6 +1087,8 @@ export function createPaintService(supabase: SupabaseClient) {
           [UNTYPED_PAINT_TYPE.toLowerCase()]: untypedCount,
         },
         line: Object.fromEntries(lineCountEntries),
+        hue: Object.fromEntries(hueCountEntries),
+        childHue: Object.fromEntries(childHueCountEntries),
       }
     },
 

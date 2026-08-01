@@ -123,7 +123,6 @@ function parseTypes(raw: string): string[] {
  * @param props.initialPaints - SSR-prefetched first page of paints.
  * @param props.initialTotalCount - SSR-prefetched total paint count.
  * @param props.hues - All top-level hues (server-fetched).
- * @param props.huePaintCounts - Paint count per top-level hue name (lowercased key).
  * @param props.brands - All brands available for filtering.
  * @param props.paintTypes - All distinct paint type strings.
  * @param props.productLines - All product lines (for the brand-gated line popover).
@@ -142,7 +141,6 @@ export function PaintExplorer({
   initialPaints,
   initialTotalCount,
   hues,
-  huePaintCounts,
   brands = [],
   paintTypes = [],
   productLines = [],
@@ -160,7 +158,6 @@ export function PaintExplorer({
   initialPaints: PaintWithBrand[]
   initialTotalCount: number
   hues: Hue[]
-  huePaintCounts: Record<string, number>
   brands?: { id: number; name: string }[]
   paintTypes?: string[]
   productLines?: { id: number; brand_id: number; name: string }[]
@@ -271,6 +268,8 @@ export function PaintExplorer({
   const { counts: facetCounts } = usePaintFacetCounts({
     query: state.q,
     hueIds,
+    parentHueId: hueFilter.selectedParentId ?? undefined,
+    childHueId: hueFilter.selectedChildId ?? undefined,
     filters: paintFilters.state,
     initialCounts: initialFacetCounts,
   })
@@ -480,9 +479,9 @@ export function PaintExplorer({
 
       <HueFilterBar
         hues={hues}
-        huePaintCounts={huePaintCounts}
+        huePaintCounts={facetCounts.hue}
         childHues={hueFilter.childHues}
-        childHuePaintCounts={hueFilter.childHuePaintCounts}
+        childHuePaintCounts={facetCounts.childHue}
         selectedParentName={hueFilter.selectedParent?.name.toLowerCase() ?? null}
         selectedChildName={hueFilter.selectedChild?.name.toLowerCase() ?? null}
         onSelectParent={handleSelectParent}

@@ -41,12 +41,14 @@ export function HueFilterBar({
       <div className="flex flex-wrap gap-2">
         {hues.map((hue) => {
           const name = hue.name.toLowerCase()
+          const count = huePaintCounts[name] ?? 0
           return (
             <HueCard
               key={hue.id}
               hue={hue}
-              paintCount={huePaintCounts[name] ?? 0}
+              paintCount={count}
               isSelected={selectedParentName === name}
+              isEmpty={count === 0}
               onSelect={() => onSelectParent(name)}
             />
           )
@@ -57,12 +59,14 @@ export function HueFilterBar({
         <div className="flex flex-wrap gap-2">
           {childHues.map((hue) => {
             const name = hue.name.toLowerCase()
+            const count = childHuePaintCounts[name] ?? 0
             return (
               <ChildHueCard
                 key={hue.id}
                 hue={hue}
-                paintCount={childHuePaintCounts[name] ?? 0}
+                paintCount={count}
                 isSelected={selectedChildName === name}
+                isEmpty={count === 0}
                 onSelect={() => onSelectChild(name)}
               />
             )

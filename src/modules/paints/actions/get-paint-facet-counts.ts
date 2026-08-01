@@ -17,17 +17,21 @@ import type { PaintFacetCounts } from '@/modules/paints/types/paint-facet-counts
  * without changing this action's signature.
  *
  * @param filters.query - Optional text search string.
- * @param filters.hueIds - Active hue UUIDs.
+ * @param filters.hueIds - Active hue UUIDs (kept active for the non-hue counts).
+ * @param filters.parentHueId - Selected top-level hue UUID (drives the childHue map).
+ * @param filters.childHueId - Selected child hue UUID (held out of the childHue map).
  * @param filters.brandIds - Active brand IDs.
  * @param filters.paintTypes - Active paint type strings.
  * @param filters.productLineIds - Active product-line IDs.
  * @param filters.discontinued - Active discontinued tri-state.
  * @param filters.metallicOnly - Active metallic filter.
- * @returns {@link PaintFacetCounts} with per-option counts for brand, type, and line.
+ * @returns {@link PaintFacetCounts} with per-option counts for brand, type, line, hue, and childHue.
  */
 export async function getPaintFacetCounts(filters: {
   query?: string
   hueIds?: string[]
+  parentHueId?: string
+  childHueId?: string
   brandIds?: number[]
   paintTypes?: string[]
   productLineIds?: number[]

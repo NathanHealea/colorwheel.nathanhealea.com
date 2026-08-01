@@ -125,12 +125,16 @@ export default async function PaintsPage({
     : undefined
 
   let hueIds: string[] | undefined
+  let childHueId: string | undefined
 
   if (parentHue) {
     const children = await hueService.getChildHues(parentHue.id)
     if (childHueName) {
       const child = children.find((h) => h.name.toLowerCase() === childHueName)
-      if (child) hueIds = [child.id]
+      if (child) {
+        childHueId = child.id
+        hueIds = [child.id]
+      }
     }
     if (!hueIds) {
       hueIds = children.map((c) => c.id)
@@ -164,26 +168,18 @@ export default async function PaintsPage({
     userPaintIds = new Set(userPaints?.map((r) => r.paint_id) ?? [])
   }
 
-  // Fetch paint counts per hue group and initial facet counts in parallel
-  const [hueCountEntries, initialFacetCounts] = await Promise.all([
-    Promise.all(
-      topLevelHues.map(async (h) => {
-        const count = await paintService.getPaintCountByHueGroup(h.id)
-        return [h.name.toLowerCase(), count] as const
-      })
-    ),
-    paintService.getPaintFacetCounts({
-      query: query || undefined,
-      hueIds,
-      brandIds: brandIds.length > 0 ? brandIds : undefined,
-      paintTypes: paintTypes.length > 0 ? paintTypes : undefined,
-      productLineIds: productLineIds.length > 0 ? productLineIds : undefined,
-      discontinued: discontinued !== 'include' ? discontinued : undefined,
-      metallicOnly: metallicOnly || undefined,
-    }),
-  ])
-
-  const huePaintCounts = Object.fromEntries(hueCountEntries)
+  // Initial facet counts — includes reactive hue and child-hue counts (hold-out rule)
+  const initialFacetCounts = await paintService.getPaintFacetCounts({
+    query: query || undefined,
+    hueIds,
+    parentHueId: parentHue?.id,
+    childHueId,
+    brandIds: brandIds.length > 0 ? brandIds : undefined,
+    paintTypes: paintTypes.length > 0 ? paintTypes : undefined,
+    productLineIds: productLineIds.length > 0 ? productLineIds : undefined,
+    discontinued: discontinued !== 'include' ? discontinued : undefined,
+    metallicOnly: metallicOnly || undefined,
+  })
 
   // Strip extra fields from brands to keep the client bundle small
   const brandsForClient = allBrands.map((b) => ({ id: b.id, name: b.name }))
@@ -199,7 +195,6 @@ export default async function PaintsPage({
         initialPaints={initialPaints}
         initialTotalCount={initialTotalCount}
         hues={topLevelHues}
-        huePaintCounts={huePaintCounts}
         brands={brandsForClient}
         paintTypes={allPaintTypes}
         productLines={allProductLines}

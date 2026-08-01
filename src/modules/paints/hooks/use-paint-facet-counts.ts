@@ -7,7 +7,13 @@ import type { PaintFacetCounts } from '@/modules/paints/types/paint-facet-counts
 import type { PaintFilterState } from '@/modules/paints/types/paint-filter-state'
 
 /** Empty facet counts used as a loading fallback. */
-const EMPTY_FACET_COUNTS: PaintFacetCounts = { brand: {}, type: {}, line: {} }
+const EMPTY_FACET_COUNTS: PaintFacetCounts = {
+  brand: {},
+  type: {},
+  line: {},
+  hue: {},
+  childHue: {},
+}
 
 /**
  * Fetches per-option paint counts whenever filters change, with AbortController
@@ -21,7 +27,11 @@ const EMPTY_FACET_COUNTS: PaintFacetCounts = { brand: {}, type: {}, line: {} }
  * narrowing strategy without changing the caller API.
  *
  * @param params.query - Debounced search string.
- * @param params.hueIds - Active hue UUIDs.
+ * @param params.hueIds - Active hue UUIDs (kept active for the non-hue counts).
+ * @param params.parentHueId - Selected top-level hue UUID; drives the reactive
+ *   `childHue` counts and re-fetches when it changes.
+ * @param params.childHueId - Selected child hue UUID; part of the fetch key so
+ *   counts re-settle as the child selection changes.
  * @param params.filters - Current {@link PaintFilterState} from `usePaintFilters`.
  * @param params.initialCounts - SSR-prefetched facet counts shown before the
  *   first client fetch resolves.
@@ -30,10 +40,12 @@ const EMPTY_FACET_COUNTS: PaintFacetCounts = { brand: {}, type: {}, line: {} }
 export function usePaintFacetCounts(params: {
   query?: string
   hueIds?: string[]
+  parentHueId?: string
+  childHueId?: string
   filters: PaintFilterState
   initialCounts?: PaintFacetCounts
 }): { counts: PaintFacetCounts; isLoading: boolean } {
-  const { query, hueIds, filters, initialCounts } = params
+  const { query, hueIds, parentHueId, childHueId, filters, initialCounts } = params
 
   const [counts, setCounts] = useState<PaintFacetCounts>(
     initialCounts ?? EMPTY_FACET_COUNTS
@@ -58,6 +70,8 @@ export function usePaintFacetCounts(params: {
     getPaintFacetCounts({
       query: query || undefined,
       hueIds,
+      parentHueId,
+      childHueId,
       brandIds: filters.brandIds.length > 0 ? filters.brandIds : undefined,
       paintTypes: filters.paintTypes.length > 0 ? filters.paintTypes : undefined,
       productLineIds: filters.productLineIds.length > 0 ? filters.productLineIds : undefined,
@@ -78,6 +92,8 @@ export function usePaintFacetCounts(params: {
   }, [
     query,
     hueIds,
+    parentHueId,
+    childHueId,
     filters.brandIds,
     filters.paintTypes,
     filters.productLineIds,
