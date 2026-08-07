@@ -1,12 +1,177 @@
 /*
- * Grimify Brand Colors
- * Gold palette derived from #b7882a, #d4a63a, #f1c84b.
- * Single brand hue — neutral everything else.
+ * Undercoat — Grimify design tokens
+ *
+ * The fixed half of the token system. Everything here has one value that never
+ * changes between light and dark. The theme-adaptive roles (canvas, panel, copy,
+ * meta, rule, signal-on, danger) live in `src/app/globals.css`, because they must
+ * flip on `.dark` and therefore need `@theme inline`.
+ *
+ * Structure:
+ *   1. Palette   — Tailwind-style numeric ramps: primary / secondary / accent /
+ *                  danger, plus black and white. Every colour in the product comes
+ *                  from one of these steps. 500 is the base.
+ *   2. Semantics — named roles (surface, ink, line, signal, stock…) aliased onto the
+ *                  ramps. Markup uses semantics, never raw ramp steps; swap a theme
+ *                  by re-pointing the semantics.
+ *   3. Type      — size ramp with baked-in line-height and letter-spacing. The three
+ *                  font families are declared in globals.css (they wrap next/font
+ *                  variables and so require `@theme inline`).
+ *   4. Shape, depth, space, motion.
+ *
+ * Principle: color is the hero — the UI is its frame. The graphite and slate ramps
+ * are chrome. Amber is the only chromatic colour in the interface and it always
+ * means something: measurement, ownership, or active state. Never decoration.
  */
 
-:root {
-  --grimify-gold: oklch(0.6 0.14 80);
-  --grimify-gold-light: oklch(0.71 0.15 84);
-  --grimify-gold-bright: oklch(0.82 0.16 88);
-  --grimify-gold-dark: oklch(0.47 0.11 84);
+@theme {
+  /* ============================================================
+     1. PALETTE
+     ============================================================ */
+
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  /* Primary — graphite. App chrome, grounds, and text. */
+  --color-primary-50: #f4f5f7;
+  --color-primary-100: #e9ebef;
+  --color-primary-200: #d6d9df;
+  --color-primary-300: #b4bac4;
+  --color-primary-400: #7f8794;
+  --color-primary-500: #5b6270;
+  --color-primary-600: #464c58;
+  --color-primary-700: #343943;
+  --color-primary-800: #23272f;
+  --color-primary-900: #1b1e24;
+  --color-primary-950: #0e1013;
+
+  /* Secondary — cool slate. Borders, mounts, metadata, disabled states. */
+  --color-secondary-50: #f7f8fa;
+  --color-secondary-100: #eceff3;
+  --color-secondary-200: #e2e5ea;
+  --color-secondary-300: #ccd1d9;
+  --color-secondary-400: #a5abb6;
+  --color-secondary-500: #8a919e;
+  --color-secondary-600: #6b7280;
+  --color-secondary-700: #4b5260;
+  --color-secondary-800: #3a404b;
+  --color-secondary-900: #2b3038;
+  --color-secondary-950: #171a20;
+
+  /* Accent — signal amber. Measurement, ownership, active state. Never decoration. */
+  --color-accent-50: #fff8e8;
+  --color-accent-100: #ffedc4;
+  --color-accent-200: #ffdc90;
+  --color-accent-300: #ffc85a;
+  --color-accent-400: #ffbe3a;
+  --color-accent-500: #ffb020;
+  --color-accent-600: #d98a06;
+  --color-accent-700: #a35a00;
+  --color-accent-800: #7d4400;
+  --color-accent-900: #5c3200;
+  --color-accent-950: #351d00;
+
+  /* Danger — terracotta. Validation errors and destructive actions only.
+     Not part of the base Undercoat spec; added because the product needs an
+     error colour. Built around the previous brand's #c44b2b so error states
+     kept their meaning through the rebrand. */
+  --color-danger-50: #fdf4f1;
+  --color-danger-100: #fae4dd;
+  --color-danger-200: #f4c7ba;
+  --color-danger-300: #eaa38e;
+  --color-danger-400: #dc7a5c;
+  --color-danger-500: #c44b2b;
+  --color-danger-600: #a63d21;
+  --color-danger-700: #85311b;
+  --color-danger-800: #642516;
+  --color-danger-900: #481a10;
+  --color-danger-950: #280e08;
+
+  /* Base aliases — `bg-signal`, `bg-inset`, `text-signal-on`.
+     Note `primary` is graphite chrome, not the brand signal. The thing a user
+     clicks is `signal` / `signal-on`, never `primary`. */
+  --color-primary: var(--color-primary-900);
+  --color-secondary: var(--color-secondary-500);
+  --color-accent: var(--color-accent-500);
+
+  /* ============================================================
+     2. SEMANTIC ROLES
+     ============================================================ */
+
+  /* Grounds + chrome (dark) */
+  --color-ink: var(--color-primary-950); /* dark app background */
+  --color-ink-raised: var(--color-secondary-950); /* nav, tab bar, chips on dark */
+  --color-ink-line: var(--color-secondary-900);
+  --color-ink-text: var(--color-secondary-200);
+  --color-ink-text-muted: var(--color-secondary-400);
+
+  /* Text on light */
+  --color-graphite: var(--color-primary-900);
+  --color-slate: var(--color-secondary-700);
+  --color-slate-dim: var(--color-primary-500); /* meta on a mount inside a dark screen */
+  --color-slate-muted: var(--color-secondary-500);
+
+  /* Surfaces (light) */
+  --color-surface: var(--color-primary-50);
+  --color-surface-card: var(--color-white);
+  --color-surface-mount: var(--color-secondary-100); /* light mat under swatches on dark */
+  --color-surface-inset: var(--color-primary-50);
+  --color-line: var(--color-secondary-200);
+  --color-line-strong: var(--color-secondary-300);
+
+  /* Accent, split by ground — amber on light fails contrast, so light gets 700.
+     `signal` is the fill (always 500, fills need no contrast bump);
+     `signal-ink` is amber used as text or border on a light ground.
+     For markup that must adapt to the active theme, use `signal-on` (globals.css). */
+  --color-signal: var(--color-accent-500);
+  --color-signal-ink: var(--color-accent-700);
+
+  /* Domain semantics */
+  --color-stock-low: var(--color-accent-700);
+  --color-match-close: var(--color-accent-700); /* ΔE < 3 */
+  --color-match-far: var(--color-secondary-500);
+
+  /* ============================================================
+     3. TYPE
+     ============================================================ */
+
+  --text-micro: 0.625rem; /* 10px   mono uppercase labels */
+  --text-micro--line-height: 1.3;
+  --text-micro--letter-spacing: 0.06em;
+  --text-data: 0.719rem; /* 11.5px mono chips, ΔE, prices */
+  --text-data--line-height: 1.4;
+  --text-small: 0.781rem; /* 12.5px helper text */
+  --text-small--line-height: 1.5;
+  --text-body: 0.906rem; /* 14.5px */
+  --text-body--line-height: 1.55;
+  --text-subhead: 0.938rem; /* 15px */
+  --text-subhead--line-height: 1.3;
+  --text-subhead--letter-spacing: -0.01em;
+  --text-heading: 1.188rem; /* 19px */
+  --text-heading--line-height: 1.2;
+  --text-heading--letter-spacing: -0.02em;
+  --text-title: 1.5rem; /* 24px */
+  --text-title--line-height: 1.1;
+  --text-title--letter-spacing: -0.03em;
+  --text-display: 2.625rem; /* 42px */
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.035em;
+
+  /* ============================================================
+     4. SHAPE, DEPTH, SPACE, MOTION
+     ============================================================ */
+
+  --radius-swatch: 4px;
+  --radius-control: 5px;
+  --radius-tile: 6px;
+  --radius-card: 8px;
+  --radius-device: 22px;
+
+  --shadow-card: 0 1px 2px rgb(14 16 19 / 0.06);
+  --shadow-overlay: 0 8px 24px rgb(14 16 19 / 0.18);
+  --inset-shadow-bottle: inset 0 -50px 44px -34px rgb(0 0 0 / 0.5); /* hero swatch meniscus */
+
+  --spacing-rail: 320px; /* fixed detail-page rail */
+
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: ease;
 }

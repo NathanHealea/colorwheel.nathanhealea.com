@@ -5,11 +5,11 @@
  * https://daisyui.com/components/skeleton/
  *
  * Implements daisyUI's class naming conventions (.skeleton, .skeleton-circle, etc.)
- * using this project's Tailwind CSS theme tokens instead of daisyUI's built-in
+ * using this project's Undercoat theme tokens instead of daisyUI's built-in
  * theme system.
  *
  * Classes:
- *   Base:    .skeleton          — Pulsing muted block (default rounded rectangle)
+ *   Base:    .skeleton          — Pulsing inset block (rounded-swatch rectangle)
  *   Shapes:  .skeleton-circle   — Perfectly round
  *            .skeleton-text     — Single line of text (h-4)
  *            .skeleton-avatar   — Round avatar block
@@ -24,8 +24,8 @@
  * Base
  * ----------------------------------------------------------------------- */
 .skeleton {
-  @apply animate-pulse rounded
-    bg-muted;
+  @apply animate-pulse rounded-swatch
+    bg-inset;
 }
 
 /* -------------------------------------------------------------------------
@@ -36,7 +36,7 @@
 }
 
 .skeleton-text {
-  @apply h-4 rounded;
+  @apply h-4 rounded-swatch;
 }
 
 .skeleton-avatar {

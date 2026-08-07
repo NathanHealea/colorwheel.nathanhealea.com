@@ -5,15 +5,15 @@
  * https://daisyui.com/components/form-control/
  *
  * Implements daisyUI-style class naming conventions for form field layouts,
- * using this project's Tailwind CSS theme tokens instead of daisyUI's
+ * using this project's Undercoat theme tokens instead of daisyUI's
  * built-in theme system.
  *
  * Classes:
  *   Base:        .form-control     — Wraps the entire form (flex column, gap-5)
  *   Item:        .form-item        — Wraps a single field: label + input + message (gap-2)
- *   Label:       .form-label       — Form-specific label styling
- *   Message:     .form-message     — Error/validation text (destructive color)
- *   Description: .form-description — Helper text below a field (muted color)
+ *   Label:       .form-label       — Form-specific label styling (text-small)
+ *   Message:     .form-message     — Error/validation text (danger, text-small)
+ *   Description: .form-description — Helper text below a field (meta, text-small)
  */
 
 /* -------------------------------------------------------------------------
@@ -34,19 +34,19 @@
  * Form label
  * ----------------------------------------------------------------------- */
 .form-label {
-  @apply text-sm leading-none font-medium select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50;
+  @apply text-small leading-none font-medium select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50;
 }
 
 /* -------------------------------------------------------------------------
  * Form message — error or validation text below a field
  * ----------------------------------------------------------------------- */
 .form-message {
-  @apply text-sm font-normal text-destructive;
+  @apply text-small font-normal text-danger;
 }
 
 /* -------------------------------------------------------------------------
  * Form description — helper text below a field
  * ----------------------------------------------------------------------- */
 .form-description {
-  @apply text-sm text-muted-foreground;
+  @apply text-small text-meta;
 }

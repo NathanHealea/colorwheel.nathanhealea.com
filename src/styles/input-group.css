@@ -6,7 +6,17 @@
  *
  * Composes an input (or textarea) with inline addons, text labels, and
  * buttons into a single visually connected control. Uses this project's
- * Tailwind CSS theme tokens instead of daisyUI's built-in theme system.
+ * Undercoat theme tokens instead of daisyUI's built-in theme system.
+ *
+ * The group itself is a control (`--radius-control`); the compact buttons slotted
+ * inside an addon use `--radius-swatch` so they nest cleanly.
+ *
+ * The group owns the border, the hover, the focus ring and the invalid ring for
+ * everything inside it — the slotted control is stripped to `border-0 ring-0` so
+ * the two never draw competing outlines. That means the group has to reproduce the
+ * same escalation `.input` uses on its own: hover firms the hairline neutrally,
+ * focus-within goes amber, invalid goes terracotta and outranks focus. Same
+ * equal-specificity source-order rule applies; see input.css.
  *
  * Classes:
  *   Base:    .input-group                — Flex container with shared border & focus ring
@@ -27,17 +37,27 @@
  * Base — shared border, focus-within ring
  * ----------------------------------------------------------------------- */
 .input-group {
-  @apply relative flex h-9 w-full min-w-0 items-center rounded-lg border border-input
+  @apply relative flex h-9 w-full min-w-0 items-center rounded-control border border-rule
     transition-colors outline-none
-    has-disabled:bg-input/50 has-disabled:opacity-50;
+    has-disabled:bg-inset/50 has-disabled:opacity-50;
+}
+
+/* --- States, escalating order --- */
+
+/* Hover fires from anywhere in the group, including the addons and the slotted
+   button, because the whole assembly reads as one field. Border only. */
+.input-group:hover {
+  @apply border-rule-strong;
 }
 
 .input-group:focus-within {
-  @apply border-ring ring-3 ring-ring/50;
+  @apply border-signal-on ring-3 ring-signal-on/50;
 }
 
+/* Terracotta at 40% to match the amber ring by weight, and declared after
+   focus-within so a focused bad field keeps showing the error. */
 .input-group:has([aria-invalid='true']) {
-  @apply border-destructive ring-3 ring-destructive/20;
+  @apply border-danger ring-3 ring-danger/40;
 }
 
 /* Stack vertically when a block-aligned addon is present */
@@ -76,7 +96,7 @@
  * ----------------------------------------------------------------------- */
 .input-group-addon {
   @apply flex h-auto shrink-0 cursor-text items-center justify-center gap-2
-    py-1.5 text-sm font-medium text-muted-foreground select-none
+    py-1.5 text-body font-medium text-meta select-none
     [&>svg:not([class*='size-'])]:size-4;
 }
 
@@ -104,29 +124,39 @@
  * Text — muted label / icon wrapper inside an addon
  * ----------------------------------------------------------------------- */
 .input-group-text {
-  @apply flex items-center gap-2 text-sm text-muted-foreground
+  @apply flex items-center gap-2 text-body text-meta
     [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4;
 }
 
 /* -------------------------------------------------------------------------
  * Button — compact action button inside an addon
  * ----------------------------------------------------------------------- */
+/* The button carries no border of its own — the group draws the only outline in
+   the assembly — so it gets a focus ring and nothing else. The previous
+   `focus-visible:border-signal-on` here was a dead declaration painting the edge
+   of a zero-width border. Hover and text colour come from `.btn-ghost`, which
+   `InputGroupButton` always applies; `:active` deepens that one step so a press
+   registers even though the group's own border does not move. */
 .input-group-btn {
   @apply inline-flex h-6 shrink-0 cursor-pointer items-center justify-center gap-1
-    rounded-[calc(var(--radius)-3px)] px-1.5 text-sm shadow-none
+    rounded-swatch px-1.5 text-body shadow-none
     transition-all select-none outline-none
-    focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50
+    focus-visible:ring-3 focus-visible:ring-signal-on/50
     disabled:pointer-events-none disabled:opacity-50
     [&_svg:not([class*='size-'])]:size-3.5;
 }
 
+.input-group-btn:active {
+  @apply bg-panel-raised text-copy;
+}
+
 .input-group-btn-xs {
-  @apply h-6 gap-1 rounded-[calc(var(--radius)-3px)] px-1.5
+  @apply h-6 gap-1 rounded-swatch px-1.5
     [&_svg:not([class*='size-'])]:size-3.5;
 }
 
 .input-group-btn-icon-xs {
-  @apply size-6 rounded-[calc(var(--radius)-3px)] p-0;
+  @apply size-6 rounded-swatch p-0;
 }
 
 .input-group-btn-icon-sm {

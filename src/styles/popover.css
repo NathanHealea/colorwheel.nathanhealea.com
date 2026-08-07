@@ -5,22 +5,22 @@
  * https://daisyui.com/components/dropdown/
  *
  * Implements daisyUI's class naming conventions using this project's
- * Tailwind CSS theme tokens instead of daisyUI's built-in theme system.
+ * Undercoat theme tokens instead of daisyUI's built-in theme system.
  *
  * Designed for use with the Radix UI Popover primitive via the
  * src/components/ui/popover.tsx wrapper. Apply the class to the Radix Content part:
  *   - Content → .popover-content
  *
  * Classes:
- *   Base:  .popover-content  — Floating panel (bordered, rounded, shadowed, animated)
+ *   Base:  .popover-content  — Floating panel (rounded-card, bordered, shadow-overlay, animated)
  */
 
 /* -------------------------------------------------------------------------
  * Content panel
  * ----------------------------------------------------------------------- */
 .popover-content {
-  @apply z-50 w-72 rounded-lg border border-border bg-popover p-4
-    text-sm text-popover-foreground shadow-md outline-none
+  @apply z-50 w-72 rounded-card border border-rule bg-panel p-4
+    text-body text-copy shadow-overlay outline-none
     data-[state=open]:animate-in data-[state=closed]:animate-out
     data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0
     data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95

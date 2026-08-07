@@ -5,7 +5,7 @@
  * https://daisyui.com/components/range/
  *
  * Implements daisyUI's class naming conventions using this project's
- * Tailwind CSS theme tokens instead of daisyUI's built-in theme system.
+ * Undercoat theme tokens instead of daisyUI's built-in theme system.
  *
  * Designed for use with the Radix UI Slider primitive via the
  * src/components/ui/slider.tsx wrapper. Apply classes to the Radix parts:
@@ -23,11 +23,15 @@
  *            .range-sm          — Small track (h-1.5) and thumb (size-3.5)
  *            .range-md          — Medium / default track (h-2) and thumb (size-4)
  *            .range-lg          — Large track (h-2.5) and thumb (size-5)
- *   Colors:  .range-primary     — Primary color track fill and thumb border
- *            .range-secondary   — Secondary color track fill and thumb border
- *            .range-accent      — Accent color track fill and thumb border
- *            .range-destructive — Destructive/error color track fill and thumb border
+ *   Colors:  .range-primary     — Amber signal fill (default)
+ *            .range-secondary   — Neutral slate fill, for de-emphasized ranges
+ *            .range-accent      — Amber signal fill (alias of .range-primary)
+ *            .range-destructive — Danger fill
  *   States:  .range-disabled    — Disabled appearance (pointer-events-none, opacity-50)
+ *
+ * Amber is the only chromatic colour in the system, so .range-primary and
+ * .range-accent resolve to the same signal fill; .range-secondary is the
+ * neutral alternative rather than a second hue.
  */
 
 /* -------------------------------------------------------------------------
@@ -42,23 +46,23 @@
  * Base — Track
  * ----------------------------------------------------------------------- */
 .range-track {
-  @apply relative h-1.5 w-full grow overflow-hidden rounded-full bg-border;
+  @apply relative h-1.5 w-full grow overflow-hidden rounded-full bg-rule;
 }
 
 /* -------------------------------------------------------------------------
  * Base — Range (filled portion)
  * ----------------------------------------------------------------------- */
 .range-range {
-  @apply absolute h-full bg-primary;
+  @apply absolute h-full bg-signal;
 }
 
 /* -------------------------------------------------------------------------
  * Base — Thumb
  * ----------------------------------------------------------------------- */
 .range-thumb {
-  @apply block size-4 rounded-full border border-primary/50 bg-background shadow
+  @apply block size-4 rounded-full border border-signal-on/50 bg-canvas shadow-card
     transition-colors outline-none
-    focus-visible:ring-1 focus-visible:ring-ring
+    focus-visible:ring-1 focus-visible:ring-signal-on
     disabled:pointer-events-none disabled:opacity-50;
 }
 
@@ -97,31 +101,31 @@
  * Color variants — apply to root (.range), cascades to track/range/thumb
  * ----------------------------------------------------------------------- */
 .range-primary .range-range {
-  @apply bg-primary;
+  @apply bg-signal;
 }
 .range-primary .range-thumb {
-  @apply border-primary/50 focus-visible:ring-primary;
+  @apply border-signal-on/50 focus-visible:ring-signal-on;
 }
 
 .range-secondary .range-range {
-  @apply bg-secondary-foreground;
+  @apply bg-rule-strong;
 }
 .range-secondary .range-thumb {
-  @apply border-secondary-foreground/50 focus-visible:ring-secondary;
+  @apply border-rule-strong focus-visible:ring-rule-strong;
 }
 
 .range-accent .range-range {
-  @apply bg-accent-foreground;
+  @apply bg-signal;
 }
 .range-accent .range-thumb {
-  @apply border-accent-foreground/50 focus-visible:ring-accent;
+  @apply border-signal-on/50 focus-visible:ring-signal-on;
 }
 
 .range-destructive .range-range {
-  @apply bg-destructive;
+  @apply bg-danger;
 }
 .range-destructive .range-thumb {
-  @apply border-destructive/50 focus-visible:ring-destructive;
+  @apply border-danger/50 focus-visible:ring-danger;
 }
 
 /* -------------------------------------------------------------------------

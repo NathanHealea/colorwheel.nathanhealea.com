@@ -5,7 +5,7 @@
  * https://daisyui.com/components/avatar/
  *
  * Implements daisyUI's class naming conventions using this project's
- * Tailwind CSS theme tokens instead of daisyUI's built-in theme system.
+ * Undercoat theme tokens instead of daisyUI's built-in theme system.
  *
  * Classes:
  *   Base:        .avatar            — Wrapper with rounded-full and overflow-hidden
@@ -13,7 +13,10 @@
  *                .avatar-sm         — 32px
  *                .avatar-md         — 40px (default)
  *                .avatar-lg         — 48px
- *   Placeholder: .avatar-placeholder — Fallback with initials (bg-muted, centered text)
+ *   Placeholder: .avatar-placeholder — Fallback with initials (bg-inset, centered text)
+ *
+ * Placeholder text size is scoped per avatar size: text-micro / text-data /
+ * text-small / text-subhead for xs / sm / md / lg.
  */
 
 /* -------------------------------------------------------------------------
@@ -49,21 +52,21 @@
  * ----------------------------------------------------------------------- */
 .avatar-placeholder {
   @apply flex items-center justify-center
-    bg-muted text-muted-foreground font-medium uppercase;
+    bg-inset text-meta font-medium uppercase;
 }
 
 .avatar-placeholder.avatar-xs {
-  @apply text-[0.625rem];
+  @apply text-micro;
 }
 
 .avatar-placeholder.avatar-sm {
-  @apply text-xs;
+  @apply text-data;
 }
 
 .avatar-placeholder.avatar-md {
-  @apply text-sm;
+  @apply text-small;
 }
 
 .avatar-placeholder.avatar-lg {
-  @apply text-base;
+  @apply text-subhead;
 }

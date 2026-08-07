@@ -5,29 +5,31 @@
  * https://daisyui.com/components/button/
  *
  * Implements daisyUI's class naming conventions (.btn, .btn-primary, .btn-ghost,
- * .btn-sm, etc.) using this project's Tailwind CSS theme tokens instead of
+ * .btn-sm, etc.) using this project's Undercoat theme tokens instead of
  * daisyUI's built-in theme system.
  *
  * Color variants set --btn-color; style modifiers (outline, soft) consume it
  * via color-mix() so any color + style combination works without compound rules.
  *
+ * Undercoat has exactly one primary action colour — amber — and it is the only
+ * chromatic colour in the interface. The old green/yellow/blue semantic variants
+ * are gone; a button that needs to warn is `.btn-destructive`, and everything
+ * else is neutral chrome. Buttons use `--radius-control` (5px).
+ *
  * Classes:
- *   Base:    .btn                — Default button styling (h-8, text-sm, rounded-lg)
- *   Colors:  .btn-primary       — Primary background with foreground text
- *            .btn-secondary     — Secondary background with foreground text
- *            .btn-accent        — Accent background with foreground text
- *            .btn-destructive   — Destructive/error tinted background
- *            .btn-success       — Green semantic variant (oklch 0.55 0.18 142)
- *            .btn-warning       — Yellow semantic variant (oklch 0.75 0.18 85)
- *            .btn-info          — Blue semantic variant (oklch 0.60 0.15 230)
- *   Styles:  .btn-outline       — Border in --btn-color, transparent background
+ *   Base:    .btn                — Default button styling (h-8, text-small, rounded-control)
+ *   Colors:  .btn-primary       — Solid amber signal, ink text — the page's one main action
+ *            .btn-secondary     — Bordered panel button, copy text
+ *            .btn-accent        — Soft amber tint with amber text
+ *            .btn-destructive   — Danger tinted background
+ *   Styles:  .btn-outline       — Border in --btn-color, canvas background
  *            .btn-soft          — Low-opacity --btn-color background fill
- *            .btn-ghost         — Transparent background, muted text (neutral, no --btn-color)
- *            .btn-link          — Text-only with underline on hover
- *   Sizes:   .btn-xs            — Extra-small (h-6, text-xs)
- *            .btn-sm            — Small (h-7, text-xs)
- *            .btn-md            — Medium / default (h-8, text-sm)
- *            .btn-lg            — Large (h-9)
+ *            .btn-ghost         — Transparent background, meta text (neutral, no --btn-color)
+ *            .btn-link          — Text-only amber with underline on hover
+ *   Sizes:   .btn-xs            — Extra-small (h-6, text-data, rounded-swatch)
+ *            .btn-sm            — Small (h-7, text-small, rounded-swatch)
+ *            .btn-md            — Medium / default (h-8, text-small)
+ *            .btn-lg            — Large (h-9, text-body)
  *   Shapes:  .btn-square        — Square aspect ratio, no padding
  *            .btn-circle        — Circular, no padding
  *            .btn-wide          — Extra horizontal padding (px-16)
@@ -41,10 +43,10 @@
  * ----------------------------------------------------------------------- */
 .btn {
   /* Default --btn-color for style modifiers used without a color variant */
-  --btn-color: var(--color-muted-foreground);
-  @apply inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg
-    text-sm font-medium whitespace-nowrap transition-all select-none outline-none
-    focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50
+  --btn-color: var(--color-meta);
+  @apply inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-control
+    text-small font-medium whitespace-nowrap transition-all select-none outline-none
+    focus-visible:border-signal-on focus-visible:ring-3 focus-visible:ring-signal-on/50
     disabled:pointer-events-none disabled:opacity-50
     [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
   /* default size (md) */
@@ -53,63 +55,38 @@
 
 /* -------------------------------------------------------------------------
  * Color variants
+ *
+ * `signal` is the fixed amber (accent-500) rather than the adaptive `signal-on`,
+ * because a fill has to stay light enough for ink text in both themes.
  * ----------------------------------------------------------------------- */
 .btn-primary {
-  --btn-color: var(--color-primary);
-  @apply bg-primary text-primary-foreground hover:bg-primary/80;
+  --btn-color: var(--color-signal);
+  @apply bg-signal text-ink hover:bg-signal/85;
 }
 
+/* Neutral counterpart to .btn-primary. Needs no `.dark` override — panel, rule and
+   copy already flip with the theme. */
 .btn-secondary {
-  --btn-color: var(--color-secondary);
-  @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  --btn-color: var(--color-rule-strong);
+  @apply border border-rule bg-panel text-copy hover:bg-inset;
 }
 
 .btn-accent {
-  --btn-color: var(--color-accent);
-  @apply bg-accent text-accent-foreground hover:bg-accent/80;
+  --btn-color: var(--color-signal-on);
+  @apply bg-signal/15 text-signal-on hover:bg-signal/25;
 }
 
 .btn-destructive {
-  --btn-color: var(--color-destructive);
-  @apply bg-destructive/10 text-destructive hover:bg-destructive/20
-    focus-visible:border-destructive/40 focus-visible:ring-destructive/20;
-}
-
-.btn-success {
-  --btn-color: oklch(0.55 0.18 142);
-  background-color: oklch(0.55 0.18 142);
-  color: oklch(1 0 0);
-}
-
-.btn-success:hover {
-  background-color: color-mix(in oklab, oklch(0.55 0.18 142) 80%, black);
-}
-
-.btn-warning {
-  --btn-color: oklch(0.75 0.18 85);
-  background-color: oklch(0.75 0.18 85);
-  color: oklch(0.15 0 0);
-}
-
-.btn-warning:hover {
-  background-color: color-mix(in oklab, oklch(0.75 0.18 85) 80%, black);
-}
-
-.btn-info {
-  --btn-color: oklch(0.60 0.15 230);
-  background-color: oklch(0.60 0.15 230);
-  color: oklch(1 0 0);
-}
-
-.btn-info:hover {
-  background-color: color-mix(in oklab, oklch(0.60 0.15 230) 80%, black);
+  --btn-color: var(--color-danger);
+  @apply bg-danger/10 text-danger hover:bg-danger/20
+    focus-visible:border-danger/40 focus-visible:ring-danger/20;
 }
 
 /* -------------------------------------------------------------------------
  * Style variants
  * ----------------------------------------------------------------------- */
 .btn-outline {
-  @apply bg-background;
+  @apply bg-canvas;
   border: 1px solid color-mix(in oklab, var(--btn-color) 50%, transparent);
   color: var(--btn-color);
 }
@@ -128,31 +105,31 @@
 }
 
 .btn-ghost {
-  @apply bg-transparent text-muted-foreground
-    hover:bg-muted hover:text-foreground;
+  @apply bg-transparent text-meta
+    hover:bg-inset hover:text-copy;
 }
 
 .btn-link {
-  @apply bg-transparent text-primary underline-offset-4 hover:underline;
+  @apply bg-transparent text-signal-on underline-offset-4 hover:underline;
 }
 
 /* -------------------------------------------------------------------------
  * Sizes
  * ----------------------------------------------------------------------- */
 .btn-xs {
-  @apply h-6 gap-1 rounded-md px-2 text-xs [&_svg:not([class*='size-'])]:size-3;
+  @apply h-6 gap-1 rounded-swatch px-2 text-data [&_svg:not([class*='size-'])]:size-3;
 }
 
 .btn-sm {
-  @apply h-7 gap-1 rounded-md px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3.5;
+  @apply h-7 gap-1 rounded-swatch px-2.5 text-small [&_svg:not([class*='size-'])]:size-3.5;
 }
 
 .btn-md {
-  @apply h-8 px-2.5 text-sm;
+  @apply h-8 px-2.5 text-small;
 }
 
 .btn-lg {
-  @apply h-9 px-2.5;
+  @apply h-9 px-3 text-body;
 }
 
 /* -------------------------------------------------------------------------
@@ -178,7 +155,7 @@
  * States
  * ----------------------------------------------------------------------- */
 .btn-active {
-  @apply bg-muted text-foreground;
+  @apply bg-inset text-copy;
 }
 
 .btn-disabled {

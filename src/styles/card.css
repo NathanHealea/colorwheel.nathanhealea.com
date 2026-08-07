@@ -5,14 +5,20 @@
  * https://daisyui.com/components/card/
  *
  * Implements daisyUI's class naming conventions (.card, .card-body, .card-title,
- * etc.) using this project's Tailwind CSS theme tokens instead of daisyUI's
+ * etc.) using this project's Undercoat theme tokens instead of daisyUI's
  * built-in theme system.
  *
+ * Cards use `--radius-card` (8px) and `--shadow-card` — a 1px lift, not a float.
+ * Undercoat separates panels with a hairline rule first and shadow second.
+ *
+ * For a card whose subject is a colour, add `.card-mount` (see swatch.css) so the
+ * ground stays light in dark mode and the swatch keeps reading as the hero.
+ *
  * Classes:
- *   Base:      .card              — Card container (rounded, bordered, shadowed)
+ *   Base:      .card              — Card container (rounded-card, bordered, shadow-card)
  *   Body:      .card-body         — Content area with padding and gap
- *   Title:     .card-title        — Heading text (text-lg, semibold)
- *   Desc:      .card-description  — Muted description text
+ *   Title:     .card-title        — Display-face heading (text-heading, semibold)
+ *   Desc:      .card-description  — Meta description text (text-small)
  *   Footer:    .card-footer       — Bottom section with horizontal layout
  *   Modifiers: .card-compact      — Reduced padding and gap on .card-body
  *              .card-bordered     — Thicker border (border-2)
@@ -22,7 +28,7 @@
  * Base
  * ----------------------------------------------------------------------- */
 .card {
-  @apply rounded-xl border border-border bg-card text-card-foreground shadow-sm;
+  @apply rounded-card border border-rule bg-panel text-copy shadow-card;
 }
 
 /* -------------------------------------------------------------------------
@@ -38,13 +44,16 @@
 
 /* -------------------------------------------------------------------------
  * Title & description
+ *
+ * `text-heading` carries its own line-height and letter-spacing, so no
+ * leading/tracking utilities are needed here.
  * ----------------------------------------------------------------------- */
 .card-title {
-  @apply text-lg font-semibold leading-none tracking-tight;
+  @apply font-display text-heading font-semibold;
 }
 
 .card-description {
-  @apply text-sm text-muted-foreground;
+  @apply text-small text-meta;
 }
 
 /* -------------------------------------------------------------------------
