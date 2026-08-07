@@ -19,10 +19,10 @@ export default function CodeOfConductPage() {
       <article className="space-y-6">
         <header className="space-y-2">
           <PageTitle className="font-semibold tracking-tight">Code of Conduct</PageTitle>
-          <p className="text-sm text-muted-foreground">Last updated: {lastUpdated}</p>
+          <p className="text-sm text-meta">Last updated: {lastUpdated}</p>
         </header>
 
-        <p className="text-muted-foreground">
+        <p className="text-meta">
           Grimify is a community for miniature painters of every skill level, background, and style.
           This Code of Conduct sets the ground rules so everyone can share recipes, palettes, and
           ideas without fear of harassment or bad-faith behavior. It applies to all Grimify surfaces
@@ -80,7 +80,7 @@ export default function CodeOfConductPage() {
             To report a violation, open an issue on the{' '}
             <a
               href="https://github.com/NathanHealea/grimify.app/issues"
-              className="text-primary underline-offset-4 hover:underline"
+              className="text-signal-on underline-offset-4 hover:underline"
               target="_blank"
               rel="noreferrer"
             >
@@ -118,7 +118,7 @@ export default function CodeOfConductPage() {
             This Code of Conduct is adapted from the{' '}
             <a
               href="https://www.contributor-covenant.org/"
-              className="text-primary underline-offset-4 hover:underline"
+              className="text-signal-on underline-offset-4 hover:underline"
               target="_blank"
               rel="noreferrer"
             >
@@ -126,7 +126,7 @@ export default function CodeOfConductPage() {
             </a>
             , version 2.1, modified for a user community rather than open-source contributors. See
             also our{' '}
-            <Link href="/terms" className="text-primary underline-offset-4 hover:underline">
+            <Link href="/terms" className="text-signal-on underline-offset-4 hover:underline">
               Terms of Use
             </Link>
             .
@@ -139,7 +139,7 @@ export default function CodeOfConductPage() {
             For general questions about this Code of Conduct, please open an issue on our{' '}
             <a
               href="https://github.com/NathanHealea/grimify.app/issues"
-              className="text-primary underline-offset-4 hover:underline"
+              className="text-signal-on underline-offset-4 hover:underline"
               target="_blank"
               rel="noreferrer"
             >

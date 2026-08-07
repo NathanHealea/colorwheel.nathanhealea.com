@@ -27,12 +27,12 @@ export function SchemeSwatch({
   return (
     <div className="flex flex-1 flex-col gap-2 min-w-40">
       <div
-        className="w-full rounded-lg border border-border aspect-square"
+        className="w-full rounded-lg border border-rule aspect-square"
         style={{ backgroundColor: color.hex }}
         aria-label={`${color.label} color: ${color.hex}`}
       />
       <p className="text-sm font-semibold">{color.label}</p>
-      <p className="font-mono text-xs text-muted-foreground">
+      <p className="font-mono text-xs text-meta">
         {color.hex} &nbsp; {Math.round(color.hue)}°
       </p>
       {color.nearestPaints.length > 0 && (

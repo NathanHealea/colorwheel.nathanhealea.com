@@ -57,7 +57,7 @@ export function UserMenu({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="btn btn-circle focus-visible:ring-0 hover:ring-3 hover:ring-primary data-[state=open]:ring-3 data-[state=open]:ring-primary">
+      <DropdownMenuTrigger className="btn btn-circle focus-visible:ring-0 hover:ring-3 hover:ring-signal-on data-[state=open]:ring-3 data-[state=open]:ring-signal-on">
         {avatarUrl ? (
           <Image
             src={avatarUrl}
@@ -81,7 +81,7 @@ export function UserMenu({
           <Link href="/profile/edit">Edit profile</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className="text-xs text-muted-foreground">Mine</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-xs text-meta">Mine</DropdownMenuLabel>
         {OWNED_ITEMS.map((item) => (
           <DropdownMenuItem key={item.label} asChild>
             <Link href={item.href}>{item.label}</Link>

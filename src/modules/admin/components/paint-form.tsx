@@ -153,7 +153,7 @@ export function PaintForm({
       <input type="hidden" name="brand_id" value={String(selectedBrandId)} />
 
       {state?.error && (
-        <p className="text-sm text-destructive">{state.error}</p>
+        <p className="form-message">{state.error}</p>
       )}
 
       {state?.success && (
@@ -162,8 +162,8 @@ export function PaintForm({
 
       {/* Name */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="paint-name" className="form-label text-sm">
-          Name <span className="text-destructive">*</span>
+        <label htmlFor="paint-name" className="form-label">
+          Name <span className="text-danger">*</span>
         </label>
         <Input
           id="paint-name"
@@ -176,13 +176,13 @@ export function PaintForm({
           placeholder="e.g. Abaddon Black"
         />
         {state?.errors?.name && (
-          <p className="text-xs text-destructive">{state.errors.name}</p>
+          <p className="form-message">{state.errors.name}</p>
         )}
       </div>
 
       {/* Slug */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="paint-slug" className="form-label text-sm">
+        <label htmlFor="paint-slug" className="form-label">
           Slug
         </label>
         <Input
@@ -195,14 +195,14 @@ export function PaintForm({
           placeholder="e.g. abaddon-black"
         />
         {state?.errors?.slug && (
-          <p className="text-xs text-destructive">{state.errors.slug}</p>
+          <p className="form-message">{state.errors.slug}</p>
         )}
       </div>
 
       {/* Brand */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="paint-brand" className="form-label text-sm">
-          Brand <span className="text-destructive">*</span>
+        <label htmlFor="paint-brand" className="form-label">
+          Brand <span className="text-danger">*</span>
         </label>
         <select
           id="paint-brand"
@@ -218,14 +218,14 @@ export function PaintForm({
           ))}
         </select>
         {state?.errors?.brand_id && (
-          <p className="text-xs text-destructive">{state.errors.brand_id}</p>
+          <p className="form-message">{state.errors.brand_id}</p>
         )}
       </div>
 
       {/* Product Line */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="paint-product-line" className="form-label text-sm">
-          Product Line <span className="text-destructive">*</span>
+        <label htmlFor="paint-product-line" className="form-label">
+          Product Line <span className="text-danger">*</span>
         </label>
         <select
           id="paint-product-line"
@@ -243,14 +243,14 @@ export function PaintForm({
           ))}
         </select>
         {state?.errors?.product_line_id && (
-          <p className="text-xs text-destructive">{state.errors.product_line_id}</p>
+          <p className="form-message">{state.errors.product_line_id}</p>
         )}
       </div>
 
       {/* Brand Paint ID */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="paint-brand-paint-id" className="form-label text-sm">
-          Brand Paint ID <span className="text-destructive">*</span>
+        <label htmlFor="paint-brand-paint-id" className="form-label">
+          Brand Paint ID <span className="text-danger">*</span>
         </label>
         <Input
           id="paint-brand-paint-id"
@@ -262,17 +262,17 @@ export function PaintForm({
           placeholder="e.g. 99189950001"
         />
         {state?.errors?.brand_paint_id && (
-          <p className="text-xs text-destructive">{state.errors.brand_paint_id}</p>
+          <p className="form-message">{state.errors.brand_paint_id}</p>
         )}
       </div>
 
       {/* Hex Color */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="paint-hex" className="form-label text-sm">
-          Hex Color <span className="text-destructive">*</span>
+        <label htmlFor="paint-hex" className="form-label">
+          Hex Color <span className="text-danger">*</span>
         </label>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">#</span>
+          <span className="text-small text-meta">#</span>
           <Input
             id="paint-hex"
             name="hex"
@@ -287,11 +287,11 @@ export function PaintForm({
             type="color"
             value={hexValue.length === 7 ? hexValue : '#000000'}
             onChange={handleColorPickerChange}
-            className="h-8 w-10 cursor-pointer rounded border border-border bg-transparent p-0.5"
+            className="input-color"
             aria-label="Color picker"
           />
           <span
-            className="inline-block h-6 w-6 rounded-full border border-border"
+            className="inline-block h-6 w-6 rounded-full border border-rule"
             style={{ backgroundColor: hexValue }}
             aria-hidden="true"
           />
@@ -299,7 +299,7 @@ export function PaintForm({
 
         {/* Computed color values */}
         {computedColor && (
-          <div className="mt-1 flex gap-4 text-xs text-muted-foreground">
+          <div className="mt-1 flex gap-4 font-mono text-data text-meta">
             <span>
               RGB: {computedColor.r}, {computedColor.g}, {computedColor.b}
             </span>
@@ -310,13 +310,13 @@ export function PaintForm({
         )}
 
         {state?.errors?.hex && (
-          <p className="text-xs text-destructive">{state.errors.hex}</p>
+          <p className="form-message">{state.errors.hex}</p>
         )}
       </div>
 
       {/* Paint Type */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="paint-type" className="form-label text-sm">
+        <label htmlFor="paint-type" className="form-label">
           Paint Type
         </label>
         <Input
@@ -338,7 +338,7 @@ export function PaintForm({
             defaultChecked={state?.fields?.is_metallic ?? defaultValues?.is_metallic ?? false}
             className="checkbox checkbox-sm"
           />
-          <span className="form-label text-sm">Metallic</span>
+          <span className="form-label">Metallic</span>
         </label>
 
         <label className="flex items-center gap-2 cursor-pointer">
@@ -348,15 +348,15 @@ export function PaintForm({
             defaultChecked={state?.fields?.is_discontinued ?? defaultValues?.is_discontinued ?? false}
             className="checkbox checkbox-sm"
           />
-          <span className="form-label text-sm">Discontinued</span>
+          <span className="form-label">Discontinued</span>
         </label>
       </div>
 
       {/* Hue Selector */}
-      <div className="border-t border-border pt-4">
-        <p className="mb-3 text-sm font-medium">Hue Assignment</p>
+      <div className="border-t border-rule pt-4">
+        <p className="mb-3 text-body font-medium">Hue Assignment</p>
         {state?.errors?.hue && (
-          <p className="mb-2 text-xs text-destructive">{state.errors.hue}</p>
+          <p className="form-message mb-2">{state.errors.hue}</p>
         )}
         <HueSelector
           parentHues={parentHues}

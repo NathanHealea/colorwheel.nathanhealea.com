@@ -29,7 +29,7 @@ export default function PaletteDetailLoading() {
         {/* Paint list skeleton — mirrors PaletteGroupedPaintList rows */}
         <div className="flex flex-col gap-2">
           {Array.from({ length: 6 }, (_, i) => (
-            <div key={i} className="flex items-center gap-3 rounded-lg border border-border p-3">
+            <div key={i} className="flex items-center gap-3 rounded-lg border border-rule p-3">
               <Skeleton className="size-8 shrink-0 rounded-full" />
               <div className="flex-1 flex flex-col gap-1">
                 <Skeleton className="h-4 w-40" />

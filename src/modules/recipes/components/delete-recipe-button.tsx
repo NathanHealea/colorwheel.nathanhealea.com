@@ -61,7 +61,7 @@ export function DeleteRecipeButton({ recipe }: { recipe: Recipe }) {
         <DialogContent className="w-full max-w-sm p-6">
           <DialogHeader>
             <DialogTitle>Delete recipe?</DialogTitle>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-meta">
               Permanently delete{' '}
               <span className="font-medium">{recipe.title}</span> and all its
               sections, steps, paints, notes, and photos. This action cannot be

@@ -8,7 +8,7 @@ export default function AdminUserDetailLoading() {
         <Skeleton className="h-4 w-32" />
       </div>
 
-      <div className="rounded-lg border border-border p-6">
+      <div className="rounded-lg border border-rule p-6">
         <div className="mb-6 flex items-center gap-4">
           <SkeletonCircle className="size-16 shrink-0" />
           <div className="flex flex-col gap-2">

@@ -144,9 +144,9 @@ export function RecipePhotoUploader({
         handleSelect(e.dataTransfer?.files ?? null)
       }}
       className={[
-        'flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-dashed border-border bg-background text-center transition-colors',
+        'flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-dashed border-rule bg-canvas text-center transition-colors',
         compact ? 'p-2 text-xs' : 'p-3 text-sm',
-        isDragOver ? 'border-primary bg-primary/5' : 'hover:bg-muted/40',
+        isDragOver ? 'border-signal-on bg-signal/5' : 'hover:bg-inset/40',
         isUploading ? 'pointer-events-none opacity-70' : '',
       ]
         .filter(Boolean)
@@ -162,7 +162,7 @@ export function RecipePhotoUploader({
       ) : (
         <>
           <span className="font-medium">Drop or click</span>
-          <span className="text-xs text-muted-foreground">JPEG, PNG, WebP — 10 MB</span>
+          <span className="text-xs text-meta">JPEG, PNG, WebP — 10 MB</span>
         </>
       )}
       <input

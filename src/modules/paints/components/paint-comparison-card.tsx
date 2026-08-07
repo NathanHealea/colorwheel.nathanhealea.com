@@ -28,18 +28,18 @@ export function PaintComparisonCard({
   const productLine = paint.product_lines
 
   return (
-    <div className="relative flex w-56 shrink-0 flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-sm sm:w-64">
+    <div className="relative flex w-56 shrink-0 flex-col gap-3 rounded-xl border border-rule bg-panel p-4 shadow-sm sm:w-64">
       <button
         type="button"
         onClick={() => onRemove(paint.id)}
         aria-label={`Remove ${paint.name} from comparison`}
-        className="absolute right-2 top-2 inline-flex size-7 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        className="absolute right-2 top-2 inline-flex size-7 items-center justify-center rounded-full border border-rule bg-canvas text-meta transition-colors hover:bg-inset hover:text-copy"
       >
         <X className="size-4" aria-hidden="true" />
       </button>
 
       <div
-        className="h-32 w-full rounded-lg border border-border shadow-sm sm:h-40"
+        className="h-32 w-full rounded-lg border border-rule shadow-sm sm:h-40"
         style={paintSwatchBackground(paint.hex, paint.paint_type, paint.is_metallic)}
         aria-label={`Color swatch for ${paint.name}`}
       />
@@ -51,10 +51,10 @@ export function PaintComparisonCard({
         >
           {paint.name}
         </Link>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-meta">
           <Link
             href={`/brands/${brand.id}`}
-            className="hover:text-foreground hover:underline"
+            className="hover:text-copy hover:underline"
           >
             {brand.name}
           </Link>
@@ -65,7 +65,7 @@ export function PaintComparisonCard({
 
       <div className="flex flex-wrap gap-1.5">
         {paint.paint_type && (
-          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+          <span className="rounded-full bg-signal/10 px-2 py-0.5 text-[10px] font-medium text-signal-on">
             {paint.paint_type}
           </span>
         )}
@@ -75,13 +75,13 @@ export function PaintComparisonCard({
           </span>
         )}
         {paint.is_discontinued && (
-          <span className="rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-medium text-destructive">
+          <span className="rounded-full bg-danger/10 px-2 py-0.5 text-[10px] font-medium text-danger">
             Discontinued
           </span>
         )}
       </div>
 
-      <p className="font-mono text-xs text-muted-foreground">{paint.hex}</p>
+      <p className="font-mono text-xs text-meta">{paint.hex}</p>
     </div>
   )
 }

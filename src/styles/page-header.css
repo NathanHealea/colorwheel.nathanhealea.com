@@ -8,12 +8,15 @@
  * follows the same `.component-variant` naming convention as the rest of
  * the styles directory.
  *
+ * Titles use the display face. Undercoat's type ramp bakes line-height and
+ * letter-spacing into each step, so no leading/tracking utilities are needed.
+ *
  * Classes:
  *   Wrapper:   .page-header        — Column layout (title above subtitle)
  *              .page-header-row    — Row layout (title/subtitle on left, actions on right)
- *   Title:     .page-title         — text-3xl font-bold (default)
- *              .page-title-md      — text-2xl font-bold (smaller variant)
- *   Subtitle:  .page-subtitle      — text-sm text-muted-foreground
+ *   Title:     .page-title         — text-title, display face (default)
+ *              .page-title-md      — text-heading, display face (smaller variant)
+ *   Subtitle:  .page-subtitle      — text-small text-meta
  */
 
 /* -------------------------------------------------------------------------
@@ -26,11 +29,11 @@
 /* -------------------------------------------------------------------------
  * Title
  * ----------------------------------------------------------------------- */
-.page-title { @apply text-3xl font-bold; }
+.page-title { @apply font-display text-title font-semibold; }
 
-.page-title-md { @apply text-2xl font-bold; }
+.page-title-md { @apply font-display text-heading font-semibold; }
 
 /* -------------------------------------------------------------------------
  * Subtitle
  * ----------------------------------------------------------------------- */
-.page-subtitle { @apply text-sm text-muted-foreground; }
+.page-subtitle { @apply text-small text-meta; }

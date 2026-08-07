@@ -161,11 +161,11 @@ export function PaginatedPaintGrid({
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-meta">
           Showing {((currentPage - 1) * pageSize + 1).toLocaleString()}–{Math.min(currentPage * pageSize, totalCount).toLocaleString()} of {totalCount.toLocaleString()}
         </p>
         <div className="flex items-center gap-2">
-          <label htmlFor="page-size" className="text-sm text-muted-foreground">
+          <label htmlFor="page-size" className="text-sm text-meta">
             Per page:
           </label>
           <Select
@@ -210,7 +210,7 @@ export function PaginatedPaintGrid({
             )}
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">No paints available.</p>
+          <p className="text-sm text-meta">No paints available.</p>
         )}
       </div>
 
@@ -226,7 +226,7 @@ export function PaginatedPaintGrid({
 
           {visiblePages.map((page, i) =>
             page === null ? (
-              <span key={`ellipsis-${i}`} className="px-1 text-sm text-muted-foreground">
+              <span key={`ellipsis-${i}`} className="px-1 text-sm text-meta">
                 &hellip;
               </span>
             ) : (

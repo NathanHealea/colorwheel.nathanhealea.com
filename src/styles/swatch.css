@@ -1,0 +1,71 @@
+/*
+ * Swatch Component
+ *
+ * Undercoat primitive — no daisyUI equivalent. A swatch is a block of a paint's
+ * own colour, so the design system supplies only geometry: radius, clipping, and
+ * the bottle meniscus on the hero variant. The colour is always set inline from
+ * the paint's hex value:
+ *
+ *   <div className="swatch size-10" style={{ background: paint.hex }} />
+ *
+ * `background-clip: padding-box` keeps a translucent border from being tinted by
+ * the paint colour underneath it, which is what makes a light hairline border
+ * read correctly on both very dark and very light paints.
+ *
+ * `.card-mount` is the mat a swatch sits on. It is deliberately NOT theme-adaptive:
+ * in dark mode a swatch-bearing card gets LIGHTER, never darker, so the paint stays
+ * the brightest thing on screen. Use it for any card whose subject is a colour.
+ *
+ * Classes:
+ *   Base:    .swatch        — Radius + padding-box clip (colour set inline)
+ *   Shapes:  .swatch-circle — Fully round
+ *   Sizes:   .swatch-hero   — Card radius plus the inset bottle meniscus shadow
+ *   Mount:   .card-mount    — Light mat under swatches; stays light in dark mode
+ */
+
+/* -------------------------------------------------------------------------
+ * Base
+ * ----------------------------------------------------------------------- */
+.swatch {
+  border-radius: var(--radius-swatch);
+  background-clip: padding-box;
+}
+
+/* -------------------------------------------------------------------------
+ * Shapes
+ * ----------------------------------------------------------------------- */
+.swatch-circle {
+  @apply rounded-full;
+  background-clip: padding-box;
+}
+
+/* -------------------------------------------------------------------------
+ * Hero
+ * ----------------------------------------------------------------------- */
+.swatch-hero {
+  border-radius: var(--radius-card);
+  box-shadow: var(--inset-shadow-bottle);
+  background-clip: padding-box;
+}
+
+/* -------------------------------------------------------------------------
+ * Mount
+ * ----------------------------------------------------------------------- */
+.card-mount {
+  background: var(--color-surface-mount);
+  color: var(--color-graphite);
+  border-radius: var(--radius-card);
+}
+
+.dark .card-mount {
+  background: var(--color-surface-mount);
+  color: var(--color-graphite);
+  border-color: transparent;
+}
+
+/* Metadata inside a mount sits on a light ground even in dark mode, so it needs
+   the light-ground muted colour rather than the adaptive one. */
+.card-mount .label-micro,
+.card-mount .text-meta {
+  color: var(--color-slate-dim);
+}

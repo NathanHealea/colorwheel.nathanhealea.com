@@ -72,13 +72,13 @@ export function ProfileForm({
           autoComplete="username"
         />
         {clientError || state?.errors?.display_name ? (
-          <p className="form-message text-sm text-destructive">{clientError || state?.errors?.display_name}</p>
+          <p className="form-message text-sm text-danger">{clientError || state?.errors?.display_name}</p>
         ) : nameAlreadyTaken && suggestedName ? (
           <p className="text-sm text-amber-600 dark:text-amber-400">
             The name &apos;{suggestedName}&apos; is already taken. Please choose a different name.
           </p>
         ) : (
-          <p className="text-sm text-muted-foreground">3-20 characters. Letters, numbers, hyphens, and underscores only.</p>
+          <p className="text-sm text-meta">3-20 characters. Letters, numbers, hyphens, and underscores only.</p>
         )}
       </div>
       <Button type="submit" className="btn-primary" disabled={pending}>

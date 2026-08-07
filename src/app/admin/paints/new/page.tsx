@@ -39,7 +39,7 @@ export default async function AdminPaintNewPage() {
   return (
     <Main as="div">
       <div className="mb-6">
-        <Link href="/admin/paints" className="text-sm text-muted-foreground hover:text-foreground">
+        <Link href="/admin/paints" className="text-sm text-meta hover:text-copy">
           ← Back to paints
         </Link>
       </div>

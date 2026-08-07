@@ -26,7 +26,7 @@ const COMPONENTS = {
     <em className="italic">{props.children}</em>
   ),
   code: (props: { children?: ReactNode }) => (
-    <code className="rounded bg-muted px-1 py-0.5 font-mono text-sm">
+    <code className="rounded bg-inset px-1 py-0.5 font-mono text-sm">
       {props.children}
     </code>
   ),

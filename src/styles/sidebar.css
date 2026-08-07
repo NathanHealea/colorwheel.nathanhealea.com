@@ -5,14 +5,14 @@
  * https://daisyui.com/components/menu/
  *
  * Implements a vertical navigation sidebar using this project's
- * Tailwind CSS theme tokens instead of daisyUI's built-in theme system.
+ * Undercoat theme tokens instead of daisyUI's built-in theme system.
  *
  * Classes:
  *   Base:    .sidebar              — Fixed-width vertical container with right border
  *   Nav:     .sidebar-nav          — Navigation list (vertical flex)
- *   Items:   .sidebar-item         — Navigation link (text + padding + hover)
+ *   Items:   .sidebar-item         — Navigation link (rounded-control, text-body)
  *            .sidebar-item-active  — Active state (background highlight)
- *   Header:  .sidebar-header       — Section heading label
+ *   Header:  .sidebar-header       — Mono uppercase micro-caption section label
  *   Mobile:  .sidebar-overlay      — Backdrop overlay for mobile drawer
  *            .sidebar-toggle       — Hamburger button visible on mobile
  */
@@ -22,7 +22,7 @@
  * ----------------------------------------------------------------------- */
 .sidebar {
   @apply hidden w-60 flex-col
-    border-r border-border bg-background
+    border-r border-rule bg-canvas
     lg:flex;
 }
 
@@ -37,14 +37,14 @@
  * Items
  * ----------------------------------------------------------------------- */
 .sidebar-item {
-  @apply block rounded-md px-3 py-2
-    text-sm text-muted-foreground no-underline
+  @apply block rounded-control px-3 py-2
+    text-body text-meta no-underline
     transition-colors
-    hover:bg-muted hover:text-foreground;
+    hover:bg-inset hover:text-copy;
 }
 
 .sidebar-item-active {
-  @apply bg-muted font-medium text-foreground;
+  @apply bg-inset font-medium text-copy;
 }
 
 /* -------------------------------------------------------------------------
@@ -52,7 +52,7 @@
  * ----------------------------------------------------------------------- */
 .sidebar-header {
   @apply px-3 pt-4 pb-1
-    text-xs font-semibold uppercase text-muted-foreground;
+    font-mono text-micro uppercase text-meta;
 }
 
 /* -------------------------------------------------------------------------
@@ -66,7 +66,7 @@
 
 .sidebar-mobile {
   @apply fixed inset-y-0 left-0 z-50 flex w-60 flex-col
-    border-r border-border bg-background
+    border-r border-rule bg-canvas
     lg:hidden;
 }
 
@@ -74,8 +74,8 @@
  * Mobile toggle
  * ----------------------------------------------------------------------- */
 .sidebar-toggle {
-  @apply inline-flex items-center justify-center rounded-md p-2
-    text-muted-foreground
-    hover:bg-muted hover:text-foreground
+  @apply inline-flex items-center justify-center rounded-control p-2
+    text-meta
+    hover:bg-inset hover:text-copy
     lg:hidden;
 }

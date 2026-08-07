@@ -89,7 +89,7 @@ export function BaseColorPicker({
           />
           {hexPreviewColor && (
             <span
-              className="inline-block size-8 rounded border border-border"
+              className="inline-block size-8 rounded-swatch border border-rule"
               style={{ backgroundColor: hexPreviewColor }}
               aria-label={`Preview: ${hexPreviewColor}`}
             />

@@ -115,7 +115,13 @@ export function WheelFiltersPanel({
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search paints…"
-          className="input-sm w-48 rounded-lg border border-border bg-background px-3 py-1.5 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+          /* `bg-canvas` is the one override this field needs — it floats over the
+             wheel, so the `.input` default of `bg-transparent` would let paint dots
+             show through the text. Everything else (border, radius, padding, hover,
+             focus ring) comes from `.input` + `.input-sm`; the ad-hoc
+             `focus:ring-1 focus:ring-signal-on` that used to live here fired on
+             pointer focus and drew a ring a third the weight of every other field. */
+          className="input-sm w-48 bg-canvas shadow-sm"
           aria-label="Search paints"
         />
       </div>
@@ -143,7 +149,7 @@ export function WheelFiltersPanel({
           <Button
             type="button"
             onClick={onClearAll}
-            className="btn-ghost btn-sm text-muted-foreground"
+            className="btn-ghost btn-sm text-meta"
             aria-label="Clear all filters"
           >
             Clear all
@@ -183,15 +189,15 @@ export function WheelFiltersPanel({
 
       {/* Expanded panel */}
       {open && (
-        <div className="pointer-events-auto flex max-h-[70vh] w-64 flex-col gap-4 overflow-y-auto rounded-lg border border-border bg-background p-4 shadow-lg">
+        <div className="pointer-events-auto flex max-h-[70vh] w-64 flex-col gap-4 overflow-y-auto rounded-lg border border-rule bg-canvas p-4 shadow-lg">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold">Filters</span>
+            <span className="text-body font-semibold">Filters</span>
             {activeCount > 0 && (
               <Button
                 type="button"
                 onClick={onClearAll}
-                className="btn-ghost btn-xs text-muted-foreground"
+                className="btn-ghost btn-xs text-meta"
               >
                 Clear all
               </Button>
@@ -218,11 +224,11 @@ export function WheelFiltersPanel({
           {/* My collection toggle */}
           {showOwnedFilter && (
             <FilterSection label="Collection">
-              <label className="flex cursor-pointer items-center justify-between gap-2 text-sm">
+              <label className="flex cursor-pointer items-center justify-between gap-2 text-body">
                 <span>My collection only</span>
                 <input
                   type="checkbox"
-                  className="h-4 w-4 cursor-pointer accent-primary"
+                  className="checkbox checkbox-sm"
                   checked={state.ownedOnly}
                   onChange={(e) => onOwnedOnlyChange(e.target.checked)}
                 />
@@ -232,21 +238,21 @@ export function WheelFiltersPanel({
 
           {/* Dot decoration toggles */}
           <FilterSection label="Display">
-            <label className="flex cursor-pointer items-center justify-between gap-2 text-sm">
+            <label className="flex cursor-pointer items-center justify-between gap-2 text-body">
               <span>Brand ring</span>
               <input
                 type="checkbox"
-                className="h-4 w-4 cursor-pointer accent-primary"
+                className="checkbox checkbox-sm"
                 checked={showBrandRing}
                 onChange={(e) => onBrandRingChange(e.target.checked)}
               />
             </label>
             {showOwnedFilter && (
-              <label className="flex cursor-pointer items-center justify-between gap-2 text-sm">
+              <label className="flex cursor-pointer items-center justify-between gap-2 text-body">
                 <span>Owned ring</span>
                 <input
                   type="checkbox"
-                  className="h-4 w-4 cursor-pointer accent-primary"
+                  className="checkbox checkbox-sm"
                   checked={showOwnedRing}
                   onChange={(e) => onOwnedRingChange(e.target.checked)}
                 />
@@ -256,7 +262,7 @@ export function WheelFiltersPanel({
 
           {/* Active chip summary at bottom of open panel */}
           {activeCount > 0 && (
-            <div className="flex flex-wrap gap-1 border-t border-border pt-3">
+            <div className="flex flex-wrap gap-1 border-t border-rule pt-3">
               {state.brandIds.map((id) => (
                 <FilterChip
                   key={`brand-${id}`}
@@ -292,7 +298,9 @@ export function WheelFiltersPanel({
 function FilterSection({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+      {/* `text-micro` is the ramp's slot for uppercase section labels and carries
+          its own 0.06em tracking, so the ad-hoc `tracking-wide` goes with it. */}
+      <p className="text-micro font-medium uppercase text-meta">{label}</p>
       {children}
     </div>
   )
@@ -308,10 +316,10 @@ function CheckRow({
   onChange: () => void
 }) {
   return (
-    <label className="flex cursor-pointer items-center gap-2 text-sm">
+    <label className="flex cursor-pointer items-center gap-2 text-body">
       <input
         type="checkbox"
-        className="h-4 w-4 cursor-pointer accent-primary"
+        className="checkbox checkbox-sm"
         checked={checked}
         onChange={onChange}
       />
@@ -327,7 +335,7 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
       <button
         type="button"
         onClick={onRemove}
-        className="ml-0.5 hover:text-foreground"
+        className="ml-0.5 hover:text-copy"
         aria-label={`Remove ${label} filter`}
       >
         ✕

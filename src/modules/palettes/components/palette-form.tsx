@@ -66,7 +66,7 @@ export function PaletteForm({ palette, armies = [] }: { palette: Palette; armies
           placeholder="My palette"
         />
         {state.errors.name && (
-          <p className="text-sm text-destructive">{state.errors.name}</p>
+          <p className="text-sm text-danger">{state.errors.name}</p>
         )}
       </div>
 
@@ -106,7 +106,7 @@ export function PaletteForm({ palette, armies = [] }: { palette: Palette; armies
             defaultValue={state.values.armyId}
             name="army_id"
           />
-          <p className="text-xs text-muted-foreground">Optional — associate this palette with an army.</p>
+          <p className="text-xs text-meta">Optional — associate this palette with an army.</p>
         </div>
       )}
 

@@ -10,7 +10,7 @@ export default function UserPalettesLoading() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {Array.from({ length: 8 }, (_, i) => (
-          <div key={i} className="flex flex-col gap-3 rounded-lg border border-border p-4">
+          <div key={i} className="flex flex-col gap-3 rounded-lg border border-rule p-4">
             <div className="flex h-16 gap-1">
               {Array.from({ length: 5 }, (_, j) => (
                 <Skeleton key={j} className="h-full flex-1" />

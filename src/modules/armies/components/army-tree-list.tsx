@@ -25,7 +25,7 @@ function DeleteSubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="btn btn-ghost btn-sm text-destructive hover:bg-destructive/10"
+      className="btn btn-ghost btn-sm text-danger hover:bg-danger/10"
     >
       {pending ? 'Deleting…' : 'Delete'}
     </button>
@@ -49,7 +49,7 @@ function DeleteArmyForm({ armyId, armyName }: DeleteFormProps) {
         <DeleteSubmitButton />
       </form>
       {state?.error && (
-        <p className="mt-1 text-xs text-destructive max-w-xs">{state.error}</p>
+        <p className="mt-1 text-xs text-danger max-w-xs">{state.error}</p>
       )}
       {/* Suppress unused variable warning — armyName used for accessibility. */}
       <span className="sr-only">{armyName}</span>
@@ -82,7 +82,7 @@ type ArmyRowProps = {
 function ArmyRow({ node, depth, parentName }: ArmyRowProps) {
   return (
     <>
-      <tr className="border-b border-border/50">
+      <tr className="border-b border-rule/50">
         <td className="py-2 pr-3 w-8">
           {node.icon_url ? (
             <img
@@ -91,7 +91,7 @@ function ArmyRow({ node, depth, parentName }: ArmyRowProps) {
               className="h-6 w-6 rounded object-contain"
             />
           ) : (
-            <span className="inline-block h-6 w-6 rounded border border-border/30 bg-muted" />
+            <span className="inline-block h-6 w-6 rounded border border-rule/30 bg-inset" />
           )}
         </td>
         <td
@@ -100,10 +100,10 @@ function ArmyRow({ node, depth, parentName }: ArmyRowProps) {
         >
           {node.name}
         </td>
-        <td className="py-2 pr-4 text-sm text-muted-foreground">
+        <td className="py-2 pr-4 text-sm text-meta">
           {parentName ?? '—'}
         </td>
-        <td className="py-2 pr-4 text-sm tabular-nums text-muted-foreground">
+        <td className="py-2 pr-4 text-sm tabular-nums text-meta">
           {node.sort_order ?? '—'}
         </td>
         <td className="py-2">
@@ -133,14 +133,14 @@ function ArmyRow({ node, depth, parentName }: ArmyRowProps) {
  */
 export function ArmyTreeList({ armies }: ArmyTreeListProps) {
   if (armies.length === 0) {
-    return <p className="text-sm text-muted-foreground">No armies found.</p>
+    return <p className="text-sm text-meta">No armies found.</p>
   }
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-border text-left">
+          <tr className="border-b border-rule text-left">
             <th className="pb-2 pr-3 font-medium w-8">Icon</th>
             <th className="pb-2 pr-4 font-medium">Name</th>
             <th className="pb-2 pr-4 font-medium">Parent</th>

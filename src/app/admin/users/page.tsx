@@ -82,7 +82,7 @@ export default async function AdminUsersPage({
           </Link>
         )}
 
-        <span className="ml-auto text-xs text-muted-foreground">
+        <span className="ml-auto text-xs text-meta">
           {count} user{count !== 1 ? 's' : ''}
         </span>
       </div>
@@ -106,7 +106,7 @@ export default async function AdminUsersPage({
             <span className="btn btn-ghost btn-sm btn-disabled opacity-50">← Prev</span>
           )}
 
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-meta">
             Page {currentPage} of {totalPages}
           </span>
 

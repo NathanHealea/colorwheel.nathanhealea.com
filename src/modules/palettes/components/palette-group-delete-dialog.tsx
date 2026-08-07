@@ -56,7 +56,7 @@ export function PaletteGroupDeleteDialog({
       <DialogContent className="w-full max-w-sm p-6">
         <DialogHeader>
           <DialogTitle>Delete group?</DialogTitle>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-sm text-meta">
             Delete the group <span className="font-medium">&ldquo;{group.name}&rdquo;</span>? Paints in this
             group will become ungrouped — they won&apos;t be removed from the palette.
           </p>

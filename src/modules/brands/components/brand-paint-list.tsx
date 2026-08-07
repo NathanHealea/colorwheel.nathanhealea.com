@@ -45,8 +45,8 @@ export function BrandPaintList({
           <section key={line.id}>
             <div className="mb-4">
               <h2 className="text-xl font-semibold">{line.name}</h2>
-              {line.description && <p className="text-sm text-muted-foreground">{line.description}</p>}
-              <p className="text-sm text-muted-foreground">
+              {line.description && <p className="text-sm text-meta">{line.description}</p>}
+              <p className="text-sm text-meta">
                 {linePaints.length} {linePaints.length === 1 ? 'paint' : 'paints'}
               </p>
             </div>
@@ -71,7 +71,7 @@ export function BrandPaintList({
                 )}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No paints in this product line.</p>
+              <p className="text-sm text-meta">No paints in this product line.</p>
             )}
           </section>
         )

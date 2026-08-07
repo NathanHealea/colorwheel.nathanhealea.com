@@ -109,7 +109,7 @@ export default async function UserProfilePage({
               {profile.display_name ?? 'Unnamed user'}
             </CardTitle>
             {joined && (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-meta">
                 Joined {joined}
               </p>
             )}
@@ -124,7 +124,7 @@ export default async function UserProfilePage({
           {profile.bio ? (
             <MarkdownRenderer content={profile.bio} />
           ) : (
-            <p className="text-sm text-muted-foreground italic">
+            <p className="text-sm text-meta italic">
               This user hasn&apos;t written a bio yet.
             </p>
           )}

@@ -16,16 +16,16 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="mt-auto border-t bg-background">
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 px-6 pt-6 pb-3 text-sm text-muted-foreground sm:flex-row">
+    <footer className="mt-auto border-t bg-canvas">
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 px-6 pt-6 pb-3 text-sm text-meta sm:flex-row">
         <p>&copy; {year} Grimify</p>
         <nav aria-label="Footer" className="flex flex-wrap items-center gap-4">
-          <Link href="/terms" className="hover:text-foreground hover:underline underline-offset-4">
+          <Link href="/terms" className="hover:text-copy hover:underline underline-offset-4">
             Terms of Use
           </Link>
           <Link
             href="/code-of-conduct"
-            className="hover:text-foreground hover:underline underline-offset-4"
+            className="hover:text-copy hover:underline underline-offset-4"
           >
             Code of Conduct
           </Link>
@@ -33,7 +33,7 @@ export function Footer() {
             href="https://github.com/NathanHealea/grimify.app"
             target="_blank"
             rel="noreferrer"
-            className="hover:text-foreground hover:underline underline-offset-4"
+            className="hover:text-copy hover:underline underline-offset-4"
           >
             GitHub
           </a>
@@ -41,7 +41,7 @@ export function Footer() {
       </div>
       <div className="mx-auto w-full max-w-6xl px-6 pb-6 text-center">
         <small
-          className="text-xs text-muted-foreground"
+          className="text-xs text-meta"
           aria-label={`Application version ${APP_VERSION}`}
         >
           v{APP_VERSION}

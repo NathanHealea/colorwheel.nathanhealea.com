@@ -66,7 +66,7 @@ export function NewPaletteInlineForm({
         disabled={isPending}
       />
       {nameError && (
-        <p className="text-xs text-destructive" aria-live="polite">
+        <p className="text-xs text-danger" aria-live="polite">
           {nameError}
         </p>
       )}

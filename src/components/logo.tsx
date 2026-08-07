@@ -70,7 +70,7 @@ function Mark({ height, title }: { height: number; title: string }) {
  * Brand logo. Renders the mark, wordmark, or both side by side.
  *
  * The mark is the Grimify logo PNG. The wordmark is plain text styled with the
- * site's display font (Geist) and inherits `currentColor`, so it themes via
+ * site's display font (Space Grotesk) and inherits `currentColor`, so it themes via
  * Tailwind text utilities.
  *
  * @param props - See {@link LogoProps}.

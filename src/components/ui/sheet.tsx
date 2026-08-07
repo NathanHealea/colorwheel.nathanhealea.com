@@ -67,9 +67,9 @@ function SheetContent({
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close
-            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background
+            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-canvas
               transition-opacity hover:opacity-100 focus:outline-none focus:ring-2
-              focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+              focus:ring-signal-on focus:ring-offset-2 disabled:pointer-events-none"
             aria-label="Close"
           >
             <X className="size-4" />
@@ -122,7 +122,7 @@ function SheetDescription({
   return (
     <DialogPrimitive.Description
       data-slot="sheet-description"
-      className={cn('text-sm text-muted-foreground', className)}
+      className={cn('text-sm text-meta', className)}
       {...props}
     />
   )

@@ -21,12 +21,12 @@ export interface NotFoundContentProps {
  */
 export function NotFoundContent({ isAuthenticated }: NotFoundContentProps) {
   return (
-    <section className=" bg-gradient-to-b from-muted/40 to-background rounded rounded-b-none rounded-t-3xl">
+    <section className=" bg-gradient-to-b from-inset/40 to-canvas rounded rounded-b-none rounded-t-3xl">
       <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-4 py-16 text-center sm:py-24">
         <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
           Page not found
         </h1>
-        <p className="text-lg text-muted-foreground text-balance sm:text-xl">
+        <p className="text-lg text-meta text-balance sm:text-xl">
           We couldn&apos;t find that page. It may have been moved, deleted, or the link might be
           wrong.
         </p>
@@ -36,19 +36,19 @@ export function NotFoundContent({ isAuthenticated }: NotFoundContentProps) {
           </Link>
         </div>
         <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3">
-          <Link href="/paints" className="card transition-colors hover:bg-accent">
+          <Link href="/paints" className="card transition-colors hover:bg-inset">
             <CardHeader>
               <CardTitle className="text-base">Browse paints</CardTitle>
               <CardDescription>Search across every major brand</CardDescription>
             </CardHeader>
           </Link>
-          <Link href="/brands" className="card transition-colors hover:bg-accent">
+          <Link href="/brands" className="card transition-colors hover:bg-inset">
             <CardHeader>
               <CardTitle className="text-base">Explore brands</CardTitle>
               <CardDescription>Browse paint lines by manufacturer</CardDescription>
             </CardHeader>
           </Link>
-          <Link href="/palettes" className="card transition-colors hover:bg-accent">
+          <Link href="/palettes" className="card transition-colors hover:bg-inset">
             <CardHeader>
               <CardTitle className="text-base">Discover palettes</CardTitle>
               <CardDescription>Find inspiration from the community</CardDescription>
@@ -56,13 +56,13 @@ export function NotFoundContent({ isAuthenticated }: NotFoundContentProps) {
           </Link>
           {isAuthenticated && (
             <>
-              <Link href="/collection" className="card transition-colors hover:bg-accent">
+              <Link href="/collection" className="card transition-colors hover:bg-inset">
                 <CardHeader>
                   <CardTitle className="text-base">Your collection</CardTitle>
                   <CardDescription>Pick up where you left off</CardDescription>
                 </CardHeader>
               </Link>
-              <Link href="/user/palettes" className="card transition-colors hover:bg-accent">
+              <Link href="/user/palettes" className="card transition-colors hover:bg-inset">
                 <CardHeader>
                   <CardTitle className="text-base">Your palettes</CardTitle>
                   <CardDescription>View and manage your palettes</CardDescription>

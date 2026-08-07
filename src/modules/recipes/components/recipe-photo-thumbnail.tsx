@@ -104,7 +104,7 @@ export function RecipePhotoThumbnail({
       ref={setNodeRef}
       style={style}
       className={[
-        'group relative aspect-square overflow-hidden rounded-md border border-border bg-muted',
+        'group relative aspect-square overflow-hidden rounded-md border border-rule bg-inset',
         isDragging ? 'shadow-lg' : '',
       ]
         .filter(Boolean)
@@ -146,7 +146,7 @@ export function RecipePhotoThumbnail({
                 type="button"
                 onClick={handleSetCover}
                 disabled={isCovering}
-                className="btn-xs btn-square btn-ghost bg-background/80 hover:bg-background"
+                className="btn-xs btn-square btn-ghost bg-canvas/80 hover:bg-canvas"
                 aria-label={isCover ? 'Clear cover photo' : 'Set as cover photo'}
                 aria-pressed={isCover}
                 title={isCover ? 'Clear cover photo' : 'Set as cover photo'}
@@ -167,7 +167,7 @@ export function RecipePhotoThumbnail({
             <Button
               type="button"
               onClick={() => setIsEditingCaption((s) => !s)}
-              className="btn-xs btn-square btn-ghost bg-background/80 hover:bg-background"
+              className="btn-xs btn-square btn-ghost bg-canvas/80 hover:bg-canvas"
               aria-label={isEditingCaption ? 'Hide caption editor' : 'Edit caption'}
               aria-pressed={isEditingCaption}
               title={isEditingCaption ? 'Hide caption' : 'Edit caption'}
@@ -182,7 +182,7 @@ export function RecipePhotoThumbnail({
               type="button"
               onClick={handleDelete}
               disabled={isDeleting}
-              className="btn-xs btn-square btn-ghost bg-background/80 hover:bg-background text-destructive hover:text-destructive"
+              className="btn-xs btn-square btn-ghost bg-canvas/80 hover:bg-canvas text-danger hover:text-danger"
               aria-label="Delete photo"
               title="Delete photo"
             >

@@ -76,7 +76,7 @@ export function PaintDetail({
       {/* Swatch and heading */}
       <div className="flex flex-col items-start gap-6 sm:flex-row">
         <div
-          className="size-32 shrink-0 rounded-xl border border-border shadow-sm"
+          className="size-32 shrink-0 rounded-xl border border-rule shadow-sm"
           style={paintSwatchBackground(paint.hex, paint.paint_type, paint.is_metallic)}
           aria-label={`Color swatch for ${paint.name}`}
         />
@@ -104,8 +104,8 @@ export function PaintDetail({
               </Link>
             )}
           </div>
-          <p className="text-muted-foreground">
-            <Link href={`/brands/${brand.id}`} className="underline hover:text-foreground">
+          <p className="text-meta">
+            <Link href={`/brands/${brand.id}`} className="underline hover:text-copy">
               {brand.name}
             </Link>
             {' \u2014 '}
@@ -113,7 +113,7 @@ export function PaintDetail({
           </p>
           <div className="flex flex-wrap gap-2">
             {paint.paint_type && (
-              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+              <span className="rounded-full bg-signal/10 px-2 py-0.5 text-xs font-medium text-signal-on">
                 {paint.paint_type}
               </span>
             )}
@@ -129,18 +129,18 @@ export function PaintDetail({
 
       {/* Color values */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-lg border border-border p-4">
-          <h3 className="mb-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">Hex</h3>
+        <div className="rounded-lg border border-rule p-4">
+          <h3 className="mb-1 text-xs font-medium uppercase tracking-wider text-meta">Hex</h3>
           <p className="font-mono text-lg">{paint.hex}</p>
         </div>
-        <div className="rounded-lg border border-border p-4">
-          <h3 className="mb-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">RGB</h3>
+        <div className="rounded-lg border border-rule p-4">
+          <h3 className="mb-1 text-xs font-medium uppercase tracking-wider text-meta">RGB</h3>
           <p className="font-mono text-lg">
             {paint.r}, {paint.g}, {paint.b}
           </p>
         </div>
-        <div className="rounded-lg border border-border p-4">
-          <h3 className="mb-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">HSL</h3>
+        <div className="rounded-lg border border-rule p-4">
+          <h3 className="mb-1 text-xs font-medium uppercase tracking-wider text-meta">HSL</h3>
           <p className="font-mono text-lg">
             {paint.hue}&deg;, {paint.saturation}%, {paint.lightness}%
           </p>
@@ -150,15 +150,15 @@ export function PaintDetail({
       {/* Hue classification */}
       {subHue && (
         <div className="flex flex-col gap-3">
-          <h2 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Hue</h2>
+          <h2 className="text-xs font-medium uppercase tracking-wider text-meta">Hue</h2>
           <div className="flex flex-wrap items-center gap-2">
             {parentHue && (
               <Link
                 href={`/hues/${parentHue.id}`}
-                className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent"
+                className="inline-flex items-center gap-2 rounded-full border border-rule px-3 py-1.5 text-sm font-medium transition-colors hover:bg-inset"
               >
                 <span
-                  className="size-3 shrink-0 rounded-full border border-border"
+                  className="size-3 shrink-0 rounded-full border border-rule"
                   style={{ backgroundColor: parentHue.hex_code }}
                   aria-hidden="true"
                 />
@@ -166,14 +166,14 @@ export function PaintDetail({
               </Link>
             )}
             {parentHue && (
-              <span className="text-muted-foreground" aria-hidden="true">/</span>
+              <span className="text-meta" aria-hidden="true">/</span>
             )}
             <Link
               href={`/hues/${subHue.id}`}
-              className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent"
+              className="inline-flex items-center gap-2 rounded-full border border-rule px-3 py-1.5 text-sm font-medium transition-colors hover:bg-inset"
             >
               <span
-                className="size-3 shrink-0 rounded-full border border-border"
+                className="size-3 shrink-0 rounded-full border border-rule"
                 style={{ backgroundColor: subHue.hex_code }}
                 aria-hidden="true"
               />

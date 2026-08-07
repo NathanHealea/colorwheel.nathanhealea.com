@@ -53,7 +53,7 @@ export async function Navbar() {
       : ({ kind: 'guest' as const })
 
   return (
-    <nav className="navbar sticky top-0 z-50 gap-2 bg-background">
+    <nav className="navbar sticky top-0 z-50 gap-2 bg-canvas">
       <div className="navbar-start gap-2">
         <Link href="/" className="navbar-brand inline-flex items-center" aria-label="Grimify home">
           <Logo size="md" />

@@ -91,7 +91,7 @@ export function BrandForm({ action, defaultValues, mode }: BrandFormProps) {
       )}
 
       {state?.error && (
-        <p className="text-sm text-destructive">{state.error}</p>
+        <p className="text-sm text-danger">{state.error}</p>
       )}
 
       {state?.success && (
@@ -101,7 +101,7 @@ export function BrandForm({ action, defaultValues, mode }: BrandFormProps) {
       {/* Name */}
       <div className="flex flex-col gap-1">
         <label htmlFor="brand-name" className="form-label text-sm">
-          Name <span className="text-destructive">*</span>
+          Name <span className="text-danger">*</span>
         </label>
         <Input
           id="brand-name"
@@ -114,14 +114,14 @@ export function BrandForm({ action, defaultValues, mode }: BrandFormProps) {
           placeholder="e.g. Citadel"
         />
         {state?.errors?.name && (
-          <p className="text-xs text-destructive">{state.errors.name}</p>
+          <p className="text-xs text-danger">{state.errors.name}</p>
         )}
       </div>
 
       {/* Slug */}
       <div className="flex flex-col gap-1">
         <label htmlFor="brand-slug" className="form-label text-sm">
-          Slug <span className="text-destructive">*</span>
+          Slug <span className="text-danger">*</span>
         </label>
         <Input
           id="brand-slug"
@@ -134,7 +134,7 @@ export function BrandForm({ action, defaultValues, mode }: BrandFormProps) {
           placeholder="e.g. citadel"
         />
         {state?.errors?.slug && (
-          <p className="text-xs text-destructive">{state.errors.slug}</p>
+          <p className="text-xs text-danger">{state.errors.slug}</p>
         )}
       </div>
 
@@ -152,7 +152,7 @@ export function BrandForm({ action, defaultValues, mode }: BrandFormProps) {
           placeholder="https://example.com"
         />
         {state?.errors?.website_url && (
-          <p className="text-xs text-destructive">{state.errors.website_url}</p>
+          <p className="text-xs text-danger">{state.errors.website_url}</p>
         )}
       </div>
 
@@ -170,7 +170,7 @@ export function BrandForm({ action, defaultValues, mode }: BrandFormProps) {
           placeholder="https://example.com/logo.png"
         />
         {state?.errors?.logo_url && (
-          <p className="text-xs text-destructive">{state.errors.logo_url}</p>
+          <p className="text-xs text-danger">{state.errors.logo_url}</p>
         )}
       </div>
 

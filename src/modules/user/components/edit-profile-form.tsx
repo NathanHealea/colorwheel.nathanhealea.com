@@ -213,8 +213,8 @@ export function EditProfileForm({
               className={cn(
                 'flex min-w-48 flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-6 text-center transition-colors select-none',
                 isDragOver
-                  ? 'border-primary bg-primary/5 text-primary'
-                  : 'border-border text-muted-foreground hover:border-muted-foreground/50 hover:text-foreground'
+                  ? 'border-signal-on bg-signal/5 text-signal-on'
+                  : 'border-rule text-meta hover:border-meta/50 hover:text-copy'
               )}
             >
               {previewUrl ? (
@@ -243,7 +243,7 @@ export function EditProfileForm({
             />
           </div>
           {(avatarError || fieldErrors.avatar) && (
-            <p className="text-sm text-destructive">{avatarError || fieldErrors.avatar}</p>
+            <p className="text-sm text-danger">{avatarError || fieldErrors.avatar}</p>
           )}
         </CardContent>
       </Card>
@@ -270,9 +270,9 @@ export function EditProfileForm({
               autoComplete="username"
             />
             {fieldErrors.display_name ? (
-              <p className="text-sm text-destructive">{fieldErrors.display_name}</p>
+              <p className="text-sm text-danger">{fieldErrors.display_name}</p>
             ) : (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-meta">
                 3-20 characters. Letters, numbers, hyphens, and underscores only.
               </p>
             )}
@@ -323,7 +323,7 @@ export function EditProfileForm({
                 placeholder="••••••••"
                 autoComplete="new-password"
               />
-              {fieldErrors.password && <p className="text-sm text-destructive">{fieldErrors.password}</p>}
+              {fieldErrors.password && <p className="text-sm text-danger">{fieldErrors.password}</p>}
             </div>
             <div className="form-item">
               <Label htmlFor="confirmPassword">Confirm new password</Label>
@@ -336,7 +336,7 @@ export function EditProfileForm({
                 placeholder="••••••••"
                 autoComplete="new-password"
               />
-              {fieldErrors.confirmPassword && <p className="text-sm text-destructive">{fieldErrors.confirmPassword}</p>}
+              {fieldErrors.confirmPassword && <p className="text-sm text-danger">{fieldErrors.confirmPassword}</p>}
             </div>
           </CardContent>
         </Card>

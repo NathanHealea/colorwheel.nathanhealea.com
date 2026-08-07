@@ -29,7 +29,7 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
           </div>
         )}
         {error && (
-          <div className="mb-4 rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="mb-4 rounded-lg border border-danger/20 bg-danger/10 p-3 text-sm text-danger">
             {error}
           </div>
         )}
@@ -39,9 +39,9 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
         <OAuthButtons />
       </CardContent>
       <CardFooter className="justify-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-meta">
           Don&apos;t have an account?{' '}
-          <Link href="/sign-up" className="text-primary underline-offset-4 hover:underline">
+          <Link href="/sign-up" className="text-signal-on underline-offset-4 hover:underline">
             Sign up
           </Link>
         </p>

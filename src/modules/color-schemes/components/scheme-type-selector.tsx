@@ -46,7 +46,7 @@ export function SchemeTypeSelector({
 
       {value === 'analogous' && (
         <label className="flex items-center gap-3 text-sm">
-          <span className="w-24 shrink-0 text-muted-foreground">
+          <span className="w-24 shrink-0 text-meta">
             Spread: {analogousAngle}°
           </span>
           <input
@@ -56,7 +56,7 @@ export function SchemeTypeSelector({
             step={1}
             value={analogousAngle}
             onChange={(e) => onAnalogousAngleChange(Number(e.target.value))}
-            className="w-48 accent-primary"
+            className="w-48 accent-signal"
             aria-label={`Analogous spread angle: ${analogousAngle}°`}
           />
         </label>

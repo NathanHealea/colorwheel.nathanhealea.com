@@ -1,0 +1,137 @@
+/*
+ * Checkbox & Radio Component
+ *
+ * Based on the daisyUI Checkbox and Radio component APIs.
+ * https://daisyui.com/components/checkbox/
+ * https://daisyui.com/components/radio/
+ *
+ * Implements daisyUI's class naming conventions using this project's
+ * Undercoat theme tokens instead of daisyUI's built-in theme system.
+ *
+ * Both controls are `appearance: none` so the native (browser-blue) tick never
+ * renders. Unchecked they are a hairline box on the ambient ground; checked they
+ * fill with `--color-signal`, because a ticked box means ownership or an active
+ * filter — two of the three things amber is allowed to mean.
+ *
+ * The check/dot glyph is a `background-image` data URI. Data URIs cannot read CSS
+ * custom properties, so the mark's colour is written literally as `--color-ink`
+ * (#0e1013). That is faithful rather than a shortcut: `ink` is a fixed token that
+ * does not flip with the theme, and the amber fill under it never changes either,
+ * so the pairing is correct in both modes.
+ *
+ * Classes:
+ *   Base:    .checkbox           — Square control (size-4, rounded-swatch)
+ *            .radio              — Round control (size-4, rounded-full)
+ *   Sizes:   .checkbox-xs        — Extra-small (size-3)
+ *            .checkbox-sm        — Small (size-3.5)
+ *            .checkbox-md        — Medium / default (size-4)
+ *            .checkbox-lg        — Large (size-5)
+ *            .radio-xs/-sm/-md/-lg — Matching radio sizes
+ *   Colors:  .checkbox-error     — Danger border, for invalid required groups
+ *   States:  :checked            — Amber fill + ink mark
+ *            :indeterminate      — Amber fill + ink dash (checkbox only)
+ *            :disabled           — opacity-50, pointer-events-none
+ */
+
+/* -------------------------------------------------------------------------
+ * Base — shared between checkbox and radio
+ * ----------------------------------------------------------------------- */
+.checkbox,
+.radio {
+  @apply size-4 shrink-0 cursor-pointer appearance-none border border-rule bg-transparent
+    transition-colors outline-none
+    hover:border-rule-strong
+    focus-visible:border-signal-on focus-visible:ring-3 focus-visible:ring-signal-on/50
+    disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.checkbox {
+  @apply rounded-swatch;
+}
+
+.radio {
+  @apply rounded-full;
+}
+
+/* --- */
+
+/* -------------------------------------------------------------------------
+ * Checked / indeterminate
+ *
+ * Declared after the base so the amber fill wins over `hover:border-rule-strong`
+ * at equal specificity — a ticked box must not lose its fill on hover.
+ * ----------------------------------------------------------------------- */
+.checkbox:checked,
+.checkbox:indeterminate,
+.radio:checked {
+  @apply border-signal bg-signal;
+}
+
+.checkbox:checked {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230e1013' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M3.5 8.5 6.5 11.5 12.5 5.5'/%3e%3c/svg%3e");
+}
+
+.checkbox:indeterminate {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230e1013' stroke-width='2.5' stroke-linecap='round'%3e%3cpath d='M4 8h8'/%3e%3c/svg%3e");
+}
+
+.radio:checked {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230e1013'%3e%3ccircle cx='8' cy='8' r='3.25'/%3e%3c/svg%3e");
+}
+
+/* Hovering an already-ticked control deepens the amber rather than dropping it. */
+.checkbox:checked:hover,
+.checkbox:indeterminate:hover,
+.radio:checked:hover {
+  @apply border-accent-600 bg-accent-600;
+}
+
+/* --- */
+
+/* -------------------------------------------------------------------------
+ * Sizes
+ * ----------------------------------------------------------------------- */
+.checkbox-xs,
+.radio-xs {
+  @apply size-3;
+}
+
+.checkbox-sm,
+.radio-sm {
+  @apply size-3.5;
+}
+
+.checkbox-md,
+.radio-md {
+  @apply size-4;
+}
+
+.checkbox-lg,
+.radio-lg {
+  @apply size-5;
+}
+
+/* --- */
+
+/* -------------------------------------------------------------------------
+ * Colors
+ *
+ * Placed after the checked block so an invalid group keeps its terracotta
+ * border even when ticked — the error outranks the fill.
+ * ----------------------------------------------------------------------- */
+.checkbox-error,
+.radio-error,
+.checkbox[aria-invalid='true'],
+.radio[aria-invalid='true'] {
+  @apply border-danger;
+}
+
+.checkbox-error:focus-visible,
+.radio-error:focus-visible,
+.checkbox[aria-invalid='true']:focus-visible,
+.radio[aria-invalid='true']:focus-visible {
+  @apply border-danger ring-3 ring-danger/40;
+}

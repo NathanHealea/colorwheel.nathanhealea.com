@@ -122,7 +122,7 @@ export function PaletteBuilder({
         />
       </div>
 
-      <div className="flex justify-end border-t border-border pt-4">
+      <div className="flex justify-end border-t border-rule pt-4">
         <DeletePaletteButton palette={palette} />
       </div>
     </div>

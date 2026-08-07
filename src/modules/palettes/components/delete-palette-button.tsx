@@ -61,7 +61,7 @@ export function DeletePaletteButton({ palette }: { palette: Palette }) {
         <DialogContent className="w-full max-w-sm p-6">
           <DialogHeader>
             <DialogTitle>Delete palette?</DialogTitle>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-meta">
               Permanently delete{' '}
               <span className="font-medium">{palette.name}</span> and all its
               paint slots. This action cannot be undone.

@@ -159,7 +159,7 @@ export function RecipeNoteList({
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-2">
         {compact ? (
-          <span className="text-xs font-medium text-muted-foreground">Notes</span>
+          <span className="text-xs font-medium text-meta">Notes</span>
         ) : (
           <h2 className="text-lg font-semibold">Notes</h2>
         )}
@@ -173,7 +173,7 @@ export function RecipeNoteList({
         </Button>
       </div>
       {slots.length === 0 && (
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-meta">
           No notes yet. Click &ldquo;Add note&rdquo; above to capture a tip or callout.
         </p>
       )}

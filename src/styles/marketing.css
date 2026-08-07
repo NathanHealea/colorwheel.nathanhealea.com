@@ -12,20 +12,20 @@
  *   Section:  .marketing-section         — Bordered section wrapper with vertical rhythm
  *             .marketing-section-muted   — Modifier: muted/secondary background surface
  *   Header:   .marketing-section-header  — Centred heading block, max-w-2xl
- *             .marketing-section-eyebrow — Tiny label above the section heading
- *             .marketing-section-heading — h2 display text, bold, responsive
- *             .marketing-section-desc    — Muted body copy below the heading
+ *             .marketing-section-eyebrow — Outline chip above the section heading
+ *             .marketing-section-heading — h2, display face, text-heading → text-title
+ *             .marketing-section-desc    — Muted subhead copy below the heading
  *   Content:  .marketing-section-body    — Inner content container, max-w-6xl
  *             .marketing-section-body-sm — Narrow variant, max-w-3xl (stats, CTA)
  *   Steps:    .marketing-steps           — Horizontal step list (core loop)
  *             .marketing-step            — Individual step column
- *             .marketing-step-number     — Circular gold step-number badge
- *             .marketing-step-icon       — Lucide icon, primary colour
- *             .marketing-step-title      — Step label text
- *             .marketing-step-desc       — Step description, muted
+ *             .marketing-step-number     — Circular amber step-number badge
+ *             .marketing-step-icon       — Lucide icon, amber signal
+ *             .marketing-step-title      — Step label, display subhead
+ *             .marketing-step-desc       — Step description, muted small
  *   Stats:    .marketing-stats           — Flex row of stat items
  *             .marketing-stat            — Individual stat (value + label)
- *             .marketing-stat-value      — Large number, primary colour
+ *             .marketing-stat-value      — Large display number, amber signal
  *             .marketing-stat-label      — Small muted label
  *   Swatch:   .marketing-swatch-grid     — Grid of paint swatch circles
  *             .marketing-swatch-circle   — Individual swatch circle (color set inline)
@@ -36,11 +36,11 @@
 /* --- */
 
 .marketing-section {
-  @apply border-b border-border;
+  @apply border-b border-rule;
 }
 
 .marketing-section-muted {
-  @apply bg-muted/20;
+  @apply bg-inset/20;
 }
 
 /* --- */
@@ -53,17 +53,17 @@
 
 .marketing-section-eyebrow {
   /* Inlined from .badge + .badge-outline — @apply cannot compose custom component classes */
-  @apply mb-3 inline-flex items-center gap-1 rounded-md border border-border bg-transparent
-    px-2 py-0.5 text-xs font-medium whitespace-nowrap text-foreground;
+  @apply mb-3 inline-flex items-center gap-1 rounded-swatch border border-rule bg-transparent
+    px-2 py-0.5 font-mono text-micro uppercase whitespace-nowrap text-meta;
 }
 
 .marketing-section-heading {
-  @apply text-balance text-3xl font-bold tracking-tight;
-  @apply sm:text-4xl;
+  @apply text-balance font-display text-heading font-semibold;
+  @apply sm:text-title;
 }
 
 .marketing-section-desc {
-  @apply mt-3 text-balance text-base text-muted-foreground;
+  @apply mt-3 text-balance text-subhead text-meta;
 }
 
 /* --- */
@@ -95,19 +95,19 @@
 }
 
 .marketing-step-number {
-  @apply inline-flex size-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary;
+  @apply inline-flex size-7 items-center justify-center rounded-full bg-signal/10 font-mono text-data font-medium text-signal-on;
 }
 
 .marketing-step-icon {
-  @apply size-5 text-primary;
+  @apply size-5 text-signal-on;
 }
 
 .marketing-step-title {
-  @apply text-base font-semibold;
+  @apply font-display text-subhead font-semibold;
 }
 
 .marketing-step-desc {
-  @apply text-sm text-muted-foreground;
+  @apply text-small text-meta;
 }
 
 /* --- */
@@ -123,11 +123,11 @@
 }
 
 .marketing-stat-value {
-  @apply text-3xl font-bold tracking-tight text-primary;
+  @apply font-display text-title font-semibold text-signal-on;
 }
 
 .marketing-stat-label {
-  @apply text-sm text-muted-foreground;
+  @apply text-small text-meta;
 }
 
 /* --- */
@@ -155,17 +155,17 @@
 }
 
 .feature-card:hover {
-  @apply border-primary/50 bg-muted/40;
+  @apply border-signal-on/50 bg-inset/40;
 }
 
 .feature-card-icon {
-  @apply inline-flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary;
+  @apply inline-flex size-10 items-center justify-center rounded-tile bg-signal/10 text-signal-on;
 }
 
 .feature-card-title {
-  @apply text-lg font-semibold leading-none tracking-tight;
+  @apply font-display text-subhead font-semibold;
 }
 
 .feature-card-blurb {
-  @apply text-sm text-muted-foreground;
+  @apply text-small text-meta;
 }

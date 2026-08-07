@@ -116,8 +116,8 @@ export function PalettePaintRow({
       ref={setNodeRef}
       style={style}
       className={[
-        'flex items-start gap-3 rounded-lg border border-border p-3',
-        isDragging ? 'shadow-lg bg-muted' : '',
+        'flex items-start gap-3 rounded-lg border border-rule p-3',
+        isDragging ? 'shadow-lg bg-inset' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -137,8 +137,8 @@ export function PalettePaintRow({
       />
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium">{paint.name}</p>
-        {brandLine && <p className="text-xs text-muted-foreground">{brandLine}</p>}
-        {note && <p className="mt-1 text-xs text-muted-foreground">{note}</p>}
+        {brandLine && <p className="text-xs text-meta">{brandLine}</p>}
+        {note && <p className="mt-1 text-xs text-meta">{note}</p>}
       </div>
       {canEdit && (
         <div className="flex items-center gap-1 flex-wrap justify-end">
@@ -162,7 +162,7 @@ export function PalettePaintRow({
             type="button"
             onClick={handleRemove}
             disabled={isPending}
-            className="btn-sm btn-ghost text-destructive hover:text-destructive"
+            className="btn-sm btn-ghost text-danger hover:text-danger"
             aria-label={
               variant === 'group' ? `Remove ${paint.name} from group` : `Remove ${paint.name}`
             }

@@ -77,7 +77,7 @@ export function CollectionSearch({ initialPaints }: { initialPaints: PaintWithBr
       )}
 
       {isSearching && !isLoading && results.length === 0 && (
-        <p className="text-sm text-muted-foreground">No paints found.</p>
+        <p className="text-sm text-meta">No paints found.</p>
       )}
 
       {isSearching && results.length > 0 && (
@@ -97,7 +97,7 @@ export function CollectionSearch({ initialPaints }: { initialPaints: PaintWithBr
       )}
 
       <div className="text-right">
-        <Link href="/collection/paints" className="text-sm text-muted-foreground hover:underline">
+        <Link href="/collection/paints" className="text-sm text-meta hover:underline">
           View full collection →
         </Link>
       </div>

@@ -67,13 +67,13 @@ export default async function AdminUserDetailPage({
       <div className="mb-6 flex items-center justify-between">
         <Link
           href="/admin/users"
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-sm text-meta hover:text-copy"
         >
           ← Back to users
         </Link>
         <Link
           href={`/admin/users/${id}/collection`}
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-sm text-meta hover:text-copy"
         >
           View collection →
         </Link>

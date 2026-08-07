@@ -37,22 +37,22 @@ export function DangerZone({ displayName, isAdmin }: DangerZoneProps) {
 
   return (
     <>
-      <Card className="border-destructive">
+      <Card className="border-danger">
         <CardHeader>
-          <CardTitle className="text-destructive">Danger Zone</CardTitle>
+          <CardTitle className="text-danger">Danger Zone</CardTitle>
           <CardDescription>
             Permanently delete your account and all associated data.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {isAdmin ? (
-            <div className="rounded-md border border-destructive/40 bg-destructive/5 p-4 text-sm space-y-2">
-              <p className="font-medium text-destructive">
+            <div className="rounded-md border border-danger/40 bg-danger/5 p-4 text-sm space-y-2">
+              <p className="font-medium text-danger">
                 Admin accounts cannot be self-deleted.
               </p>
-              <p className="text-muted-foreground">
+              <p className="text-meta">
                 To delete your account: remove your admin role via the{' '}
-                <Link href="/admin/roles" className="underline hover:text-foreground">
+                <Link href="/admin/roles" className="underline hover:text-copy">
                   admin roles panel
                 </Link>
                 , then return here to complete account deletion.
@@ -67,7 +67,7 @@ export function DangerZone({ displayName, isAdmin }: DangerZoneProps) {
             </div>
           ) : (
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-meta">
                 Once you delete your account, there is no going back. All your
                 data will be permanently removed.
               </p>

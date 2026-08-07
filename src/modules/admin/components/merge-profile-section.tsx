@@ -116,7 +116,7 @@ export function MergeProfileSection({
         </div>
 
         {previewError && (
-          <p className="text-sm text-destructive">{previewError}</p>
+          <p className="text-sm text-danger">{previewError}</p>
         )}
 
         {preview && (
@@ -127,7 +127,7 @@ export function MergeProfileSection({
               {' → '}
               <span className="font-medium">{preview.target_display_name}</span>
             </p>
-            <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
+            <ul className="text-sm text-meta list-disc list-inside space-y-1">
               <li>{preview.roles_to_transfer} new role(s) will transfer</li>
               {preview.will_copy_bio && <li>Bio will copy from source</li>}
               {preview.will_copy_avatar && <li>Avatar will copy from source</li>}
@@ -146,10 +146,10 @@ export function MergeProfileSection({
         <Dialog open={showConfirm} onOpenChange={(o) => !o && setShowConfirm(false)}>
           <DialogContent className="w-full max-w-sm p-6">
             <DialogHeader>
-              <DialogTitle className="text-destructive">
+              <DialogTitle className="text-danger">
                 Confirm Merge — This is irreversible
               </DialogTitle>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-1 text-sm text-meta">
                 Merge{' '}
                 <span className="font-medium">{preview?.source_display_name}</span>
                 {' into '}
@@ -159,7 +159,7 @@ export function MergeProfileSection({
             </DialogHeader>
 
             {mergeError && (
-              <p className="text-sm text-destructive">{mergeError}</p>
+              <p className="text-sm text-danger">{mergeError}</p>
             )}
 
             <DialogFooter className="mt-2">

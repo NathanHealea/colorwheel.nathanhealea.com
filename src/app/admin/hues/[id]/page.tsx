@@ -60,7 +60,7 @@ export default async function AdminHueDetailPage({ params }: { params: Promise<{
   return (
     <Main as="div">
       <div className="mb-6">
-        <Link href="/admin/hues" className="text-sm text-muted-foreground hover:text-foreground">
+        <Link href="/admin/hues" className="text-sm text-meta hover:text-copy">
           ← Back to hues
         </Link>
       </div>
@@ -98,12 +98,12 @@ export default async function AdminHueDetailPage({ params }: { params: Promise<{
             </CardHeader>
             <CardContent>
               {childHues.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No child hues yet.</p>
+                <p className="text-sm text-meta">No child hues yet.</p>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-border text-left">
+                      <tr className="border-b border-rule text-left">
                         <th className="pb-2 pr-3 w-8">Swatch</th>
                         <th className="pb-2 pr-4 font-medium">Name</th>
                         <th className="pb-2 pr-4 font-medium">Slug</th>
@@ -139,7 +139,7 @@ export default async function AdminHueDetailPage({ params }: { params: Promise<{
           </CardHeader>
           <CardContent>
             {paints.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No paints associated with this hue.</p>
+              <p className="text-sm text-meta">No paints associated with this hue.</p>
             ) : (
               <HuePaintList paints={paints} hueId={hue.id} />
             )}
@@ -147,7 +147,7 @@ export default async function AdminHueDetailPage({ params }: { params: Promise<{
         </Card>
 
         {/* Danger zone */}
-        <Card className="border-destructive/20">
+        <Card className="border-danger/20">
           <CardHeader>
             <CardTitle>Danger Zone</CardTitle>
           </CardHeader>

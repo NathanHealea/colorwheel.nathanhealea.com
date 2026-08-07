@@ -32,12 +32,12 @@ export default async function AdminHuesPage() {
       </PageHeader>
 
       {hues.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No hues found.</p>
+        <p className="text-sm text-meta">No hues found.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-left">
+              <tr className="border-b border-rule text-left">
                 <th className="pb-2 pr-3 font-medium w-8">Swatch</th>
                 <th className="pb-2 pr-4 font-medium">Name</th>
                 <th className="pb-2 pr-4 font-medium">Slug</th>
@@ -48,16 +48,16 @@ export default async function AdminHuesPage() {
             </thead>
             <tbody>
               {hues.map((hue) => (
-                <tr key={hue.id} className="border-b border-border/50">
+                <tr key={hue.id} className="border-b border-rule/50">
                   <td className="py-2 pr-3">
                     <span
-                      className="inline-block h-6 w-6 rounded border border-border"
+                      className="inline-block h-6 w-6 rounded border border-rule"
                       style={{ backgroundColor: hue.hex_code }}
                       aria-hidden="true"
                     />
                   </td>
                   <td className="py-2 pr-4 font-medium">{hue.name}</td>
-                  <td className="py-2 pr-4 font-mono text-xs text-muted-foreground">
+                  <td className="py-2 pr-4 font-mono text-xs text-meta">
                     {hue.slug}
                   </td>
                   <td className="py-2 pr-4 text-right tabular-nums">{hue.child_count}</td>

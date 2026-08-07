@@ -21,7 +21,7 @@ export function PaintGrid({
   renderCard: (paint: PaintWithBrand) => ReactNode
 }) {
   if (paints.length === 0) {
-    return <p className="text-sm text-muted-foreground">No paints found.</p>
+    return <p className="text-sm text-meta">No paints found.</p>
   }
 
   return (

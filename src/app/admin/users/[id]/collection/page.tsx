@@ -50,7 +50,7 @@ export default async function AdminUserCollectionPage({
       <div className="mb-6">
         <Link
           href={`/admin/users/${id}`}
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-sm text-meta hover:text-copy"
         >
           ← Back to user
         </Link>

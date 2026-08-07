@@ -75,8 +75,8 @@ export function EditProductLineRow({ productLine, brandId }: EditProductLineRowP
     return (
       <tr>
         <td colSpan={4} className="py-3">
-          <div className="rounded-lg border border-border bg-card p-4 flex flex-col gap-3 shadow-sm">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          <div className="rounded-lg border border-rule bg-panel p-4 flex flex-col gap-3 shadow-sm">
+            <p className="text-xs font-medium text-meta uppercase tracking-wide">
               Editing: {productLine.name}
             </p>
             <ProductLineForm
@@ -85,7 +85,7 @@ export function EditProductLineRow({ productLine, brandId }: EditProductLineRowP
               defaultValues={productLine}
               mode="edit"
               footer={
-                <div className="flex items-center justify-between border-t border-border pt-3">
+                <div className="flex items-center justify-between border-t border-rule pt-3">
                   <DeleteProductLineButton
                     productLineId={productLine.id}
                     productLineName={productLine.name}
@@ -112,9 +112,9 @@ export function EditProductLineRow({ productLine, brandId }: EditProductLineRowP
   }
 
   return (
-    <tr className="border-b border-border/50">
+    <tr className="border-b border-rule/50">
       <td className="py-2 pr-4 font-medium">{productLine.name}</td>
-      <td className="py-2 pr-4 font-mono text-xs text-muted-foreground">{productLine.slug}</td>
+      <td className="py-2 pr-4 font-mono text-xs text-meta">{productLine.slug}</td>
       <td className="py-2 pr-4 text-right tabular-nums">{productLine.paint_count}</td>
       <td className="py-2">
         <div className="flex items-center gap-2">

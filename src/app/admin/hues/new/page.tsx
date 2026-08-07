@@ -32,7 +32,7 @@ export default async function AdminHueNewPage({
       <div className="mb-6">
         <Link
           href={parent_id ? `/admin/hues/${parent_id}` : '/admin/hues'}
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-sm text-meta hover:text-copy"
         >
           {parent_id ? '← Back to hue' : '← Back to hues'}
         </Link>

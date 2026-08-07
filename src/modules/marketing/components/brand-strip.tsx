@@ -10,7 +10,7 @@ export function BrandStrip() {
     'Monument Hobbies',
   ]
   return (
-    <p className="text-xs text-muted-foreground text-center">
+    <p className="text-xs text-meta text-center">
       Supports {brands.join(' · ')} and more
     </p>
   )

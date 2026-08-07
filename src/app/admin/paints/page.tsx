@@ -111,18 +111,18 @@ export default async function AdminPaintsPage({
           </Link>
         )}
 
-        <span className="ml-auto text-xs text-muted-foreground">
+        <span className="ml-auto text-xs text-meta">
           {paints.length} shown
         </span>
       </div>
 
       {paints.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No paints found.</p>
+        <p className="text-sm text-meta">No paints found.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-left">
+              <tr className="border-b border-rule text-left">
                 <th className="pb-2 pr-3 w-8">Swatch</th>
                 <th className="pb-2 pr-4 font-medium">Name</th>
                 <th className="pb-2 pr-4 font-medium">Brand</th>
@@ -134,26 +134,26 @@ export default async function AdminPaintsPage({
             </thead>
             <tbody>
               {paints.map((paint) => (
-                <tr key={paint.id} className="border-b border-border/50">
+                <tr key={paint.id} className="border-b border-rule/50">
                   <td className="py-2 pr-3">
                     <span
-                      className="inline-block h-5 w-5 rounded border border-border"
+                      className="inline-block h-5 w-5 rounded border border-rule"
                       style={{ backgroundColor: paint.hex }}
                       aria-hidden="true"
                     />
                   </td>
                   <td className="py-2 pr-4 font-medium">{paint.name}</td>
-                  <td className="py-2 pr-4 text-muted-foreground">
+                  <td className="py-2 pr-4 text-meta">
                     {paint.product_lines.brands.name}
                   </td>
-                  <td className="py-2 pr-4 text-muted-foreground text-xs">
+                  <td className="py-2 pr-4 text-meta text-xs">
                     {paint.product_lines.name}
                   </td>
-                  <td className="py-2 pr-4 text-xs text-muted-foreground">
+                  <td className="py-2 pr-4 text-xs text-meta">
                     {paint.hues ? (
                       <span className="flex items-center gap-1.5">
                         <span
-                          className="inline-block h-3 w-3 rounded-full border border-border shrink-0"
+                          className="inline-block h-3 w-3 rounded-full border border-rule shrink-0"
                           style={{ backgroundColor: paint.hues.hex_code }}
                           aria-hidden="true"
                         />
@@ -163,7 +163,7 @@ export default async function AdminPaintsPage({
                       '—'
                     )}
                   </td>
-                  <td className="py-2 pr-4 text-xs text-muted-foreground">
+                  <td className="py-2 pr-4 text-xs text-meta">
                     {paint.paint_type ?? '—'}
                   </td>
                   <td className="py-2">
@@ -192,7 +192,7 @@ export default async function AdminPaintsPage({
             <span className="btn btn-ghost btn-sm btn-disabled opacity-50">← Prev</span>
           )}
 
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-meta">
             Page {currentPage} of {totalPages}
           </span>
 

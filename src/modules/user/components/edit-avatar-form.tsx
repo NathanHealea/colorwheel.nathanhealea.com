@@ -123,13 +123,13 @@ export function EditAvatarForm({
           onChange={handleChange}
           disabled={isPending}
         />
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-meta">
           JPEG, PNG, WebP, or GIF — resized to max 800 × 800 px, 2 MB limit
         </p>
       </div>
 
       {(clientError || serverError) && (
-        <p className="text-sm text-destructive">{clientError || serverError}</p>
+        <p className="text-sm text-danger">{clientError || serverError}</p>
       )}
 
       <Button type="submit" className="btn-primary" disabled={isPending || !processedBlob}>

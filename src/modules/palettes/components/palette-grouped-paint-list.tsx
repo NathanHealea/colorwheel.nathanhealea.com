@@ -345,7 +345,7 @@ export function PaletteGroupedPaintList({
             ) : (
               <div
                 key={slot.dndId}
-                className="flex items-center rounded-lg border border-border p-3 text-sm text-muted-foreground"
+                className="flex items-center rounded-lg border border-rule p-3 text-sm text-meta"
               >
                 Paint unavailable
               </div>
@@ -398,7 +398,7 @@ export function PaletteGroupedPaintList({
                       ) : (
                         <div
                           key={ref.dndId}
-                          className="flex items-center rounded-lg border border-border p-3 text-sm text-muted-foreground"
+                          className="flex items-center rounded-lg border border-rule p-3 text-sm text-meta"
                         >
                           Paint unavailable
                         </div>
@@ -406,7 +406,7 @@ export function PaletteGroupedPaintList({
                     )}
                   </SortableContext>
                   {refs.length === 0 && canEdit && (
-                    <p className="px-2 py-1 text-xs italic text-muted-foreground">
+                    <p className="px-2 py-1 text-xs italic text-meta">
                       No paints in this group
                     </p>
                   )}
@@ -429,9 +429,9 @@ export function PaletteGroupedPaintList({
           if (dg) {
             const count = groupRefs.get(dg.group.id)?.length ?? 0
             return (
-              <div className="flex items-center gap-2 rounded-md border border-dashed border-border bg-background px-2 py-1 shadow-xl">
+              <div className="flex items-center gap-2 rounded-md border border-dashed border-rule bg-canvas px-2 py-1 shadow-xl">
                 <span className="flex-1 text-sm font-semibold">{dg.group.name}</span>
-                <span className="rounded px-1.5 py-0.5 text-xs text-muted-foreground bg-muted">
+                <span className="rounded px-1.5 py-0.5 text-xs text-meta bg-inset">
                   {count} {count === 1 ? 'paint' : 'paints'}
                 </span>
               </div>
@@ -442,7 +442,7 @@ export function PaletteGroupedPaintList({
           const masterSlot = master.find((m) => m.dndId === activeDndId)
           if (masterSlot && groupDropState?.kind === 'hover' && masterSlot.paint) {
             return (
-              <div className="flex items-center gap-2 rounded-lg border border-primary/40 bg-background px-3 py-2 shadow-xl">
+              <div className="flex items-center gap-2 rounded-lg border border-signal-on/40 bg-canvas px-3 py-2 shadow-xl">
                 <div
                   className="size-6 shrink-0 rounded-sm"
                   style={{ backgroundColor: masterSlot.paint.hex }}

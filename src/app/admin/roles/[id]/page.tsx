@@ -68,7 +68,7 @@ export default async function AdminRoleDetailPage({
       <div className="mb-6">
         <Link
           href="/admin/roles"
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-sm text-meta hover:text-copy"
         >
           &larr; Back to roles
         </Link>

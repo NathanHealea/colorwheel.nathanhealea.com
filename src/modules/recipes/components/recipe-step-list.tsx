@@ -106,7 +106,7 @@ export function RecipeStepList({
 
   if (orderedSteps.length === 0) {
     return (
-      <p className="rounded-md border border-dashed border-border p-3 text-xs text-muted-foreground">
+      <p className="rounded-md border border-dashed border-rule p-3 text-xs text-meta">
         No steps yet. Add the first step to start building this section.
       </p>
     )

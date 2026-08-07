@@ -5,82 +5,120 @@
  * https://daisyui.com/components/badge/
  *
  * Implements daisyUI's class naming conventions (.badge, .badge-primary, etc.)
- * using this project's Tailwind CSS theme tokens instead of daisyUI's built-in
+ * using this project's Undercoat theme tokens instead of daisyUI's built-in
  * theme system.
  *
+ * Two Undercoat additions live here because they are badge-shaped:
+ *   .chip-data   — mono chip for a measured value (hex, code, price, volume)
+ *   .badge-delta — ΔE readout; `.is-close` fills amber when ΔE < 3
+ *
+ * Badges use `--radius-swatch` (4px) so they sit visually alongside a paint
+ * swatch without competing with it.
+ *
  * Classes:
- *   Base:    .badge              — Default badge (neutral background, small text)
- *   Colors:  .badge-primary      — Primary-colored badge
- *            .badge-secondary    — Secondary-colored badge
- *            .badge-accent       — Accent-colored badge
- *            .badge-destructive  — Destructive/error-colored badge
+ *   Base:    .badge              — Default badge (inset background, meta text)
+ *   Colors:  .badge-primary      — Amber signal tint (ownership, active state)
+ *            .badge-secondary    — Neutral slate fill
+ *            .badge-accent       — Solid amber fill with ink text
+ *            .badge-destructive  — Danger tint (discontinued, errors)
  *   Styles:  .badge-outline      — Bordered, transparent background
- *            .badge-soft         — Muted background, subtle appearance
+ *            .badge-soft         — Softened inset background
  *            .badge-ghost        — Transparent background
- *   Sizes:   .badge-xs           — Extra-small
- *            .badge-sm           — Small
- *            .badge-md           — Medium (default)
- *            .badge-lg           — Large
+ *   Sizes:   .badge-xs           — Extra-small (text-micro)
+ *            .badge-sm           — Small (text-data)
+ *            .badge-md           — Medium / default (text-data)
+ *            .badge-lg           — Large (text-small)
+ *   Data:    .chip-data          — Mono uppercase value chip
+ *            .badge-delta        — Mono ΔE badge
+ *            .badge-delta.is-close — ΔE < 3: solid amber, ink text
  */
 
 /* -------------------------------------------------------------------------
  * Base
  * ----------------------------------------------------------------------- */
 .badge {
-  @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5
-    text-xs font-medium whitespace-nowrap
-    bg-muted text-muted-foreground;
+  @apply inline-flex items-center gap-1 rounded-swatch px-2 py-0.5
+    text-data font-medium whitespace-nowrap
+    bg-inset text-meta;
 }
 
 /* -------------------------------------------------------------------------
  * Color variants
  * ----------------------------------------------------------------------- */
 .badge-primary {
-  @apply bg-primary/15 text-primary;
+  @apply bg-signal/15 text-signal-on;
 }
 
 .badge-secondary {
-  @apply bg-secondary text-secondary-foreground;
+  @apply bg-inset text-copy;
 }
 
 .badge-accent {
-  @apply bg-accent text-accent-foreground;
+  @apply bg-signal text-ink;
 }
 
 .badge-destructive {
-  @apply bg-destructive/15 text-destructive;
+  @apply bg-danger/15 text-danger;
 }
 
 /* -------------------------------------------------------------------------
  * Style variants
  * ----------------------------------------------------------------------- */
 .badge-outline {
-  @apply border border-border bg-transparent text-foreground;
+  @apply border border-rule bg-transparent text-copy;
 }
 
 .badge-soft {
-  @apply bg-muted/60 text-muted-foreground;
+  @apply bg-inset/60 text-meta;
 }
 
 .badge-ghost {
-  @apply bg-transparent text-muted-foreground;
+  @apply bg-transparent text-meta;
 }
 
 /* -------------------------------------------------------------------------
  * Sizes
  * ----------------------------------------------------------------------- */
 .badge-xs {
-  @apply rounded px-1 py-px text-[0.625rem];
+  @apply rounded-swatch px-1 py-px text-micro;
 }
 
 .badge-sm {
-  @apply rounded px-1.5 py-px text-[0.6875rem];
+  @apply rounded-swatch px-1.5 py-px text-data;
 }
 
 .badge-md {
-  @apply rounded-md px-2 py-0.5 text-xs;
+  @apply rounded-swatch px-2 py-0.5 text-data;
 }
 
 .badge-lg {
-  @apply rounded-md px-2.5 py-1 text-sm;
+  @apply rounded-tile px-2.5 py-1 text-small;
+}
+
+/* -------------------------------------------------------------------------
+ * Data chips
+ * ----------------------------------------------------------------------- */
+.chip-data {
+  @apply inline-flex items-center rounded-swatch px-2 py-[3px]
+    font-mono text-data uppercase
+    bg-panel-raised text-slate;
+}
+
+.dark .chip-data {
+  @apply text-ink-text;
+}
+
+.badge-delta {
+  @apply inline-flex items-center rounded-swatch px-[7px] py-0.5
+    font-mono text-data
+    bg-panel-raised text-slate;
+}
+
+.dark .badge-delta {
+  @apply text-ink-text;
+}
+
+/* ΔE < 3 — a close match is a measurement worth surfacing, so it gets the signal. */
+.badge-delta.is-close {
+  @apply bg-signal text-ink;
 }

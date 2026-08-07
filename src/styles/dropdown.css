@@ -4,15 +4,20 @@
  * Based on the daisyUI Dropdown component API.
  * https://daisyui.com/components/dropdown/
  *
- * Styled for use with Radix UI DropdownMenu primitives. Animations use
- * Radix data-state attributes for open/close transitions.
+ * Styled for use with Radix UI DropdownMenu primitives, using this project's
+ * Undercoat theme tokens. Animations use Radix data-state attributes for
+ * open/close transitions.
+ *
+ * The panel is `--radius-card` + `--shadow-overlay` (a floating surface); the rows
+ * inside it are `--radius-control`. Group labels use Undercoat's micro-label
+ * treatment — mono, uppercase, meta — rather than a bolded body-size row.
  *
  * Classes:
- *   Content:      .dropdown-content           — The floating panel
- *   Items:        .dropdown-item              — Individual menu item
- *   Destructive:  .dropdown-item-destructive  — Destructive/danger item
+ *   Content:      .dropdown-content           — Floating panel (rounded-card, shadow-overlay)
+ *   Items:        .dropdown-item              — Individual menu item (rounded-control)
+ *   Destructive:  .dropdown-item-destructive  — Danger item
  *   Checkbox:     .dropdown-checkbox-item     — Checkbox menu item with indicator gutter
- *   Label:        .dropdown-label             — Non-interactive label row
+ *   Label:        .dropdown-label             — Mono uppercase micro-caption row
  *   Separator:    .dropdown-separator         — Divider line between groups
  */
 
@@ -20,8 +25,8 @@
  * Content panel
  * ----------------------------------------------------------------------- */
 .dropdown-content {
-  @apply z-50 min-w-48 overflow-hidden rounded-lg
-    border border-border bg-popover p-1 text-popover-foreground shadow-md;
+  @apply z-50 min-w-48 overflow-hidden rounded-card
+    border border-rule bg-panel p-1 text-copy shadow-overlay;
 
   /* open/close animations */
   @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95
@@ -38,30 +43,30 @@
  * Menu items
  * ----------------------------------------------------------------------- */
 .dropdown-item {
-  @apply relative flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-1.5
-    text-sm text-foreground outline-none transition-colors select-none
-    focus:bg-muted
+  @apply relative flex w-full cursor-pointer items-center gap-2 rounded-control px-2 py-1.5
+    text-body text-copy outline-none transition-colors select-none
+    focus:bg-inset
     data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 }
 
 .dropdown-item-destructive {
-  @apply text-destructive focus:bg-destructive/10;
+  @apply text-danger focus:bg-danger/10;
 }
 
 /* -------------------------------------------------------------------------
  * Label
  * ----------------------------------------------------------------------- */
 .dropdown-label {
-  @apply px-2 py-1.5 text-sm font-medium;
+  @apply px-2 py-1.5 font-mono text-micro uppercase text-meta;
 }
 
 /* -------------------------------------------------------------------------
  * Checkbox item
  * ----------------------------------------------------------------------- */
 .dropdown-checkbox-item {
-  @apply relative flex w-full cursor-pointer items-center gap-2 rounded-md pl-8 pr-2 py-1.5
-    text-sm text-foreground outline-none transition-colors select-none
-    focus:bg-muted
+  @apply relative flex w-full cursor-pointer items-center gap-2 rounded-control pl-8 pr-2 py-1.5
+    text-body text-copy outline-none transition-colors select-none
+    focus:bg-inset
     data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 }
 
@@ -69,5 +74,5 @@
  * Separator
  * ----------------------------------------------------------------------- */
 .dropdown-separator {
-  @apply -mx-1 my-1 h-px bg-border;
+  @apply -mx-1 my-1 h-px bg-rule;
 }

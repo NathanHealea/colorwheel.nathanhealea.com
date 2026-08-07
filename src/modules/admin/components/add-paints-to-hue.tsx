@@ -82,7 +82,7 @@ export function AddPaintsToHue({ hueId }: AddPaintsToHueProps) {
         aria-label="Search paints"
       />
 
-      {isLoading && <p className="text-sm text-muted-foreground">Loading…</p>}
+      {isLoading && <p className="text-sm text-meta">Loading…</p>}
 
       {!isLoading && paints.length > 0 && (
         <form action={formAction} className="flex flex-col gap-3">
@@ -92,7 +92,7 @@ export function AddPaintsToHue({ hueId }: AddPaintsToHueProps) {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border text-left">
+                <tr className="border-b border-rule text-left">
                   <th className="pb-2 pr-3 w-8" />
                   <th className="pb-2 pr-3 w-8">Color</th>
                   <th className="pb-2 pr-4 font-medium">Name</th>
@@ -101,7 +101,7 @@ export function AddPaintsToHue({ hueId }: AddPaintsToHueProps) {
               </thead>
               <tbody>
                 {paints.map((paint) => (
-                  <tr key={paint.id} className="border-b border-border/50">
+                  <tr key={paint.id} className="border-b border-rule/50">
                     <td className="py-2 pr-3">
                       <input
                         type="checkbox"
@@ -113,13 +113,13 @@ export function AddPaintsToHue({ hueId }: AddPaintsToHueProps) {
                     </td>
                     <td className="py-2 pr-3">
                       <span
-                        className="inline-block h-5 w-5 rounded border border-border"
+                        className="inline-block h-5 w-5 rounded border border-rule"
                         style={{ backgroundColor: paint.hex }}
                         aria-hidden="true"
                       />
                     </td>
                     <td className="py-2 pr-4 font-medium">{paint.name}</td>
-                    <td className="py-2 text-muted-foreground">
+                    <td className="py-2 text-meta">
                       {paint.product_lines?.brands?.name ?? '—'}
                     </td>
                   </tr>
@@ -131,14 +131,14 @@ export function AddPaintsToHue({ hueId }: AddPaintsToHueProps) {
           <div className="flex items-center gap-3">
             <SubmitButton />
             {selectedIds.size > 0 && (
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-meta">
                 {selectedIds.size} selected
               </span>
             )}
           </div>
 
           {state?.error && (
-            <p className="text-sm text-destructive">{state.error}</p>
+            <p className="text-sm text-danger">{state.error}</p>
           )}
           {state?.success && (
             <p className="text-sm text-green-600">
@@ -149,13 +149,13 @@ export function AddPaintsToHue({ hueId }: AddPaintsToHueProps) {
       )}
 
       {!isLoading && paints.length === 0 && debouncedQuery && (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-meta">
           No paints match &quot;{debouncedQuery}&quot;.
         </p>
       )}
 
       {!isLoading && paints.length === 0 && !debouncedQuery && (
-        <p className="text-sm text-muted-foreground">No paints found.</p>
+        <p className="text-sm text-meta">No paints found.</p>
       )}
     </div>
   )

@@ -7,7 +7,7 @@ export default function CollectionLoading() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 3 }, (_, i) => (
-          <div key={i} className="flex flex-col gap-2 rounded-lg border border-border p-6">
+          <div key={i} className="flex flex-col gap-2 rounded-lg border border-rule p-6">
             <Skeleton className="h-4 w-24" />
             <Skeleton className="h-7 w-16" />
           </div>

@@ -132,7 +132,7 @@ export default async function AdminDashboardPage() {
         </CardHeader>
         <CardContent>
           {recentUsers && recentUsers.length > 0 ? (
-            <ul className="divide-y divide-border">
+            <ul className="divide-y divide-rule">
               {recentUsers.map((user) => (
                 <li key={user.id} className="flex items-center gap-3 py-3">
                   {user.avatar_url ? (
@@ -153,7 +153,7 @@ export default async function AdminDashboardPage() {
                     <p className="truncate text-sm font-medium">
                       {user.display_name ?? 'Unnamed user'}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-meta">
                       {user.created_at
                         ? new Date(user.created_at).toLocaleDateString(
                             'en-US',
@@ -170,7 +170,7 @@ export default async function AdminDashboardPage() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-muted-foreground">No users yet.</p>
+            <p className="text-sm text-meta">No users yet.</p>
           )}
         </CardContent>
       </Card>

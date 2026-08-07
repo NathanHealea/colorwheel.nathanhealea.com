@@ -1,3 +1,24 @@
+/*
+ * Grimify — global stylesheet
+ *
+ * Token order matters:
+ *   1. `styles/variables.css` declares the fixed Undercoat tokens (palette ramps,
+ *      ground-specific semantics, type scale, shape/depth/space/motion).
+ *   2. This file declares the two things that cannot live in a plain `@theme`:
+ *      the font families (they wrap the `--font-*-face` variables next/font sets
+ *      on <html>) and the theme-adaptive roles (they flip on `.dark`). Both need
+ *      `@theme inline` so Tailwind inlines the reference into each utility rather
+ *      than resolving it once at build time — a plain `@theme` would freeze the
+ *      adaptive roles to their light-mode values.
+ *   3. Component classes are imported into `layer(components)` so Tailwind v4
+ *      processes their `@apply` rules correctly.
+ *
+ * Adaptive roles are the vocabulary for markup. Reach for a ground-specific role
+ * (`surface-mount`, `ink-raised`, `signal-ink`) only when you deliberately want a
+ * value that ignores the theme — the classic case being a light mat under a paint
+ * swatch, which stays light in dark mode so the swatch keeps reading as the hero.
+ */
+
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
@@ -6,17 +27,21 @@
 @source "../modules/**/*.{ts,tsx}";
 @source "../components/**/*.{ts,tsx}";
 @source "../lib/**/*.{ts,tsx}";
+
 @import '../styles/variables.css';
 @import '../styles/button.css' layer(components);
 @import '../styles/card.css' layer(components);
+@import '../styles/swatch.css' layer(components);
 @import '../styles/input.css' layer(components);
 @import '../styles/input-group.css' layer(components);
+@import '../styles/checkbox.css' layer(components);
 @import '../styles/select.css' layer(components);
 @import '../styles/label.css' layer(components);
 @import '../styles/textarea.css' layer(components);
 @import '../styles/form.css' layer(components);
 @import '../styles/avatar.css' layer(components);
 @import '../styles/dropdown.css' layer(components);
+@import '../styles/combobox.css' layer(components);
 @import '../styles/badge.css' layer(components);
 @import '../styles/navbar.css' layer(components);
 @import '../styles/sidebar.css' layer(components);
@@ -30,128 +55,167 @@
 @import '../styles/hero.css' layer(components);
 @import '../styles/marketing.css' layer(components);
 
-@custom-variant dark (&:is(.dark *));
+/* Matches the `.dark` element itself as well as its descendants, so rules can key
+   off `html.dark` directly. `:where()` keeps the variant at zero specificity. */
+@custom-variant dark (&:where(.dark, .dark *));
 
-@theme inline {
-  --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-foreground: var(--foreground);
-  --color-background: var(--background);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-}
+/* ---------------------------------------------------------------------------
+ * Theme-adaptive roles
+ *
+ * Raw custom properties, redefined under `.dark`. Surfaced as Tailwind utilities
+ * by the `@theme inline` block below.
+ * ------------------------------------------------------------------------- */
 
 :root {
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.15 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0 0);
-  --primary: var(--grimify-gold);
-  --primary-foreground: oklch(0.15 0 0);
-  --secondary: oklch(0.96 0 0);
-  --secondary-foreground: oklch(0.15 0 0);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.55 0 0);
-  --accent: oklch(0.96 0 0);
-  --accent-foreground: oklch(0.15 0 0);
-  --destructive: oklch(0.58 0.24 27);
-  --border: oklch(0.91 0 0);
-  --input: oklch(0.91 0 0);
-  --ring: var(--grimify-gold);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.15 0 0);
-  --sidebar-primary: var(--grimify-gold);
-  --sidebar-primary-foreground: oklch(0.15 0 0);
-  --sidebar-accent: oklch(0.96 0 0);
-  --sidebar-accent-foreground: oklch(0.15 0 0);
-  --sidebar-border: oklch(0.91 0 0);
-  --sidebar-ring: var(--grimify-gold);
+  /* Tells the browser which way to render the UI it owns and we cannot style:
+     scrollbars, the `type="color"` picker chrome, date pickers, spin buttons,
+     and the autofill drop-down. Without it every one of those stays light-mode
+     while the app around them goes dark. */
+  color-scheme: light;
+
+  --canvas: var(--color-surface);
+  --panel: var(--color-surface-card);
+  --panel-raised: var(--color-primary-100);
+  --inset: var(--color-surface-inset);
+  --rule: var(--color-line);
+  --rule-strong: var(--color-line-strong);
+  --copy: var(--color-graphite);
+  --meta: var(--color-slate-muted);
+  --signal-on: var(--color-signal-ink);
+  --danger: var(--color-danger-600);
+  --danger-soft: var(--color-danger-100);
 }
 
 .dark {
-  --background: oklch(0.15 0 0);
-  --foreground: oklch(0.96 0 0);
-  --card: oklch(0.19 0 0);
-  --card-foreground: oklch(0.96 0 0);
-  --popover: oklch(0.19 0 0);
-  --popover-foreground: oklch(0.96 0 0);
-  --primary: var(--grimify-gold-light);
-  --primary-foreground: oklch(0.15 0 0);
-  --secondary: oklch(0.22 0 0);
-  --secondary-foreground: oklch(0.96 0 0);
-  --muted: oklch(0.22 0 0);
-  --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.22 0 0);
-  --accent-foreground: oklch(0.96 0 0);
-  --destructive: oklch(0.65 0.22 25);
-  --border: oklch(0.25 0 0);
-  --input: oklch(0.25 0 0);
-  --ring: var(--grimify-gold-light);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.19 0 0);
-  --sidebar-foreground: oklch(0.96 0 0);
-  --sidebar-primary: var(--grimify-gold-light);
-  --sidebar-primary-foreground: oklch(0.15 0 0);
-  --sidebar-accent: oklch(0.22 0 0);
-  --sidebar-accent-foreground: oklch(0.96 0 0);
-  --sidebar-border: oklch(0.25 0 0);
-  --sidebar-ring: var(--grimify-gold-light);
+  color-scheme: dark;
+
+  --canvas: var(--color-ink);
+  --panel: var(--color-ink-raised);
+  --panel-raised: var(--color-secondary-900);
+  --inset: var(--color-secondary-900);
+  --rule: var(--color-ink-line);
+  --rule-strong: var(--color-secondary-800);
+  --copy: var(--color-ink-text);
+  --meta: var(--color-ink-text-muted);
+  --signal-on: var(--color-signal);
+  --danger: var(--color-danger-400);
+  --danger-soft: var(--color-danger-900);
+}
+
+@theme inline {
+  /* Font families — the leading `var()` is the next/font variable set on <html>
+     in app/layout.tsx; the rest is the fallback chain. */
+  --font-display: var(--font-display-face), 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sans-face), 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-face), 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* Grounds */
+  --color-canvas: var(--canvas); /* page background */
+  --color-panel: var(--panel); /* card, popover, dropdown, sheet, dialog */
+  --color-panel-raised: var(--panel-raised); /* chip / tint on top of a panel */
+  --color-inset: var(--inset); /* muted + hover surfaces, skeletons, wells */
+
+  /* Lines */
+  --color-rule: var(--rule); /* default border, input outline, divider */
+  --color-rule-strong: var(--rule-strong); /* emphasised border, secondary button */
+
+  /* Text */
+  --color-copy: var(--copy); /* primary text */
+  --color-meta: var(--meta); /* secondary text, captions, placeholders */
+
+  /* Amber as text / border / ring on whichever ground is active. Fills should use
+     the fixed `signal` (always accent-500) so the ink text on them stays legible. */
+  --color-signal-on: var(--signal-on);
+
+  /* Errors and destructive actions */
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+  *,
+  ::after,
+  ::before {
+    border-color: var(--color-rule);
   }
-  body {
-    @apply bg-background text-foreground;
-  }
+
   html {
+    background-color: var(--color-canvas);
+    color: var(--color-copy);
+    font-size: 16px;
     @apply font-sans;
+  }
+
+  body {
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: 1.55;
+    text-wrap: pretty;
+    -webkit-font-smoothing: antialiased;
+    @apply bg-canvas text-copy;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  /* Every numeral in the product is tabular. */
+  .font-mono,
+  code,
+  kbd,
+  samp {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Anchors inherit. Undercoat's base makes every link amber, but most anchors here
+     wrap whole cards and rows rather than sitting inline in prose — colouring them
+     all would flood the UI with a signal that is supposed to be rare. Inline prose
+     links opt in with `text-signal-on`. */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  :focus-visible {
+    outline-color: color-mix(in oklab, var(--color-signal-on) 50%, transparent);
+  }
+
+  /* The caret is the one place amber earns its way into an idle field: it marks
+     where the next character lands, which is a measurement of position. */
+  input,
+  textarea,
+  select,
+  [contenteditable] {
+    caret-color: var(--color-signal-on);
+  }
+
+  /* Chrome paints autofilled fields pale blue (or yellow) from a UA rule that
+     `background-color` cannot override. Clipping the background to the glyphs
+     removes the fill entirely, which is what we want — every field in the app is
+     `bg-transparent` and inherits whatever surface it sits on, so there is no
+     colour to restore. `-webkit-text-fill-color` is needed because the same UA
+     rule also forces the text colour. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: var(--color-copy);
+    -webkit-background-clip: text;
+    background-clip: text;
+    caret-color: var(--color-signal-on);
+  }
+
+  /* Amber wash for selected text. Only the ground is set, never the colour: the
+     adaptive `--color-copy` would go dark-on-dark inside a fixed-light region
+     such as a swatch mount, so selected text keeps whatever colour it already
+     had and the wash sits behind it. */
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-signal) 35%, transparent);
   }
 }

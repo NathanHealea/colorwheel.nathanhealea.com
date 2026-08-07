@@ -93,7 +93,7 @@ export function ProductLineForm({ action, brandId, defaultValues, mode, footer }
       )}
 
       {state?.error && (
-        <p className="text-sm text-destructive">{state.error}</p>
+        <p className="text-sm text-danger">{state.error}</p>
       )}
 
       {state?.success && (
@@ -103,7 +103,7 @@ export function ProductLineForm({ action, brandId, defaultValues, mode, footer }
       {/* Name */}
       <div className="flex flex-col gap-1">
         <label htmlFor={`pl-name-${brandId}-${defaultValues?.id ?? 'new'}`} className="form-label text-sm">
-          Name <span className="text-destructive">*</span>
+          Name <span className="text-danger">*</span>
         </label>
         <Input
           id={`pl-name-${brandId}-${defaultValues?.id ?? 'new'}`}
@@ -116,14 +116,14 @@ export function ProductLineForm({ action, brandId, defaultValues, mode, footer }
           placeholder="e.g. Base"
         />
         {state?.errors?.name && (
-          <p className="text-xs text-destructive">{state.errors.name}</p>
+          <p className="text-xs text-danger">{state.errors.name}</p>
         )}
       </div>
 
       {/* Slug */}
       <div className="flex flex-col gap-1">
         <label htmlFor={`pl-slug-${brandId}-${defaultValues?.id ?? 'new'}`} className="form-label text-sm">
-          Slug <span className="text-destructive">*</span>
+          Slug <span className="text-danger">*</span>
         </label>
         <Input
           id={`pl-slug-${brandId}-${defaultValues?.id ?? 'new'}`}
@@ -136,7 +136,7 @@ export function ProductLineForm({ action, brandId, defaultValues, mode, footer }
           placeholder="e.g. base"
         />
         {state?.errors?.slug && (
-          <p className="text-xs text-destructive">{state.errors.slug}</p>
+          <p className="text-xs text-danger">{state.errors.slug}</p>
         )}
       </div>
 

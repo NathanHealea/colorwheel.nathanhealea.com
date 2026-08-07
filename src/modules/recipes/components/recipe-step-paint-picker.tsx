@@ -139,7 +139,7 @@ export function RecipeStepPaintPicker({
             />
             <div className="overflow-y-auto pr-1">
               {filteredPaletteSlots.length === 0 ? (
-                <p className="p-4 text-center text-sm text-muted-foreground">
+                <p className="p-4 text-center text-sm text-meta">
                   {palette.paints.length === 0
                     ? 'This palette is empty.'
                     : 'No matches in this palette.'}
@@ -155,7 +155,7 @@ export function RecipeStepPaintPicker({
                         onClick={() =>
                           selectPaint(slot.paintId, slot.paint!.name, slot.paintId)
                         }
-                        className="flex items-center gap-3 rounded-lg border border-border p-2 text-left hover:bg-muted disabled:opacity-60"
+                        className="flex items-center gap-3 rounded-lg border border-rule p-2 text-left hover:bg-inset disabled:opacity-60"
                       >
                         <div
                           className="size-8 shrink-0 rounded-sm"
@@ -167,7 +167,7 @@ export function RecipeStepPaintPicker({
                             {slot.paint.name}
                           </p>
                           {slot.paint.brand_name && (
-                            <p className="truncate text-xs text-muted-foreground">
+                            <p className="truncate text-xs text-meta">
                               {[slot.paint.brand_name, slot.paint.product_line_name]
                                 .filter(Boolean)
                                 .join(': ')}
@@ -191,15 +191,15 @@ export function RecipeStepPaintPicker({
             />
             <div className="overflow-y-auto pr-1">
               {libraryError ? (
-                <p className="p-4 text-center text-sm text-destructive">
+                <p className="p-4 text-center text-sm text-danger">
                   {libraryError}
                 </p>
               ) : libraryLoading && librarySearchResults.length === 0 ? (
-                <p className="p-4 text-center text-sm text-muted-foreground">
+                <p className="p-4 text-center text-sm text-meta">
                   Searching…
                 </p>
               ) : librarySearchResults.length === 0 ? (
-                <p className="p-4 text-center text-sm text-muted-foreground">
+                <p className="p-4 text-center text-sm text-meta">
                   {libraryQuery
                     ? 'No paints match that search.'
                     : 'Type to search.'}
@@ -212,7 +212,7 @@ export function RecipeStepPaintPicker({
                       type="button"
                       disabled={isAdding}
                       onClick={() => selectPaint(paint.id, paint.name, null)}
-                      className="flex items-center gap-3 rounded-lg border border-border p-2 text-left hover:bg-muted disabled:opacity-60"
+                      className="flex items-center gap-3 rounded-lg border border-rule p-2 text-left hover:bg-inset disabled:opacity-60"
                     >
                       <div
                         className="size-8 shrink-0 rounded-sm"
@@ -222,7 +222,7 @@ export function RecipeStepPaintPicker({
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium">{paint.name}</p>
                         {paint.product_lines?.brands?.name && (
-                          <p className="truncate text-xs text-muted-foreground">
+                          <p className="truncate text-xs text-meta">
                             {paint.product_lines.brands.name}
                           </p>
                         )}

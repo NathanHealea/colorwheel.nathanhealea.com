@@ -51,7 +51,7 @@ export function PaintCard({
       <Link href={`/paints/${id}`} className="card-body flex h-full flex-col items-center gap-2">
         <div className="relative">
           <div
-            className={cn('rounded-full border border-border', isLg ? 'size-20' : 'size-16')}
+            className={cn('rounded-full border border-rule', isLg ? 'size-20' : 'size-16')}
             style={paintSwatchBackground(hex, paintType ?? null, isMetallic)}
             aria-hidden="true"
           />
@@ -65,7 +65,7 @@ export function PaintCard({
           {name}
         </p>
         {(brand || paintType) && (
-          <p className="text-center text-xs text-muted-foreground leading-tight">
+          <p className="text-center text-xs text-meta leading-tight">
             {brand}
             {brand && paintType ? ': ' : ''}
             {paintType?.replace(/\b\w/g, (c) => c.toUpperCase())}

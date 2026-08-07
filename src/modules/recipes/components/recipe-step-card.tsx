@@ -121,8 +121,8 @@ export function RecipeStepCard({
       ref={setNodeRef}
       style={style}
       className={[
-        'flex flex-col gap-3 rounded-lg border border-border p-3',
-        isDragging ? 'shadow-lg bg-muted' : '',
+        'flex flex-col gap-3 rounded-lg border border-rule p-3',
+        isDragging ? 'shadow-lg bg-inset' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -134,7 +134,7 @@ export function RecipeStepCard({
           {...attributes}
           {...listeners}
         />
-        <span className="mt-1 text-sm font-medium tabular-nums text-muted-foreground">
+        <span className="mt-1 text-sm font-medium tabular-nums text-meta">
           {label}
         </span>
         <Input
@@ -150,7 +150,7 @@ export function RecipeStepCard({
           type="button"
           onClick={handleDelete}
           disabled={isPending}
-          className="btn-sm btn-ghost text-destructive hover:text-destructive"
+          className="btn-sm btn-ghost text-danger hover:text-danger"
           aria-label={`Delete step ${label}`}
         >
           <Trash2 className="size-4" aria-hidden />
@@ -202,7 +202,7 @@ export function RecipeStepCard({
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-muted-foreground">
+          <span className="text-xs font-medium text-meta">
             Paints
           </span>
           <RecipeStepPaintPicker stepId={step.id} palette={palette} />
@@ -221,7 +221,7 @@ export function RecipeStepCard({
       />
 
       <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium text-muted-foreground">Photos</span>
+        <span className="text-xs font-medium text-meta">Photos</span>
         <RecipePhotoGrid
           parent={{ kind: 'step', stepId: step.id }}
           recipeId={recipeId}

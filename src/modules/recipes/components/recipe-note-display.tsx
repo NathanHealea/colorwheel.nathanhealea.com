@@ -6,7 +6,7 @@ import type { RecipeNote } from '@/modules/recipes/types/recipe-note'
  *
  * Renders nothing when `notes` is empty so callers can mount the
  * component unconditionally. Each note becomes its own callout block
- * with a left primary border accent (`border-l-4 border-primary`) so
+ * with a left primary border accent (`border-l-4 border-signal-on`) so
  * notes are visually distinct from step instructions and the recipe
  * summary. Note bodies are plain text — newlines are preserved via
  * `whitespace-pre-wrap`, but no markdown is interpreted.
@@ -33,7 +33,7 @@ export function RecipeNoteDisplay({
         <div
           key={note.id}
           className={cn(
-            'rounded-md border border-border border-l-4 border-l-primary bg-base-200/40',
+            'rounded-md border border-rule border-l-4 border-l-primary bg-base-200/40',
             compact ? 'px-3 py-2' : 'px-4 py-3',
           )}
         >

@@ -17,11 +17,11 @@ export function BrandCard({ brand }: { brand: BrandWithPaintCount }) {
             <img
               src={brand.logo_url}
               alt={brand.name}
-              className="size-12 shrink-0 rounded-full border border-border object-contain"
+              className="size-12 shrink-0 rounded-full border border-rule object-contain"
             />
           ) : (
             <div
-              className="size-12 shrink-0 rounded-full border border-border bg-muted flex items-center justify-center text-lg font-bold text-muted-foreground"
+              className="size-12 shrink-0 rounded-full border border-rule bg-inset flex items-center justify-center text-lg font-bold text-meta"
               aria-hidden="true"
             >
               {brand.name.charAt(0)}
@@ -29,7 +29,7 @@ export function BrandCard({ brand }: { brand: BrandWithPaintCount }) {
           )}
           <div className="min-w-0">
             <h3 className="font-semibold">{brand.name}</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-meta">
               {brand.paint_count} {brand.paint_count === 1 ? 'paint' : 'paints'}
             </p>
           </div>

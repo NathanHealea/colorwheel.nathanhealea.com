@@ -135,7 +135,7 @@ export function AddToPaletteMenu({
     return (
       <div className="flex flex-col gap-1 p-2">
         {[1, 2, 3].map((n) => (
-          <div key={n} className="h-8 animate-pulse rounded bg-muted" />
+          <div key={n} className="h-8 animate-pulse rounded bg-inset" />
         ))}
       </div>
     )
@@ -144,7 +144,7 @@ export function AddToPaletteMenu({
   if (state.status === 'error') {
     return (
       <div className="flex flex-col gap-2 p-3">
-        <p className="text-sm text-destructive">Failed to load palettes.</p>
+        <p className="text-sm text-danger">Failed to load palettes.</p>
         <Button
           type="button"
           onClick={() => dispatch({ type: 'FETCH_START' })}
@@ -189,7 +189,7 @@ export function AddToPaletteMenu({
                 className={index === 0 ? 'font-medium' : undefined}
               >
                 <span className="flex-1 truncate">{palette.name}</span>
-                <span className="ml-2 text-xs text-muted-foreground">
+                <span className="ml-2 text-xs text-meta">
                   {palette.paintCount}
                 </span>
               </DropdownMenuItem>

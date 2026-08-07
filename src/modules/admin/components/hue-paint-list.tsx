@@ -111,7 +111,7 @@ export function HuePaintList({ paints, hueId }: HuePaintListProps) {
   }, [bulkState])
 
   if (paints.length === 0) {
-    return <p className="text-sm text-muted-foreground">No paints associated with this hue.</p>
+    return <p className="text-sm text-meta">No paints associated with this hue.</p>
   }
 
   return (
@@ -127,7 +127,7 @@ export function HuePaintList({ paints, hueId }: HuePaintListProps) {
           aria-label="Filter associated paints"
         />
         {inputValue.trim() && (
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-meta">
             {filteredPaints.length} of {paints.length}
           </span>
         )}
@@ -144,7 +144,7 @@ export function HuePaintList({ paints, hueId }: HuePaintListProps) {
           Remove Selected
         </Button>
         {selectedIds.size > 0 && (
-          <span className="text-sm text-muted-foreground">{selectedIds.size} selected</span>
+          <span className="text-sm text-meta">{selectedIds.size} selected</span>
         )}
         {bulkState?.success && (
           <span className="text-sm text-green-600">
@@ -160,7 +160,7 @@ export function HuePaintList({ paints, hueId }: HuePaintListProps) {
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-border text-left">
+            <tr className="border-b border-rule text-left">
               <th className="pb-2 pr-3 w-8">
                 <input
                   type="checkbox"
@@ -178,7 +178,7 @@ export function HuePaintList({ paints, hueId }: HuePaintListProps) {
           </thead>
           <tbody>
             {filteredPaints.map((paint) => (
-              <tr key={paint.id} className="border-b border-border/50">
+              <tr key={paint.id} className="border-b border-rule/50">
                 <td className="py-2 pr-3">
                   <input
                     type="checkbox"
@@ -190,13 +190,13 @@ export function HuePaintList({ paints, hueId }: HuePaintListProps) {
                 </td>
                 <td className="py-2 pr-3">
                   <span
-                    className="inline-block h-5 w-5 rounded border border-border"
+                    className="inline-block h-5 w-5 rounded border border-rule"
                     style={{ backgroundColor: paint.hex }}
                     aria-hidden="true"
                   />
                 </td>
                 <td className="py-2 pr-4 font-medium">{paint.name}</td>
-                <td className="py-2 pr-4 text-muted-foreground">
+                <td className="py-2 pr-4 text-meta">
                   {paint.product_lines?.brands?.name ?? '—'}
                 </td>
                 <td className="py-2">
@@ -223,7 +223,7 @@ export function HuePaintList({ paints, hueId }: HuePaintListProps) {
       </div>
 
       {filteredPaints.length === 0 && inputValue.trim() && (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-meta">
           No paints match &quot;{inputValue.trim()}&quot;.
         </p>
       )}
@@ -231,14 +231,14 @@ export function HuePaintList({ paints, hueId }: HuePaintListProps) {
       {/* Single remove confirmation dialog */}
       <dialog
         ref={singleDialogRef}
-        className="m-auto w-full max-w-md rounded-lg border border-border bg-background p-0 shadow-lg backdrop:bg-black/50"
+        className="m-auto w-full max-w-md rounded-lg border border-rule bg-canvas p-0 shadow-lg backdrop:bg-black/50"
       >
         <div className="flex flex-col gap-4 p-6">
           <p className="text-sm">
             Remove <strong>{confirmPaint?.name}</strong> from this hue? The paint will be unassigned but not deleted.
           </p>
           {singleState?.error && (
-            <p className="text-sm text-destructive">{singleState.error}</p>
+            <p className="text-sm text-danger">{singleState.error}</p>
           )}
           <div className="flex justify-end gap-2">
             <Button
@@ -263,7 +263,7 @@ export function HuePaintList({ paints, hueId }: HuePaintListProps) {
       {/* Bulk remove confirmation dialog */}
       <dialog
         ref={bulkDialogRef}
-        className="m-auto w-full max-w-md rounded-lg border border-border bg-background p-0 shadow-lg backdrop:bg-black/50"
+        className="m-auto w-full max-w-md rounded-lg border border-rule bg-canvas p-0 shadow-lg backdrop:bg-black/50"
       >
         <div className="flex flex-col gap-4 p-6">
           <p className="text-sm">
@@ -274,7 +274,7 @@ export function HuePaintList({ paints, hueId }: HuePaintListProps) {
             from this hue? They will be unassigned but not deleted.
           </p>
           {bulkState?.error && (
-            <p className="text-sm text-destructive">{bulkState.error}</p>
+            <p className="text-sm text-danger">{bulkState.error}</p>
           )}
           <div className="flex justify-end gap-2">
             <Button

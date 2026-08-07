@@ -110,7 +110,7 @@ export default async function BrandDetailPage({ params }: { params: Promise<{ id
               href={brand.website_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary underline hover:text-primary/80"
+              className="text-signal-on underline hover:text-signal-on/80"
             >
               {brand.website_url}
             </a>

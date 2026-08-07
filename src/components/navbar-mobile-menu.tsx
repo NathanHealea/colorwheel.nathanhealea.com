@@ -126,7 +126,7 @@ export function NavbarMobileMenu({ viewer }: { viewer: Viewer }) {
                   <span className="">{viewer.displayName}</span>
                 </Link>
               </SheetClose>
-              <p className="text-xs uppercase tracking-wide text-muted-foreground px-3 pt-2 text-center">Mine</p>
+              <p className="text-xs uppercase tracking-wide text-meta px-3 pt-2 text-center">Mine</p>
               <SheetClose asChild>
                 <Link href="/collection" className="btn btn-ghost w-full justify-center md:justify-start">
                   My collection

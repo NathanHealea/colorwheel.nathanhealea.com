@@ -170,7 +170,7 @@ export function PaintSimilarSection({
     <section className="flex flex-col gap-4">
       <header className="flex flex-col gap-1">
         <h2 className="text-xl font-semibold">Similar paints</h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-body text-meta">
           Ranked by perceptual distance from this paint.
         </p>
       </header>
@@ -187,7 +187,7 @@ export function PaintSimilarSection({
           </PopoverTrigger>
           <PopoverContent className="w-56 max-h-72 overflow-auto p-2">
             {brands.length === 0 ? (
-              <p className="px-2 py-1 text-xs text-muted-foreground">No brands.</p>
+              <p className="px-2 py-1 text-small text-meta">No brands.</p>
             ) : (
               <ul className="flex flex-col gap-1">
                 {brands.map((brand) => {
@@ -196,12 +196,13 @@ export function PaintSimilarSection({
                   return (
                     <li key={id}>
                       <label
-                        className={`flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-sm hover:bg-accent ${
+                        className={`flex cursor-pointer items-center gap-2 rounded-control px-2 py-1 text-body hover:bg-inset ${
                           filterState.sameBrandOnly ? 'cursor-not-allowed opacity-50' : ''
                         }`}
                       >
                         <input
                           type="checkbox"
+                          className="checkbox checkbox-sm"
                           checked={checked}
                           disabled={filterState.sameBrandOnly}
                           onChange={() => toggleBrand(id)}
@@ -227,16 +228,17 @@ export function PaintSimilarSection({
           </PopoverTrigger>
           <PopoverContent className="w-56 max-h-72 overflow-auto p-2">
             {paintTypes.length === 0 ? (
-              <p className="px-2 py-1 text-xs text-muted-foreground">No types.</p>
+              <p className="px-2 py-1 text-small text-meta">No types.</p>
             ) : (
               <ul className="flex flex-col gap-1">
                 {paintTypes.map((type) => {
                   const checked = filterState.paintTypes.includes(type)
                   return (
                     <li key={type}>
-                      <label className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-sm hover:bg-accent">
+                      <label className="flex cursor-pointer items-center gap-2 rounded-control px-2 py-1 text-body hover:bg-inset">
                         <input
                           type="checkbox"
+                          className="checkbox checkbox-sm"
                           checked={checked}
                           onChange={() => togglePaintType(type)}
                         />
@@ -251,7 +253,7 @@ export function PaintSimilarSection({
         </Popover>
 
         <label
-          className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border px-3 py-1 text-sm"
+          className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-rule px-3 py-1 text-body"
           title={
             filterState.brandIds.length > 0
               ? 'Clear brand filters to enable same-brand mode.'
@@ -260,6 +262,7 @@ export function PaintSimilarSection({
         >
           <input
             type="checkbox"
+            className="checkbox checkbox-sm"
             checked={filterState.sameBrandOnly}
             disabled={filterState.brandIds.length > 0}
             onChange={toggleSameBrandOnly}
@@ -303,14 +306,14 @@ export function PaintSimilarSection({
         </div>
       )}
 
-      {error && <p className="text-sm text-destructive">{error.message}</p>}
+      {error && <p className="text-body text-danger">{error.message}</p>}
 
       {isPending && matches.length === 0 ? (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: defaultLimit }, (_, i) => (
             <div
               key={i}
-              className="flex flex-col items-center gap-2 rounded-lg border border-border p-3"
+              className="flex flex-col items-center gap-2 rounded-lg border border-rule p-3"
             >
               <Skeleton className="size-16" />
               <Skeleton className="h-4 w-3/4" />
@@ -320,7 +323,7 @@ export function PaintSimilarSection({
         </div>
       ) : filteredMatches.length === 0 ? (
         <div className="flex flex-col items-start gap-2">
-          <p className="rounded-lg border border-dashed border-border bg-muted/30 p-4 text-sm text-muted-foreground">
+          <p className="rounded-lg border border-dashed border-rule bg-inset/30 p-4 text-body text-meta">
             No similar paints with the current filters.
           </p>
           {hasActiveFilters && (
@@ -355,7 +358,7 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
       <button
         type="button"
         onClick={onRemove}
-        className="ml-0.5 hover:text-foreground"
+        className="ml-0.5 hover:text-copy"
         aria-label={`Remove ${label} filter`}
       >
         ✕

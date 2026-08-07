@@ -106,7 +106,7 @@ export function HueForm({ action, parentId, defaultValues, mode, footer }: HueFo
       )}
 
       {state?.error && (
-        <p className="text-sm text-destructive">{state.error}</p>
+        <p className="form-message">{state.error}</p>
       )}
 
       {state?.success && (
@@ -115,8 +115,8 @@ export function HueForm({ action, parentId, defaultValues, mode, footer }: HueFo
 
       {/* Name */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="hue-name" className="form-label text-sm">
-          Name <span className="text-destructive">*</span>
+        <label htmlFor="hue-name" className="form-label">
+          Name <span className="text-danger">*</span>
         </label>
         <Input
           id="hue-name"
@@ -129,14 +129,14 @@ export function HueForm({ action, parentId, defaultValues, mode, footer }: HueFo
           placeholder="e.g. Vivid Red"
         />
         {state?.errors?.name && (
-          <p className="text-xs text-destructive">{state.errors.name}</p>
+          <p className="form-message">{state.errors.name}</p>
         )}
       </div>
 
       {/* Slug */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="hue-slug" className="form-label text-sm">
-          Slug <span className="text-destructive">*</span>
+        <label htmlFor="hue-slug" className="form-label">
+          Slug <span className="text-danger">*</span>
         </label>
         <Input
           id="hue-slug"
@@ -149,13 +149,13 @@ export function HueForm({ action, parentId, defaultValues, mode, footer }: HueFo
           placeholder="e.g. vivid-red"
         />
         {state?.errors?.slug && (
-          <p className="text-xs text-destructive">{state.errors.slug}</p>
+          <p className="form-message">{state.errors.slug}</p>
         )}
       </div>
 
       {/* Hex code with color picker */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="hue-hex" className="form-label text-sm">
+        <label htmlFor="hue-hex" className="form-label">
           Hex Code
         </label>
         <div className="flex items-center gap-2">
@@ -172,24 +172,24 @@ export function HueForm({ action, parentId, defaultValues, mode, footer }: HueFo
             type="color"
             value={hexValue.startsWith('#') && hexValue.length === 7 ? hexValue : '#000000'}
             onChange={handleColorPickerChange}
-            className="h-8 w-10 cursor-pointer rounded border border-border bg-transparent p-0.5"
+            className="input-color"
             aria-label="Color picker"
           />
           <span
-            className="inline-block h-6 w-6 rounded-full border border-border"
+            className="inline-block h-6 w-6 rounded-full border border-rule"
             style={{ backgroundColor: hexValue }}
             aria-hidden="true"
           />
         </div>
         {state?.errors?.hex_code && (
-          <p className="text-xs text-destructive">{state.errors.hex_code}</p>
+          <p className="form-message">{state.errors.hex_code}</p>
         )}
       </div>
 
       {/* Sort order — only for parent hues */}
       {!parentId && (
         <div className="flex flex-col gap-1">
-          <label htmlFor="hue-sort-order" className="form-label text-sm">
+          <label htmlFor="hue-sort-order" className="form-label">
             Sort Order
           </label>
           <Input
@@ -202,7 +202,7 @@ export function HueForm({ action, parentId, defaultValues, mode, footer }: HueFo
             placeholder="0"
           />
           {state?.errors?.sort_order && (
-            <p className="text-xs text-destructive">{state.errors.sort_order}</p>
+            <p className="form-message">{state.errors.sort_order}</p>
           )}
         </div>
       )}

@@ -29,21 +29,21 @@ export function AdminUsersTable({
   searchParams?: { q?: string; role?: string }
 }) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-border">
+    <div className="overflow-x-auto rounded-lg border border-rule">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-border bg-muted/50">
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">User</th>
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">Email</th>
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">Roles</th>
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">Joined</th>
-            <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
+          <tr className="border-b border-rule bg-inset/50">
+            <th className="px-4 py-3 text-left font-medium text-meta">User</th>
+            <th className="px-4 py-3 text-left font-medium text-meta">Email</th>
+            <th className="px-4 py-3 text-left font-medium text-meta">Roles</th>
+            <th className="px-4 py-3 text-left font-medium text-meta">Joined</th>
+            <th className="px-4 py-3 text-right font-medium text-meta">Actions</th>
           </tr>
         </thead>
         <tbody>
           {users.length === 0 ? (
             <tr>
-              <td colSpan={5} className="px-4 py-8 text-center text-sm text-muted-foreground">
+              <td colSpan={5} className="px-4 py-8 text-center text-sm text-meta">
                 No users found.
               </td>
             </tr>
@@ -80,7 +80,7 @@ function UserRow({ user, isSelf }: { user: UserWithRoles; isSelf: boolean }) {
     : '—'
 
   return (
-    <tr className="border-b border-border last:border-b-0">
+    <tr className="border-b border-rule last:border-b-0">
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
           {user.avatar_url ? (
@@ -100,12 +100,12 @@ function UserRow({ user, isSelf }: { user: UserWithRoles; isSelf: boolean }) {
           <span className="font-medium">
             {user.display_name ?? 'No display name'}
             {isSelf && (
-              <span className="ml-1.5 text-xs text-muted-foreground">(you)</span>
+              <span className="ml-1.5 text-xs text-meta">(you)</span>
             )}
           </span>
         </div>
       </td>
-      <td className="px-4 py-3 text-muted-foreground">
+      <td className="px-4 py-3 text-meta">
         {user.email ?? <span className="italic">No email</span>}
       </td>
       <td className="px-4 py-3">
@@ -126,12 +126,12 @@ function UserRow({ user, isSelf }: { user: UserWithRoles; isSelf: boolean }) {
           ))}
         </div>
       </td>
-      <td className="px-4 py-3 text-muted-foreground">
+      <td className="px-4 py-3 text-meta">
         {joinedDate}
       </td>
       <td className="px-4 py-3 text-right">
         { !isSelf && isOwner ? (
-          <span className="text-xs text-muted-foreground">Protected</span>
+          <span className="text-xs text-meta">Protected</span>
         ) : (
           <AdminUserActionsMenu
             userId={user.id}

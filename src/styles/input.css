@@ -1,130 +1,217 @@
 /*
- * Input & Textarea Components
+ * Input Component
  *
- * Based on the daisyUI Input and Textarea component APIs.
+ * Based on the daisyUI Input component API.
  * https://daisyui.com/components/input/
- * https://daisyui.com/components/textarea/
  *
  * Implements daisyUI's class naming conventions (.input, .input-primary,
- * .input-sm, etc.) using this project's Tailwind CSS theme tokens instead of
+ * .input-sm, etc.) using this project's Undercoat theme tokens instead of
  * daisyUI's built-in theme system.
  *
- * Input Classes:
- *   Base:    .input              — Default single-line input styling (h-9, text-sm)
- *   Sizes:   .input-xs           — Extra-small (h-6, text-xs)
- *            .input-sm           — Small (h-7, text-xs)
- *            .input-md           — Medium / default (h-9, text-sm)
- *            .input-lg           — Large (h-11, text-base)
- *   Colors:  .input-primary      — Primary border & ring color
- *            .input-secondary    — Secondary border & ring color
- *            .input-accent       — Accent border & ring color
- *            .input-error        — Destructive/error border & ring color
- *   States:  .input-disabled     — Disabled appearance (pointer-events-none, opacity-50)
- *            .input-ghost        — Borderless/transparent style
+ * Controls use `--radius-control` (5px). `.textarea` lives in textarea.css.
  *
- * Textarea Classes:
- *   Base:    .textarea           — Default multi-line input styling (min-height 5rem)
- *   Sizes:   .textarea-xs        — Extra-small (min-height 3rem, text-xs)
- *            .textarea-sm        — Small (min-height 4rem, text-xs)
- *            .textarea-md        — Medium / default (min-height 5rem, text-sm)
- *            .textarea-lg        — Large (min-height 7rem, text-base)
+ * State model — the whole point of the ordering below:
+ *
+ *   rest     hairline `--color-rule`, no ring
+ *   hover    hairline firms to `--color-rule-strong`, still no colour. A field the
+ *            pointer merely crosses is not active, and amber has to keep meaning
+ *            "active" to mean anything at all.
+ *   focus    amber border + amber ring — a focused field IS an active state, one of
+ *            the three things amber is allowed to mean.
+ *   invalid  terracotta border + terracotta ring, and it OUTRANKS focus: focusing a
+ *            bad field must not repaint it amber and swallow the error.
+ *   disabled opacity-50, pointer-events-none.
+ *
+ * All four state selectors are 0,2,0 — identical specificity — so source order is
+ * the only thing deciding which wins. They are therefore written as separate
+ * blocks in escalating order rather than crammed into one `@apply`, because
+ * Tailwind sorts variants inside a single `@apply` by its own fixed variant order,
+ * not by the order they are typed.
+ *
+ * Colour variants come last for the same reason: `.input-error` alone is 0,1,0 and
+ * would lose to `.input:hover`, so each variant restates its own hover and focus.
+ *
+ * Text fields have no pressed state — there is nothing to press. `:active` lives on
+ * `.btn` and `.select-trigger`.
+ *
+ * Classes:
+ *   Base:    .input              — Default single-line input styling (h-9, text-body)
+ *   Sizes:   .input-xs           — Extra-small (h-6, text-small)
+ *            .input-sm           — Small (h-7, text-small)
+ *            .input-md           — Medium / default (h-9, text-body)
+ *            .input-lg           — Large (h-11, text-subhead)
+ *   Colors:  .input-primary      — Amber signal border & ring
+ *            .input-secondary    — Strong rule border & ring
+ *            .input-accent       — Amber signal border & ring
+ *            .input-error        — Danger border & ring
+ *   States:  .input-disabled     — Disabled appearance (pointer-events-none, opacity-50)
+ *            .input-ghost        — Borderless until hovered or focused
+ *   Special: .input-color        — Compact `type="color"` swatch trigger
  */
 
 /* -------------------------------------------------------------------------
- * Input — Base
+ * Base
  * ----------------------------------------------------------------------- */
 .input {
-  @apply h-9 w-full min-w-0 rounded-lg border border-input bg-transparent
-    px-3 py-1.5 text-sm transition-colors outline-none
-    placeholder:text-muted-foreground
-    focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50
-    disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50
-    aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20;
+  @apply h-9 w-full min-w-0 rounded-control border border-rule bg-transparent
+    px-3 py-1.5 text-body transition-colors outline-none
+    placeholder:text-meta;
 }
 
+/* --- */
+
 /* -------------------------------------------------------------------------
- * Input — Sizes
+ * States — escalating order, equal specificity
+ * ----------------------------------------------------------------------- */
+
+/* Hover — the weakest state, so it is declared first and every later block
+   overrides it. Border only; no ring, no hue. */
+.input:hover {
+  @apply border-rule-strong;
+}
+
+.input:focus-visible {
+  @apply border-signal-on ring-3 ring-signal-on/50;
+}
+
+/* Invalid. The ring is terracotta at 40% rather than 20%: matched to the amber
+   ring by how heavy it reads, not by the number. At 20% the error was the
+   quietest ring in the app, which is exactly backwards. */
+.input[aria-invalid='true'] {
+  @apply border-danger ring-3 ring-danger/40;
+}
+
+.input:disabled {
+  @apply pointer-events-none cursor-not-allowed opacity-50;
+}
+
+/* --- */
+
+/* -------------------------------------------------------------------------
+ * Sizes
  * ----------------------------------------------------------------------- */
 .input-xs {
-  @apply h-6 px-2 py-0.5 text-xs;
+  @apply h-6 rounded-swatch px-2 py-0.5 text-small;
 }
 
 .input-sm {
-  @apply h-7 px-2.5 py-1 text-xs;
+  @apply h-7 rounded-swatch px-2.5 py-1 text-small;
 }
 
 .input-md {
-  @apply h-9 px-3 py-1.5 text-sm;
+  @apply h-9 px-3 py-1.5 text-body;
 }
 
 .input-lg {
-  @apply h-11 px-4 py-2.5 text-base;
+  @apply h-11 px-4 py-2.5 text-subhead;
 }
 
+/* --- */
+
 /* -------------------------------------------------------------------------
- * Input — Colors
+ * Colors
+ *
+ * Each variant restates hover and focus so it outranks the shared state blocks
+ * above by source order. A pre-coloured border does not go neutral on hover.
  * ----------------------------------------------------------------------- */
-.input-primary {
-  @apply border-primary focus-visible:border-primary focus-visible:ring-primary/50;
+.input-primary,
+.input-primary:hover,
+.input-accent,
+.input-accent:hover {
+  @apply border-signal-on;
 }
 
-.input-secondary {
-  @apply border-secondary focus-visible:border-secondary focus-visible:ring-secondary/50;
+.input-primary:focus-visible,
+.input-accent:focus-visible {
+  @apply border-signal-on ring-3 ring-signal-on/50;
 }
 
-.input-accent {
-  @apply border-accent focus-visible:border-accent focus-visible:ring-accent/50;
+.input-secondary,
+.input-secondary:hover {
+  @apply border-rule-strong;
 }
 
-.input-error {
-  @apply border-destructive focus-visible:border-destructive focus-visible:ring-destructive/20;
+.input-secondary:focus-visible {
+  @apply border-rule-strong ring-3 ring-rule-strong/50;
 }
+
+.input-error,
+.input-error:hover {
+  @apply border-danger;
+}
+
+.input-error:focus-visible,
+.input[aria-invalid='true']:focus-visible {
+  @apply border-danger ring-3 ring-danger/40;
+}
+
+/* --- */
 
 /* -------------------------------------------------------------------------
- * Input — States
+ * States
  * ----------------------------------------------------------------------- */
 .input-disabled {
   @apply pointer-events-none cursor-not-allowed opacity-50;
 }
 
+/* Ghost fields carry no border at rest — they read as text until you reach for
+   them. Hover reveals the hairline, which is the same "firm the edge" gesture the
+   bordered field makes, just starting from nothing. */
 .input-ghost {
-  @apply border-transparent bg-transparent
-    focus-visible:border-ring focus-visible:bg-transparent;
+  @apply border-transparent bg-transparent;
 }
+
+.input-ghost:hover {
+  @apply border-rule;
+}
+
+.input-ghost:focus-visible {
+  @apply border-signal-on bg-transparent ring-3 ring-signal-on/50;
+}
+
+/* --- */
 
 /* -------------------------------------------------------------------------
- * Textarea — Base
+ * Color picker
+ *
+ * A `type="color"` input is a compact swatch trigger, not a text field — it gets
+ * its own footprint rather than `.input`'s h-9 and horizontal padding. The colour
+ * well inside it is a browser-owned pseudo-element that no Tailwind utility can
+ * reach, so its radius and border are restated there; without that the well stays
+ * a hard square sitting inside a rounded frame. The frame itself follows the same
+ * escalation as every other control: neutral hairline, firmer on hover, amber on
+ * focus.
+ *
+ * `color-scheme` on `:root` (see globals.css) is what keeps the picker panel this
+ * button opens from rendering light-mode in a dark app.
  * ----------------------------------------------------------------------- */
-.textarea {
-  @apply field-sizing-content w-full min-w-0 rounded-lg border border-input bg-transparent
-    px-3 py-2 text-sm transition-colors outline-none
-    placeholder:text-muted-foreground
-    focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50
-    disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50
-    aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20;
-  min-height: 5rem;
-  resize: vertical;
+.input-color {
+  @apply h-8 w-10 shrink-0 cursor-pointer rounded-swatch border border-rule bg-transparent p-0.5
+    transition-colors outline-none;
 }
 
-/* -------------------------------------------------------------------------
- * Textarea — Sizes
- * ----------------------------------------------------------------------- */
-.textarea-xs {
-  @apply px-2 py-1 text-xs;
-  min-height: 3rem;
+.input-color::-webkit-color-swatch-wrapper {
+  @apply p-0;
 }
 
-.textarea-sm {
-  @apply px-2.5 py-1.5 text-xs;
-  min-height: 4rem;
+/* One pixel tighter than `--radius-swatch` so the inner curve nests inside the
+   frame's instead of fighting it. */
+.input-color::-webkit-color-swatch {
+  @apply rounded-[3px] border-0;
 }
 
-.textarea-md {
-  @apply px-3 py-2 text-sm;
-  min-height: 5rem;
+.input-color::-moz-color-swatch {
+  @apply rounded-[3px] border-0;
 }
 
-.textarea-lg {
-  @apply px-4 py-3 text-base;
-  min-height: 7rem;
+.input-color:hover {
+  @apply border-rule-strong;
+}
+
+.input-color:focus-visible {
+  @apply border-signal-on ring-3 ring-signal-on/50;
+}
+
+.input-color:disabled {
+  @apply pointer-events-none cursor-not-allowed opacity-50;
 }

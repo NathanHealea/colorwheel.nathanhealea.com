@@ -48,7 +48,7 @@ export function GradientScale({
 
   return (
     <div className="flex flex-col gap-3">
-      <h2 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+      <h2 className="text-xs font-medium uppercase tracking-wider text-meta">
         {label}
       </h2>
       <ol className="flex h-20 max-w-md items-end gap-1 pt-5" aria-label={label}>
@@ -62,7 +62,7 @@ export function GradientScale({
             >
               {isCurrent && (
                 <span
-                  className="absolute -top-5 left-1/2 -translate-x-1/2 text-xs leading-none text-foreground"
+                  className="absolute -top-5 left-1/2 -translate-x-1/2 text-xs leading-none text-copy"
                   aria-hidden="true"
                 >
                   &#9660;
@@ -73,7 +73,7 @@ export function GradientScale({
                   href={item.href}
                   title={item.label}
                   aria-label={item.label}
-                  className="block h-full w-full rounded-sm border border-border transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  className="block h-full w-full rounded-sm border border-rule transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal-on"
                   style={{ backgroundColor: item.hex }}
                 />
               ) : (
@@ -83,8 +83,8 @@ export function GradientScale({
                   aria-current={isCurrent ? 'true' : undefined}
                   className={
                     isCurrent
-                      ? 'h-full w-full rounded-sm border border-border ring-2 ring-primary'
-                      : 'h-full w-full rounded-sm border border-border'
+                      ? 'h-full w-full rounded-sm border border-rule ring-2 ring-signal-on'
+                      : 'h-full w-full rounded-sm border border-rule'
                   }
                   style={{ backgroundColor: item.hex }}
                 />

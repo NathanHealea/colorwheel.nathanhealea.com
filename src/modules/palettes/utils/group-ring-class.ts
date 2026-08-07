@@ -18,5 +18,5 @@ export function getGroupRingClass(groupId: string, dropState: GroupDropState): s
   if (dropState?.groupId !== groupId) return ''
   if (dropState.kind === 'error') return 'ring-2 ring-red-500'
   if (dropState.kind === 'success') return 'ring-2 ring-green-500'
-  return 'ring-2 ring-primary'
+  return 'ring-2 ring-signal-on'
 }

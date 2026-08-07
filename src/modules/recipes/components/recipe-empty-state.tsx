@@ -7,7 +7,7 @@
 export function RecipeEmptyState({ variant }: { variant: 'owner' | 'guest' }) {
   return (
     <div className="card card-body items-center justify-center py-12 text-center">
-      <p className="text-muted-foreground">
+      <p className="text-meta">
         {variant === 'owner'
           ? 'No recipes yet — start a new one to outline your painting steps.'
           : 'No public recipes yet.'}

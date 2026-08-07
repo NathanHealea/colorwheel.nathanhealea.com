@@ -1,0 +1,86 @@
+/*
+ * Combobox Component
+ *
+ * Loosely modeled on the daisyUI Dropdown component, applied to the app's
+ * hand-rolled autocomplete widgets (paint search, army picker, scheme paint
+ * picker) rather than to a Radix primitive.
+ * https://daisyui.com/components/dropdown/
+ *
+ * Implements daisyUI's class naming conventions using this project's
+ * Undercoat theme tokens instead of daisyUI's built-in theme system.
+ *
+ * These panels are the same kind of surface as `.select-content` and
+ * `.dropdown-content`, so they share its tokens: `--radius-card` for the panel,
+ * `--radius-control` for the rows inside it, and `--shadow-overlay` to lift it
+ * off the field it covers. Keeping them in one file means an autocomplete can
+ * never drift away from the Radix-backed dropdowns again.
+ *
+ * Because these widgets are hand-rolled, the keyboard highlight has no Radix
+ * `data-highlighted` attribute to hook. `.combobox-item-active` is the explicit
+ * hook the component toggles as the active index moves.
+ *
+ * Classes:
+ *   Root:    .combobox              — Positioning context for the panel
+ *   Panel:   .combobox-panel        — Floating result surface (rounded-card, shadow-overlay)
+ *   List:    .combobox-list         — Scrollable row container
+ *   Rows:    .combobox-item         — Result row (rounded-control, text-body)
+ *            .combobox-item-active  — Keyboard-highlighted row
+ *            .combobox-item-meta    — Trailing metadata cluster (brand, badges)
+ *            .combobox-empty        — "No results" row
+ *   Chip:    .combobox-chip         — Selected-value chip shown in place of the field
+ */
+
+/* -------------------------------------------------------------------------
+ * Root
+ * ----------------------------------------------------------------------- */
+.combobox {
+  @apply relative;
+}
+
+/* -------------------------------------------------------------------------
+ * Panel — floating result surface
+ * ----------------------------------------------------------------------- */
+.combobox-panel {
+  @apply absolute top-full left-0 z-50 mt-1 w-full overflow-hidden
+    rounded-card border border-rule bg-panel text-copy shadow-overlay;
+}
+
+.combobox-list {
+  @apply max-h-72 overflow-y-auto p-1;
+}
+
+/* --- */
+
+/* -------------------------------------------------------------------------
+ * Rows
+ * ----------------------------------------------------------------------- */
+.combobox-item {
+  @apply flex w-full cursor-pointer items-center gap-3 rounded-control px-2 py-1.5
+    text-left text-body text-copy transition-colors outline-none
+    hover:bg-inset
+    focus-visible:bg-inset;
+}
+
+/* Keyboard highlight. Declared after the hover rule so arrowing through results
+   keeps the highlight on the active row even while the pointer rests elsewhere. */
+.combobox-item-active {
+  @apply bg-inset;
+}
+
+.combobox-item-meta {
+  @apply ml-auto flex shrink-0 items-center gap-2 text-small text-meta;
+}
+
+.combobox-empty {
+  @apply px-2 py-1.5 text-small text-meta;
+}
+
+/* --- */
+
+/* -------------------------------------------------------------------------
+ * Chip — selected value shown in place of the search field
+ * ----------------------------------------------------------------------- */
+.combobox-chip {
+  @apply flex items-center gap-2 rounded-control border border-rule bg-canvas
+    px-3 py-2 text-body;
+}

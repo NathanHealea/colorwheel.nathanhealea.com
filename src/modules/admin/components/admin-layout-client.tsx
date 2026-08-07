@@ -23,7 +23,7 @@ export function AdminLayoutClient({ children }: { children: ReactNode }) {
         onClose={() => setSidebarOpen(false)}
       />
       <div className="flex flex-1 flex-col">
-        <div className="border-b border-border p-2 lg:hidden">
+        <div className="border-b border-rule p-2 lg:hidden">
           <button
             type="button"
             className="sidebar-toggle"

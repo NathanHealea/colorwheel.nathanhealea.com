@@ -13,13 +13,13 @@ export default function AdminRolesLoading() {
         <Skeleton className="h-10 w-32" />
       </div>
 
-      <div className="rounded-lg border border-border">
-        <div className="flex items-center gap-3 border-b border-border px-4 py-3">
+      <div className="rounded-lg border border-rule">
+        <div className="flex items-center gap-3 border-b border-rule px-4 py-3">
           <Skeleton className="h-4 w-32" />
           <Skeleton className="ml-auto h-4 w-20" />
         </div>
         {Array.from({ length: 6 }, (_, i) => (
-          <div key={i} className="flex items-center gap-3 border-b border-border px-4 py-3 last:border-b-0">
+          <div key={i} className="flex items-center gap-3 border-b border-rule px-4 py-3 last:border-b-0">
             <Skeleton className="h-4 w-32" />
             <Skeleton className="ml-auto h-4 w-12" />
           </div>

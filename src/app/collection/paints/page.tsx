@@ -53,7 +53,7 @@ export default async function CollectionPaintsPage({
       </PageHeader>
 
       {totalCount === 0 ? (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-meta">
           Browse the <Link href="/paints" className="underline underline-offset-4">paint library</Link> and click the bookmark icon to add paints.
         </p>
       ) : (

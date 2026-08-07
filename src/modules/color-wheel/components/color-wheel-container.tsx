@@ -54,7 +54,7 @@ export function ColorWheelContainer({
 
   return (
     <div className="relative flex h-full w-full flex-col items-center gap-4 p-4">
-      <div className="flex gap-1 rounded-lg border border-border p-1">
+      <div className="flex gap-1 rounded-lg border border-rule p-1">
         <Button
           type="button"
           onClick={() => setView('munsell')}

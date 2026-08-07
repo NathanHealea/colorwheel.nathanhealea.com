@@ -5,26 +5,38 @@
  * https://daisyui.com/components/select/
  *
  * Styled for use with Radix UI Select primitives. The trigger mirrors the
- * .input styling (border, focus ring, disabled state) with a chevron caret
- * rendered via an inline icon inside the trigger. The content panel uses
- * Radix data-state attributes for open/close transitions, mirroring
- * dropdown.css.
+ * .input styling; the content panel uses Radix data-state attributes for
+ * open/close transitions, mirroring dropdown.css.
+ *
+ * The trigger is a control (`--radius-control`); the content panel is a floating
+ * surface (`--radius-card` + `--shadow-overlay`).
+ *
+ * The trigger needs one state the text inputs do not. It is a `<button>`, and
+ * `:focus-visible` deliberately does not match a button clicked with a pointer —
+ * so a mouse user opening a select got no amber at all, and the most active
+ * control on screen was the only one that looked idle. Radix hangs
+ * `data-state="open"` on the trigger; styling that alongside `:focus-visible`
+ * covers both input methods. See input.css for why the state blocks are separate
+ * and ordered rather than folded into one `@apply`.
+ *
+ * State order: hover (neutral) → active/pressed → focus → open → invalid → disabled.
  *
  * Classes:
- *   Trigger:   .select-trigger          — Default trigger styling (h-9, text-sm)
- *   Sizes:     .select-trigger-xs       — Extra-small (h-6, text-xs)
- *              .select-trigger-sm       — Small (h-7, text-xs)
- *              .select-trigger-md       — Medium / default (h-9, text-sm)
- *              .select-trigger-lg       — Large (h-11, text-base)
- *   Colors:    .select-trigger-primary  — Primary border & ring color
- *              .select-trigger-secondary — Secondary border & ring color
- *              .select-trigger-accent   — Accent border & ring color
- *              .select-trigger-error    — Destructive/error border & ring color
- *   States:    .select-trigger-ghost    — Borderless/transparent style
- *   Content:   .select-content          — The floating panel
+ *   Trigger:   .select-trigger          — Default trigger styling (h-9, text-body)
+ *   Sizes:     .select-trigger-xs       — Extra-small (h-6, text-small)
+ *              .select-trigger-sm       — Small (h-7, text-small)
+ *              .select-trigger-md       — Medium / default (h-9, text-body)
+ *              .select-trigger-lg       — Large (h-11, text-subhead)
+ *   Colors:    .select-trigger-primary  — Amber signal border & ring
+ *              .select-trigger-secondary — Strong rule border & ring
+ *              .select-trigger-accent   — Amber signal border & ring
+ *              .select-trigger-error    — Danger border & ring
+ *   States:    .select-trigger-ghost    — Borderless until hovered or focused
+ *   Icon:      .select-trigger-icon     — Chevron caret; brightens and flips when open
+ *   Content:   .select-content          — Floating panel (rounded-card, shadow-overlay)
  *   Viewport:  .select-viewport         — Inner scrollable container
- *   Items:     .select-item             — Individual option row
- *   Label:     .select-label            — Non-interactive group label
+ *   Items:     .select-item             — Individual option row (rounded-control)
+ *   Label:     .select-label            — Mono uppercase micro-caption group label
  *   Separator: .select-separator        — Divider line between groups
  *   Indicator: .select-item-indicator   — Check icon shown next to selected item
  *   Scroll:    .select-scroll-button    — Up/down scroll-affordance buttons
@@ -35,12 +47,9 @@
  * ----------------------------------------------------------------------- */
 .select-trigger {
   @apply flex h-9 w-full min-w-0 cursor-pointer items-center justify-between gap-2
-    rounded-lg border border-input bg-transparent
-    py-1.5 pr-2.5 pl-3 text-sm transition-colors outline-none
-    focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50
-    disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50
-    aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20
-    data-[placeholder]:text-muted-foreground;
+    rounded-control border border-rule bg-transparent
+    py-1.5 pr-2.5 pl-3 text-body transition-colors outline-none
+    data-[placeholder]:text-meta;
 }
 
 .select-trigger > span:first-child {
@@ -48,14 +57,60 @@
 }
 
 .select-trigger-icon {
-  @apply size-4 shrink-0 opacity-50;
+  @apply size-4 shrink-0 opacity-50 transition-[opacity,transform] duration-150;
 }
+
+/* --- */
+
+/* -------------------------------------------------------------------------
+ * Trigger — States, escalating order
+ * ----------------------------------------------------------------------- */
+
+/* Hover firms the hairline and brings the chevron up to full weight. No hue: the
+   pointer crossing a closed select has not activated anything. */
+.select-trigger:hover {
+  @apply border-rule-strong;
+}
+
+.select-trigger:hover .select-trigger-icon {
+  @apply opacity-100;
+}
+
+/* Pressed. The only place a control gets an inset ground — it reads as the
+   surface giving way under the pointer. */
+.select-trigger:active {
+  @apply border-rule-strong bg-inset;
+}
+
+.select-trigger:focus-visible {
+  @apply border-signal-on ring-3 ring-signal-on/50;
+}
+
+/* Open — the same amber as focus, because an open select is unambiguously the
+   active control whether it was opened by keyboard or by mouse. */
+.select-trigger[data-state='open'] {
+  @apply border-signal-on bg-transparent ring-3 ring-signal-on/50;
+}
+
+.select-trigger[data-state='open'] .select-trigger-icon {
+  @apply rotate-180 opacity-100;
+}
+
+.select-trigger[aria-invalid='true'] {
+  @apply border-danger ring-3 ring-danger/40;
+}
+
+.select-trigger:disabled {
+  @apply pointer-events-none cursor-not-allowed opacity-50;
+}
+
+/* --- */
 
 /* -------------------------------------------------------------------------
  * Trigger — Sizes
  * ----------------------------------------------------------------------- */
 .select-trigger-xs {
-  @apply h-6 gap-1.5 py-0.5 pr-1.5 pl-2 text-xs;
+  @apply h-6 gap-1.5 rounded-swatch py-0.5 pr-1.5 pl-2 text-small;
 }
 
 .select-trigger-xs .select-trigger-icon {
@@ -63,7 +118,7 @@
 }
 
 .select-trigger-sm {
-  @apply h-7 gap-1.5 py-1 pr-2 pl-2.5 text-xs;
+  @apply h-7 gap-1.5 rounded-swatch py-1 pr-2 pl-2.5 text-small;
 }
 
 .select-trigger-sm .select-trigger-icon {
@@ -71,7 +126,7 @@
 }
 
 .select-trigger-md {
-  @apply h-9 gap-2 py-1.5 pr-2.5 pl-3 text-sm;
+  @apply h-9 gap-2 py-1.5 pr-2.5 pl-3 text-body;
 }
 
 .select-trigger-md .select-trigger-icon {
@@ -79,46 +134,83 @@
 }
 
 .select-trigger-lg {
-  @apply h-11 gap-2.5 py-2.5 pr-3 pl-4 text-base;
+  @apply h-11 gap-2.5 py-2.5 pr-3 pl-4 text-subhead;
 }
 
 .select-trigger-lg .select-trigger-icon {
   @apply size-5;
 }
 
+/* --- */
+
 /* -------------------------------------------------------------------------
  * Trigger — Colors
+ *
+ * Each variant restates hover and focus so it outranks the shared state blocks
+ * above by source order. A pre-coloured border does not go neutral on hover.
  * ----------------------------------------------------------------------- */
-.select-trigger-primary {
-  @apply border-primary focus-visible:border-primary focus-visible:ring-primary/50;
+.select-trigger-primary,
+.select-trigger-primary:hover,
+.select-trigger-accent,
+.select-trigger-accent:hover {
+  @apply border-signal-on;
 }
 
-.select-trigger-secondary {
-  @apply border-secondary focus-visible:border-secondary focus-visible:ring-secondary/50;
+.select-trigger-primary:focus-visible,
+.select-trigger-primary[data-state='open'],
+.select-trigger-accent:focus-visible,
+.select-trigger-accent[data-state='open'] {
+  @apply border-signal-on ring-3 ring-signal-on/50;
 }
 
-.select-trigger-accent {
-  @apply border-accent focus-visible:border-accent focus-visible:ring-accent/50;
+.select-trigger-secondary,
+.select-trigger-secondary:hover {
+  @apply border-rule-strong;
 }
 
-.select-trigger-error {
-  @apply border-destructive focus-visible:border-destructive focus-visible:ring-destructive/20;
+.select-trigger-secondary:focus-visible,
+.select-trigger-secondary[data-state='open'] {
+  @apply border-rule-strong ring-3 ring-rule-strong/50;
 }
+
+.select-trigger-error,
+.select-trigger-error:hover {
+  @apply border-danger;
+}
+
+.select-trigger-error:focus-visible,
+.select-trigger-error[data-state='open'],
+.select-trigger[aria-invalid='true']:focus-visible,
+.select-trigger[aria-invalid='true'][data-state='open'] {
+  @apply border-danger ring-3 ring-danger/40;
+}
+
+/* --- */
 
 /* -------------------------------------------------------------------------
  * Trigger — States
  * ----------------------------------------------------------------------- */
 .select-trigger-ghost {
-  @apply border-transparent bg-transparent
-    focus-visible:border-ring focus-visible:bg-transparent;
+  @apply border-transparent bg-transparent;
 }
+
+.select-trigger-ghost:hover {
+  @apply border-rule;
+}
+
+.select-trigger-ghost:focus-visible,
+.select-trigger-ghost[data-state='open'] {
+  @apply border-signal-on bg-transparent ring-3 ring-signal-on/50;
+}
+
+/* --- */
 
 /* -------------------------------------------------------------------------
  * Content panel
  * ----------------------------------------------------------------------- */
 .select-content {
   @apply relative z-50 max-h-(--radix-select-content-available-height) min-w-(--radix-select-trigger-width)
-    overflow-hidden rounded-lg border border-border bg-popover text-popover-foreground shadow-md;
+    overflow-hidden rounded-card border border-rule bg-panel text-copy shadow-overlay;
 
   /* open/close animations */
   @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95
@@ -139,37 +231,53 @@
   @apply scroll-my-1;
 }
 
+/* --- */
+
 /* -------------------------------------------------------------------------
  * Item
+ *
+ * `data-highlighted` is the attribute Radix drives with the keyboard and the
+ * pointer alike; `:focus` alone left the row unlit in the cases where Radix moves
+ * the highlight without moving DOM focus.
  * ----------------------------------------------------------------------- */
 .select-item {
-  @apply relative flex w-full cursor-pointer items-center gap-2 rounded-md py-1.5 pr-8 pl-2
-    text-sm text-foreground outline-none transition-colors select-none
-    focus:bg-muted
+  @apply relative flex w-full cursor-pointer items-center gap-2 rounded-control py-1.5 pr-8 pl-2
+    text-body text-copy outline-none transition-colors select-none
+    hover:bg-inset
+    focus:bg-inset
+    data-[highlighted]:bg-inset
     data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 }
 
+/* The tick beside the chosen option is amber — it marks ownership of the current
+   value, not decoration. */
 .select-item-indicator {
-  @apply absolute right-2 flex size-3.5 items-center justify-center;
+  @apply absolute right-2 flex size-3.5 items-center justify-center text-signal-on;
 }
+
+/* --- */
 
 /* -------------------------------------------------------------------------
  * Label
  * ----------------------------------------------------------------------- */
 .select-label {
-  @apply px-2 py-1.5 text-xs font-medium text-muted-foreground;
+  @apply px-2 py-1.5 font-mono text-micro uppercase text-meta;
 }
+
+/* --- */
 
 /* -------------------------------------------------------------------------
  * Separator
  * ----------------------------------------------------------------------- */
 .select-separator {
-  @apply -mx-1 my-1 h-px bg-border;
+  @apply -mx-1 my-1 h-px bg-rule;
 }
+
+/* --- */
 
 /* -------------------------------------------------------------------------
  * Scroll buttons
  * ----------------------------------------------------------------------- */
 .select-scroll-button {
-  @apply flex h-6 cursor-default items-center justify-center text-muted-foreground;
+  @apply flex h-6 cursor-default items-center justify-center text-meta;
 }

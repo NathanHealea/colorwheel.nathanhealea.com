@@ -37,9 +37,9 @@ export function OAuthButtons() {
   return (
     <div className="mt-6 flex flex-col gap-4">
       <div className="flex items-center gap-3">
-        <hr className="flex-1 border-border" />
-        <span className="text-sm text-muted-foreground">or</span>
-        <hr className="flex-1 border-border" />
+        <hr className="flex-1 border-rule" />
+        <span className="text-sm text-meta">or</span>
+        <hr className="flex-1 border-rule" />
       </div>
 
       <Button type="button" className="btn btn-outline btn-block" disabled={pending} onClick={handleGoogle}>

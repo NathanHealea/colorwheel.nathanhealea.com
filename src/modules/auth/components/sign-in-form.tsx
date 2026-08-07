@@ -52,7 +52,7 @@ export function SignInForm() {
         />
       </div>
       <div className="flex justify-end">
-        <Link href="/forgot-password" className="text-sm text-muted-foreground underline-offset-4 hover:underline">
+        <Link href="/forgot-password" className="text-sm text-meta underline-offset-4 hover:underline">
           Forgot your password?
         </Link>
       </div>

@@ -62,7 +62,7 @@ export function SchemeOverview({
         partners={analogous}
         ownedIds={ownedIds}
         control={
-          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+          <label className="flex items-center gap-2 text-xs text-meta">
             Spread {analogousAngle}°
             <input
               type="range"

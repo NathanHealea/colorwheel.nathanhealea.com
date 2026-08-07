@@ -9,7 +9,10 @@
  * https://daisyui.com/components/drawer/
  *
  * Implements daisyUI's class naming conventions using this project's
- * Tailwind CSS theme tokens instead of daisyUI's built-in theme system.
+ * Undercoat theme tokens instead of daisyUI's built-in theme system.
+ *
+ * The panel is edge-anchored and full-height, so it takes no corner radius —
+ * only `--shadow-overlay` to lift it off the canvas.
  *
  * Classes:
  *   Overlay:   .sheet-overlay              — Fixed translucent backdrop
@@ -37,7 +40,7 @@
  * ----------------------------------------------------------------------- */
 .sheet-content {
   @apply fixed z-[60] flex h-full w-3/4 max-w-sm flex-col gap-4
-    border-border bg-background p-6 shadow-lg
+    border-rule bg-canvas p-6 shadow-overlay
     transition ease-in-out
     data-[state=open]:animate-in data-[state=closed]:animate-out
     data-[state=closed]:duration-200 data-[state=open]:duration-300;

@@ -12,7 +12,7 @@ export default function AdminRoleDetailLoading() {
       </div>
 
       <div className="space-y-8">
-        <div className="rounded-lg border border-border p-6">
+        <div className="rounded-lg border border-rule p-6">
           <div className="flex flex-col gap-3">
             <Skeleton className="h-6 w-32" />
             <Skeleton className="h-4 w-56" />
@@ -22,9 +22,9 @@ export default function AdminRoleDetailLoading() {
 
         <div className="flex flex-col gap-4">
           <Skeleton className="h-6 w-40" />
-          <div className="rounded-lg border border-border">
+          <div className="rounded-lg border border-rule">
             {Array.from({ length: 4 }, (_, i) => (
-              <div key={i} className="flex items-center gap-3 border-b border-border px-4 py-3 last:border-b-0">
+              <div key={i} className="flex items-center gap-3 border-b border-rule px-4 py-3 last:border-b-0">
                 <Skeleton className="h-4 w-40" />
                 <Skeleton className="ml-auto h-4 w-16" />
               </div>

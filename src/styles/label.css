@@ -5,29 +5,43 @@
  * https://daisyui.com/components/label/
  *
  * Implements daisyUI's class naming conventions (.label, .label-text, etc.)
- * using this project's Tailwind CSS theme tokens instead of daisyUI's
- * built-in theme system.
+ * using this project's Undercoat theme tokens instead of daisyUI's built-in
+ * theme system.
+ *
+ * `.label-micro` is Undercoat's primary hierarchy device — a mono, uppercase,
+ * letter-spaced caption that names a field without competing with its value.
+ * Prefer it over a bold heading whenever the label is metadata rather than a title.
  *
  * Classes:
- *   Base:    .label          — Flex label with gap, medium weight, peer-disabled handling
- *   Text:    .label-text     — Standard label text (text-sm, foreground)
- *            .label-text-alt — Alternate/helper label text (text-xs, muted)
+ *   Base:    .label           — Flex label with gap, medium weight, peer-disabled handling
+ *   Text:    .label-text      — Standard label text (text-small, copy)
+ *            .label-text-alt  — Alternate/helper label text (text-data, meta)
+ *   Micro:   .label-micro     — Mono uppercase micro-caption (text-micro, meta)
  */
 
 /* -------------------------------------------------------------------------
  * Base
  * ----------------------------------------------------------------------- */
 .label {
-  @apply flex items-center gap-2 text-sm leading-none font-medium select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50;
+  @apply flex items-center gap-2
+    text-small leading-none font-medium select-none
+    peer-disabled:cursor-not-allowed peer-disabled:opacity-50;
 }
 
 /* -------------------------------------------------------------------------
  * Text variants
  * ----------------------------------------------------------------------- */
 .label-text {
-  @apply text-sm font-medium text-foreground;
+  @apply text-small font-medium text-copy;
 }
 
 .label-text-alt {
-  @apply text-xs font-normal text-muted-foreground;
+  @apply text-data font-normal text-meta;
+}
+
+/* -------------------------------------------------------------------------
+ * Micro-label
+ * ----------------------------------------------------------------------- */
+.label-micro {
+  @apply font-mono text-micro uppercase text-meta;
 }

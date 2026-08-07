@@ -188,7 +188,7 @@ export function MarkdownEditor({
           {previewContent.trim().length > 0 ? (
             <MarkdownRenderer content={previewContent} />
           ) : (
-            <p className="italic text-muted-foreground">Nothing to preview</p>
+            <p className="italic text-meta">Nothing to preview</p>
           )}
         </div>
       )}
@@ -208,7 +208,7 @@ export function MarkdownEditor({
           previewMode && 'hidden'
         )}
       />
-      <div className="mt-1 flex justify-between gap-2 text-xs text-muted-foreground">
+      <div className="mt-1 flex justify-between gap-2 text-xs text-meta">
         <p>
           Supports **bold**, *italic*, `code`, ## headings, and lists.
         </p>
@@ -216,14 +216,14 @@ export function MarkdownEditor({
           <p
             className={cn(
               'tabular-nums',
-              count > maxLength && 'text-destructive'
+              count > maxLength && 'text-danger'
             )}
           >
             {count} / {maxLength}
           </p>
         )}
       </div>
-      {error && <p className="mt-1 text-sm text-destructive">{error}</p>}
+      {error && <p className="mt-1 text-sm text-danger">{error}</p>}
     </div>
   )
 }

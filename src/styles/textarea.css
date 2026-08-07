@@ -5,78 +5,126 @@
  * https://daisyui.com/components/textarea/
  *
  * Implements daisyUI's class naming conventions (.textarea, .textarea-primary,
- * .textarea-sm, etc.) using this project's Tailwind CSS theme tokens instead
+ * .textarea-sm, etc.) using this project's Undercoat theme tokens instead
  * of daisyUI's built-in theme system.
  *
+ * Mirrors input.css exactly — same radius, same border, same state escalation
+ * (rest → hover firms the hairline → focus goes amber → invalid outranks focus in
+ * terracotta → disabled) — with content-based sizing and a vertical resize handle
+ * on top. See input.css for why the state blocks are separate and ordered rather
+ * than folded into one `@apply`.
+ *
  * Classes:
- *   Base:    .textarea            — Default multi-line input styling (min-h-16, text-sm)
- *   Sizes:   .textarea-xs        — Extra-small (min-h-12, text-xs)
- *            .textarea-sm        — Small (min-h-16, text-xs)
- *            .textarea-md        — Medium / default (min-h-20, text-sm)
- *            .textarea-lg        — Large (min-h-28, text-base)
- *   Colors:  .textarea-primary   — Primary border & ring color
- *            .textarea-secondary — Secondary border & ring color
- *            .textarea-accent    — Accent border & ring color
- *            .textarea-error     — Destructive/error border & ring color
+ *   Base:    .textarea            — Default multi-line input styling (min-h 4rem, text-body)
+ *   Sizes:   .textarea-xs        — Extra-small (min-h 3rem, text-small)
+ *            .textarea-sm        — Small (min-h 4rem, text-small)
+ *            .textarea-md        — Medium / default (min-h 5rem, text-body)
+ *            .textarea-lg        — Large (min-h 7rem, text-subhead)
+ *   Colors:  .textarea-primary   — Amber signal border & ring
+ *            .textarea-secondary — Strong rule border & ring
+ *            .textarea-accent    — Amber signal border & ring
+ *            .textarea-error     — Danger border & ring
  *   States:  .textarea-disabled  — Disabled appearance (pointer-events-none, opacity-50)
- *            .textarea-ghost     — Borderless/transparent style
+ *            .textarea-ghost     — Borderless until hovered or focused
  */
 
 /* -------------------------------------------------------------------------
  * Base
  * ----------------------------------------------------------------------- */
 .textarea {
-  @apply field-sizing-content w-full min-w-0 rounded-lg border border-input bg-transparent
-    px-3 py-2 text-sm transition-colors outline-none
-    placeholder:text-muted-foreground
-    focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50
-    disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50
-    aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20;
+  @apply field-sizing-content w-full min-w-0 rounded-control border border-rule bg-transparent
+    px-3 py-2 text-body transition-colors outline-none
+    placeholder:text-meta;
   min-height: 4rem;
   resize: vertical;
 }
+
+/* --- */
+
+/* -------------------------------------------------------------------------
+ * States — escalating order, equal specificity
+ * ----------------------------------------------------------------------- */
+.textarea:hover {
+  @apply border-rule-strong;
+}
+
+.textarea:focus-visible {
+  @apply border-signal-on ring-3 ring-signal-on/50;
+}
+
+.textarea[aria-invalid='true'] {
+  @apply border-danger ring-3 ring-danger/40;
+}
+
+.textarea:disabled {
+  @apply pointer-events-none cursor-not-allowed opacity-50;
+}
+
+/* --- */
 
 /* -------------------------------------------------------------------------
  * Sizes
  * ----------------------------------------------------------------------- */
 .textarea-xs {
-  @apply px-2 py-1 text-xs;
+  @apply rounded-swatch px-2 py-1 text-small;
   min-height: 3rem;
 }
 
 .textarea-sm {
-  @apply px-2.5 py-1.5 text-xs;
+  @apply rounded-swatch px-2.5 py-1.5 text-small;
   min-height: 4rem;
 }
 
 .textarea-md {
-  @apply px-3 py-2 text-sm;
+  @apply px-3 py-2 text-body;
   min-height: 5rem;
 }
 
 .textarea-lg {
-  @apply px-4 py-3 text-base;
+  @apply px-4 py-3 text-subhead;
   min-height: 7rem;
 }
 
+/* --- */
+
 /* -------------------------------------------------------------------------
  * Colors
+ *
+ * Each variant restates hover and focus so it outranks the shared state blocks
+ * above by source order.
  * ----------------------------------------------------------------------- */
-.textarea-primary {
-  @apply border-primary focus-visible:border-primary focus-visible:ring-primary/50;
+.textarea-primary,
+.textarea-primary:hover,
+.textarea-accent,
+.textarea-accent:hover {
+  @apply border-signal-on;
 }
 
-.textarea-secondary {
-  @apply border-secondary focus-visible:border-secondary focus-visible:ring-secondary/50;
+.textarea-primary:focus-visible,
+.textarea-accent:focus-visible {
+  @apply border-signal-on ring-3 ring-signal-on/50;
 }
 
-.textarea-accent {
-  @apply border-accent focus-visible:border-accent focus-visible:ring-accent/50;
+.textarea-secondary,
+.textarea-secondary:hover {
+  @apply border-rule-strong;
 }
 
-.textarea-error {
-  @apply border-destructive focus-visible:border-destructive focus-visible:ring-destructive/20;
+.textarea-secondary:focus-visible {
+  @apply border-rule-strong ring-3 ring-rule-strong/50;
 }
+
+.textarea-error,
+.textarea-error:hover {
+  @apply border-danger;
+}
+
+.textarea-error:focus-visible,
+.textarea[aria-invalid='true']:focus-visible {
+  @apply border-danger ring-3 ring-danger/40;
+}
+
+/* --- */
 
 /* -------------------------------------------------------------------------
  * States
@@ -86,6 +134,13 @@
 }
 
 .textarea-ghost {
-  @apply border-transparent bg-transparent
-    focus-visible:border-ring focus-visible:bg-transparent;
+  @apply border-transparent bg-transparent;
+}
+
+.textarea-ghost:hover {
+  @apply border-rule;
+}
+
+.textarea-ghost:focus-visible {
+  @apply border-signal-on bg-transparent ring-3 ring-signal-on/50;
 }
