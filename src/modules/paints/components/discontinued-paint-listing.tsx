@@ -52,7 +52,7 @@ export function DiscontinuedPaintListing({
 
   if (paints.length === 0) {
     return (
-      <p className="rounded-lg border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
+      <p className="rounded-lg border border-dashed border-rule bg-inset/30 p-8 text-center text-sm text-meta">
         No discontinued paints found.
       </p>
     )
@@ -60,7 +60,7 @@ export function DiscontinuedPaintListing({
 
   return (
     <div className="flex flex-col gap-6">
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-meta">
         Showing {rangeStart.toLocaleString()}&ndash;{rangeEnd.toLocaleString()} of{' '}
         {totalCount.toLocaleString()}
       </p>
@@ -72,12 +72,12 @@ export function DiscontinuedPaintListing({
           return (
             <li
               key={paint.id}
-              className="grid gap-6 rounded-lg border border-border bg-card p-4 sm:grid-cols-[minmax(0,18rem)_1fr]"
+              className="grid gap-6 rounded-lg border border-rule bg-panel p-4 sm:grid-cols-[minmax(0,18rem)_1fr]"
             >
               <div className="flex flex-col gap-3">
                 <div className="flex items-start gap-3">
                   <div
-                    className="size-16 shrink-0 rounded-lg border border-border"
+                    className="size-16 shrink-0 rounded-lg border border-rule"
                     style={paintSwatchBackground(paint.hex, paint.paint_type, paint.is_metallic)}
                     aria-label={`Color swatch for ${paint.name}`}
                   />
@@ -88,17 +88,17 @@ export function DiscontinuedPaintListing({
                     >
                       {paint.name}
                     </Link>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-meta">
                       <Link
                         href={`/brands/${brand.id}`}
-                        className="underline hover:text-foreground"
+                        className="underline hover:text-copy"
                       >
                         {brand.name}
                       </Link>
                       {' — '}
                       {productLine.name}
                     </p>
-                    <p className="font-mono text-xs text-muted-foreground">
+                    <p className="font-mono text-xs text-meta">
                       {paint.hex.toUpperCase()}
                     </p>
                   </div>
@@ -127,7 +127,7 @@ export function DiscontinuedPaintListing({
           <PaginationLink page={page - 1} size={size} disabled={page <= 1}>
             Previous
           </PaginationLink>
-          <span className="px-3 text-sm text-muted-foreground">
+          <span className="px-3 text-sm text-meta">
             Page {page} of {totalPages}
           </span>
           <PaginationLink page={page + 1} size={size} disabled={page >= totalPages}>

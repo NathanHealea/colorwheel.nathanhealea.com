@@ -107,8 +107,8 @@ export function CollectionToggle({
         'btn-ghost',
         btnSize,
         optimisticInCollection
-          ? 'text-primary'
-          : 'text-muted-foreground hover:text-foreground',
+          ? 'text-signal-on'
+          : 'text-meta hover:text-copy',
         className,
       )}
     >

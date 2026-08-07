@@ -24,7 +24,7 @@ export function SimilarPaintCard({ match }: { match: PaintMatch }) {
         paintType={paint.paint_type}
         isDiscontinued={paint.is_discontinued}
       />
-      <p className="text-center text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+      <p className="text-center text-[10px] font-medium uppercase tracking-wider text-meta">
         ΔE {match.deltaE.toFixed(1)}
       </p>
     </div>

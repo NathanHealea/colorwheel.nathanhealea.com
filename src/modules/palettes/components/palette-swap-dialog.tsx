@@ -131,7 +131,7 @@ export function PaletteSwapDialog({
         className="w-full max-w-2xl max-h-[90vh] p-0"
       >
         {/* Header */}
-        <div className="flex items-center gap-3 border-b border-border px-5 py-4 shrink-0">
+        <div className="flex items-center gap-3 border-b border-rule px-5 py-4 shrink-0">
           <div
             className="size-9 shrink-0 rounded-md"
             style={paintSwatchBackground(paint.hex, paint.paint_type, paint.is_metallic)}
@@ -140,7 +140,7 @@ export function PaletteSwapDialog({
           <DialogHeader className="min-w-0 flex-1">
             <DialogTitle className="truncate">{paint.name}</DialogTitle>
             {hueGroupName && (
-              <p className="text-xs text-muted-foreground">Hue group: {hueGroupName}</p>
+              <p className="text-xs text-meta">Hue group: {hueGroupName}</p>
             )}
           </DialogHeader>
           <Button
@@ -158,7 +158,7 @@ export function PaletteSwapDialog({
           {/* Filter controls */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              <span className="text-xs font-semibold uppercase tracking-wide text-meta">
                 Filters
               </span>
               <SliderInfoPopover />
@@ -193,17 +193,17 @@ export function PaletteSwapDialog({
             {fetchState.status === 'loading' && (
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="h-24 animate-pulse rounded-lg bg-muted" />
+                  <div key={i} className="h-24 animate-pulse rounded-lg bg-inset" />
                 ))}
               </div>
             )}
 
             {fetchState.status === 'error' && (
-              <p className="text-sm text-destructive">{fetchState.message}</p>
+              <p className="text-sm text-danger">{fetchState.message}</p>
             )}
 
             {fetchState.status === 'success' && visible.length === 0 && (
-              <p className="py-4 text-center text-sm text-muted-foreground">
+              <p className="py-4 text-center text-sm text-meta">
                 {ownedOnly
                   ? 'No paints in your collection match these ranges.'
                   : 'No same-hue paints match these ranges. Try widening saturation or lightness.'}
@@ -227,7 +227,7 @@ export function PaletteSwapDialog({
         </div>
 
         {/* Footer */}
-        <DialogFooter className="border-t border-border px-5 py-3 shrink-0">
+        <DialogFooter className="border-t border-rule px-5 py-3 shrink-0">
           <Button
             type="button"
             onClick={handleClose}
@@ -261,7 +261,7 @@ function SliderInfoPopover() {
         <div className="flex flex-col gap-3 text-sm">
           <div>
             <p className="font-medium">Saturation &amp; Lightness</p>
-            <p className="mt-1 text-muted-foreground">
+            <p className="mt-1 text-meta">
               Each slider has two handles defining a range. Drag the left handle to set the
               minimum and the right to set the maximum. Only paints whose saturation or lightness
               falls inside both ranges are shown. The tick mark on each track shows where your
@@ -270,26 +270,26 @@ function SliderInfoPopover() {
           </div>
           <div>
             <p className="font-medium">
-              ΔE <span className="font-normal text-muted-foreground">(Delta E)</span>
+              ΔE <span className="font-normal text-meta">(Delta E)</span>
             </p>
-            <p className="mt-1 text-muted-foreground">
+            <p className="mt-1 text-meta">
               A perceptual color-distance score. Lower means more similar to your current paint:
             </p>
-            <ul className="mt-1.5 space-y-0.5 text-muted-foreground">
+            <ul className="mt-1.5 space-y-0.5 text-meta">
               <li>
-                <span className="font-medium text-foreground">&lt; 2</span> — nearly identical
+                <span className="font-medium text-copy">&lt; 2</span> — nearly identical
               </li>
               <li>
-                <span className="font-medium text-foreground">2–5</span> — very close match
+                <span className="font-medium text-copy">2–5</span> — very close match
               </li>
               <li>
-                <span className="font-medium text-foreground">5–10</span> — noticeable but similar
+                <span className="font-medium text-copy">5–10</span> — noticeable but similar
               </li>
               <li>
-                <span className="font-medium text-foreground">&gt; 10</span> — clearly different
+                <span className="font-medium text-copy">&gt; 10</span> — clearly different
               </li>
             </ul>
-            <p className="mt-2 text-muted-foreground">
+            <p className="mt-2 text-meta">
               Candidates are sorted by ΔE so the closest match appears first.
             </p>
           </div>

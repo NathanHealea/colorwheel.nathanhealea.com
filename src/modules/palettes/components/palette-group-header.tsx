@@ -92,7 +92,7 @@ export function PaletteGroupHeader({
 
   if (!canEdit) {
     return (
-      <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mt-2 mb-1 px-1">
+      <h3 className="text-xs font-medium text-meta uppercase tracking-wide mt-2 mb-1 px-1">
         {group.name}
       </h3>
     )
@@ -105,10 +105,10 @@ export function PaletteGroupHeader({
       <div
         ref={setNodeRef}
         style={style}
-        className="flex items-center gap-2 rounded-md border border-dashed border-border px-2 py-1 opacity-50"
+        className="flex items-center gap-2 rounded-md border border-dashed border-rule px-2 py-1 opacity-50"
       >
-        <span className="flex-1 text-sm font-semibold text-muted-foreground">{group.name}</span>
-        <span className="rounded px-1.5 py-0.5 text-xs text-muted-foreground bg-muted">
+        <span className="flex-1 text-sm font-semibold text-meta">{group.name}</span>
+        <span className="rounded px-1.5 py-0.5 text-xs text-meta bg-inset">
           {paintCount} {paintCount === 1 ? 'paint' : 'paints'}
         </span>
       </div>
@@ -120,7 +120,7 @@ export function PaletteGroupHeader({
       <div
         ref={setNodeRef}
         style={style}
-        className="flex items-center gap-2 rounded-md border border-dashed border-border px-2 py-1"
+        className="flex items-center gap-2 rounded-md border border-dashed border-rule px-2 py-1"
       >
         {dndId && (
           <PaletteDragHandle
@@ -142,7 +142,7 @@ export function PaletteGroupHeader({
         <Button
           type="button"
           onClick={() => setDeleteOpen(true)}
-          className="btn-ghost btn-xs text-muted-foreground hover:text-destructive"
+          className="btn-ghost btn-xs text-meta hover:text-danger"
           aria-label={`Delete group ${group.name}`}
         >
           <Trash2 className="size-3.5" aria-hidden />

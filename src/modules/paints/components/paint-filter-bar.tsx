@@ -129,7 +129,7 @@ export function PaintFilterBar({
         <button
           type="button"
           onClick={onCycleDiscontinued}
-          className={discLabel === 'Include discontinued' ? 'btn btn-ghost btn-sm text-muted-foreground' : discClassName}
+          className={discLabel === 'Include discontinued' ? 'btn btn-ghost btn-sm text-meta' : discClassName}
         >
           {discLabel}
         </button>
@@ -196,7 +196,7 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
       <button
         type="button"
         onClick={onRemove}
-        className="ml-0.5 hover:text-foreground"
+        className="ml-0.5 hover:text-copy"
         aria-label={`Remove ${label} filter`}
       >
         ✕

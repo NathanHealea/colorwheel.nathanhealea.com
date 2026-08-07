@@ -34,7 +34,7 @@ export function PaletteSwatchStrip({
       {visible.length === 0 ? (
         <div
           style={{ width: px, height: px }}
-          className="rounded-sm border border-dashed border-muted-foreground/40 bg-transparent"
+          className="rounded-sm border border-dashed border-meta/40 bg-transparent"
         />
       ) : (
         visible.map((hex, i) => (
@@ -49,7 +49,7 @@ export function PaletteSwatchStrip({
       {overflow > 0 && (
         <div
           style={{ height: px }}
-          className="flex items-center rounded-md bg-muted px-1 text-xs text-muted-foreground"
+          className="flex items-center rounded-md bg-inset px-1 text-xs text-meta"
         >
           +{overflow}
         </div>

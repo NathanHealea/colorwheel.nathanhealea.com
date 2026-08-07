@@ -37,7 +37,7 @@ export function RecipeBrowsePage({
       </PageHeader>
 
       {summaries.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No public recipes yet.</p>
+        <p className="text-sm text-meta">No public recipes yet.</p>
       ) : (
         <div className="flex flex-col gap-8">
           <RecipeCardGrid summaries={summaries} />

@@ -203,12 +203,12 @@ export function HslColorWheel({
 
       {hoveredPaint && !selectedPaint && (
         <div
-          className="card pointer-events-none absolute z-10 max-w-[176px] border border-border bg-background px-3 py-2 text-sm shadow-md"
+          className="card pointer-events-none absolute z-10 max-w-[176px] border border-rule bg-canvas px-3 py-2 text-sm shadow-md"
           style={{ left: tooltipPos.x, top: tooltipPos.y }}
         >
           <p className="font-medium leading-tight">{hoveredPaint.name}</p>
-          <p className="text-muted-foreground">{hoveredPaint.brand_name}</p>
-          <p className="text-muted-foreground">{hoveredPaint.product_line_name}</p>
+          <p className="text-meta">{hoveredPaint.brand_name}</p>
+          <p className="text-meta">{hoveredPaint.product_line_name}</p>
         </div>
       )}
 

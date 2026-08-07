@@ -84,7 +84,7 @@ export function AdminUserRolesEditor({
       {/* Current roles */}
       <div className="flex flex-wrap gap-2">
         {assigned.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No roles assigned.</p>
+          <p className="text-sm text-meta">No roles assigned.</p>
         ) : (
           assigned.map((role) => {
             const isBase = role.name === 'user'

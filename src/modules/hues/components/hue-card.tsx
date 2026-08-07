@@ -27,16 +27,16 @@ export function HueCard({
   onSelect?: () => void
 }) {
   const sharedClasses = cn(
-    'inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm transition-colors',
+    'inline-flex items-center gap-2 rounded-full border border-rule px-3 py-1.5 text-sm transition-colors',
     isSelected
-      ? 'border-primary bg-primary/10 text-foreground'
-      : 'bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
+      ? 'border-signal-on bg-signal/10 text-copy'
+      : 'bg-canvas text-meta hover:bg-inset hover:text-copy'
   )
 
   const content = (
     <>
       <span
-        className="size-4 shrink-0 rounded-full border border-border/50"
+        className="size-4 shrink-0 rounded-full border border-rule/50"
         style={{ backgroundColor: hue.hex_code }}
         aria-hidden="true"
       />

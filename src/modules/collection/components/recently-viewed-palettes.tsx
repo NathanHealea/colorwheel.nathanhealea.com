@@ -46,13 +46,13 @@ export function RecentlyViewedPalettes() {
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className="h-28 animate-pulse rounded-xl bg-muted"
+              className="h-28 animate-pulse rounded-xl bg-inset"
             />
           ))}
         </div>
       )}
       {summaries !== null && summaries.length === 0 && (
-        <p className="text-sm text-muted-foreground">No recently viewed palettes yet.</p>
+        <p className="text-sm text-meta">No recently viewed palettes yet.</p>
       )}
       {summaries !== null && summaries.length > 0 && (
         <PaletteCardGrid summaries={summaries} />

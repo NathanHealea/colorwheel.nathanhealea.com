@@ -14,13 +14,13 @@ export default function AdminUsersLoading() {
         <Skeleton className="ml-auto h-3 w-20" />
       </div>
 
-      <div className="rounded-lg border border-border">
-        <div className="flex items-center gap-3 border-b border-border px-4 py-3">
+      <div className="rounded-lg border border-rule">
+        <div className="flex items-center gap-3 border-b border-rule px-4 py-3">
           <Skeleton className="h-4 w-32" />
           <Skeleton className="ml-auto h-4 w-24" />
         </div>
         {Array.from({ length: 8 }, (_, i) => (
-          <div key={i} className="flex items-center gap-3 border-b border-border px-4 py-3 last:border-b-0">
+          <div key={i} className="flex items-center gap-3 border-b border-rule px-4 py-3 last:border-b-0">
             <Skeleton className="h-4 w-40" />
             <Skeleton className="ml-auto h-4 w-20" />
           </div>

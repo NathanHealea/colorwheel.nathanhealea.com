@@ -96,7 +96,7 @@ export function SaveSchemeAsPaletteButton({
         <DialogContent className="w-full max-w-sm p-6">
           <DialogHeader>
             <DialogTitle>Save scheme as palette</DialogTitle>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-meta">
               A new palette will be created with each scheme color&apos;s top paint match.
             </p>
           </DialogHeader>

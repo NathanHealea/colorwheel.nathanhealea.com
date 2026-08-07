@@ -28,7 +28,7 @@ export function SchemePartnerRow({
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline justify-between gap-2">
         <p className="text-sm font-medium">{label}</p>
-        <p className="font-mono text-xs text-muted-foreground">{Math.round(hue)}°</p>
+        <p className="font-mono text-xs text-meta">{Math.round(hue)}°</p>
       </div>
       <div className="grid grid-cols-5 gap-2">
         {paints.map((p, i) => (
@@ -36,8 +36,8 @@ export function SchemePartnerRow({
             key={p.id}
             href={`/paints/${p.id}`}
             className={cn(
-              'flex flex-col gap-1 rounded-md border border-border p-2 transition hover:border-foreground/40',
-              i === 2 && 'ring-2 ring-foreground/20',
+              'flex flex-col gap-1 rounded-md border border-rule p-2 transition hover:border-copy/40',
+              i === 2 && 'ring-2 ring-copy/20',
             )}
             aria-label={`${p.name} (${p.brand_name}) — ${p.hex}`}
           >
@@ -47,8 +47,8 @@ export function SchemePartnerRow({
               aria-hidden
             />
             <span className="line-clamp-2 text-xs font-medium">{p.name}</span>
-            <span className="line-clamp-1 text-[10px] text-muted-foreground">{p.brand_name}</span>
-            <span className="flex items-center justify-between font-mono text-[10px] text-muted-foreground">
+            <span className="line-clamp-1 text-[10px] text-meta">{p.brand_name}</span>
+            <span className="flex items-center justify-between font-mono text-[10px] text-meta">
               <span>{p.hex}</span>
               {ownedIds.has(p.id) && (
                 <span

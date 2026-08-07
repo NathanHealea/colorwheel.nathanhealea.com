@@ -50,7 +50,7 @@ export function RoleDetailCard({
   )
 
   return (
-    <div className="rounded-lg border border-border p-6">
+    <div className="rounded-lg border border-rule p-6">
       <div className="flex items-center justify-between">
         {editing ? (
           <form action={formAction} className="flex items-start gap-3">

@@ -17,7 +17,7 @@ export default function CompareLoading() {
           {Array.from({ length: 3 }, (_, i) => (
             <div
               key={i}
-              className="flex w-56 shrink-0 flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:w-64"
+              className="flex w-56 shrink-0 flex-col gap-3 rounded-xl border border-rule bg-panel p-4 sm:w-64"
             >
               <Skeleton className="h-32 w-full sm:h-40" />
               <Skeleton className="h-4 w-3/4" />

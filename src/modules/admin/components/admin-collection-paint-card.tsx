@@ -49,7 +49,7 @@ export function AdminCollectionPaintCard({
         isMetallic={isMetallic}
       />
       <button
-        className="absolute right-1 top-1 flex size-6 items-center justify-center rounded-md bg-background/80 text-muted-foreground backdrop-blur-sm hover:bg-background hover:text-destructive disabled:opacity-50"
+        className="absolute right-1 top-1 flex size-6 items-center justify-center rounded-md bg-canvas/80 text-meta backdrop-blur-sm hover:bg-canvas hover:text-danger disabled:opacity-50"
         disabled={isPending}
         aria-label="Remove from collection"
         onClick={handleRemove}

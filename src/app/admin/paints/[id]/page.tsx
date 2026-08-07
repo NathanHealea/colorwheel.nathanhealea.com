@@ -59,7 +59,7 @@ export default async function AdminPaintDetailPage({
   return (
     <Main as="div">
       <div className="mb-6">
-        <Link href="/admin/paints" className="text-sm text-muted-foreground hover:text-foreground">
+        <Link href="/admin/paints" className="text-sm text-meta hover:text-copy">
           ← Back to paints
         </Link>
       </div>
@@ -86,7 +86,7 @@ export default async function AdminPaintDetailPage({
           </CardContent>
         </Card>
 
-        <Card className="border-destructive/20">
+        <Card className="border-danger/20">
           <CardHeader>
             <CardTitle>Danger Zone</CardTitle>
           </CardHeader>

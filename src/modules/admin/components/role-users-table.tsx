@@ -38,21 +38,21 @@ export function RoleUsersTable({
 
   if (users.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-meta">
         No users assigned to this role.
       </p>
     )
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-border">
+    <div className="overflow-x-auto rounded-lg border border-rule">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-border bg-muted/50">
-            <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+          <tr className="border-b border-rule bg-inset/50">
+            <th className="px-4 py-3 text-left font-medium text-meta">
               User
             </th>
-            <th className="px-4 py-3 text-right font-medium text-muted-foreground">
+            <th className="px-4 py-3 text-right font-medium text-meta">
               Actions
             </th>
           </tr>
@@ -101,7 +101,7 @@ function UserRow({
   }
 
   return (
-    <tr className="border-b border-border last:border-b-0">
+    <tr className="border-b border-rule last:border-b-0">
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
           {user.avatar_url ? (
@@ -126,7 +126,7 @@ function UserRow({
       <td className="px-4 py-3 text-right">
         <div className="flex items-center justify-end gap-2">
           {isUserRole ? (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-meta">
               Cannot revoke baseline role
             </span>
           ) : (

@@ -69,7 +69,7 @@ export function RecipeForm({
           placeholder="My recipe"
         />
         {state.errors.title && (
-          <p className="text-sm text-destructive">{state.errors.title}</p>
+          <p className="text-sm text-danger">{state.errors.title}</p>
         )}
       </div>
 

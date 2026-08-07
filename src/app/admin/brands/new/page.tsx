@@ -19,7 +19,7 @@ export default function AdminBrandNewPage() {
   return (
     <Main as="div">
       <div className="mb-6">
-        <Link href="/admin/brands" className="text-sm text-muted-foreground hover:text-foreground">
+        <Link href="/admin/brands" className="text-sm text-meta hover:text-copy">
           ← Back to brands
         </Link>
       </div>

@@ -43,7 +43,7 @@ export default async function AdminBrandDetailPage({
   return (
     <Main as="div">
       <div className="mb-6">
-        <Link href="/admin/brands" className="text-sm text-muted-foreground hover:text-foreground">
+        <Link href="/admin/brands" className="text-sm text-meta hover:text-copy">
           ← Back to brands
         </Link>
       </div>
@@ -71,12 +71,12 @@ export default async function AdminBrandDetailPage({
           </CardHeader>
           <CardContent>
             {brand.product_lines.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No product lines yet.</p>
+              <p className="text-sm text-meta">No product lines yet.</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-border text-left">
+                    <tr className="border-b border-rule text-left">
                       <th className="pb-2 pr-4 font-medium">Name</th>
                       <th className="pb-2 pr-4 font-medium">Slug</th>
                       <th className="pb-2 pr-4 font-medium text-right">Paints</th>
@@ -109,7 +109,7 @@ export default async function AdminBrandDetailPage({
         </Card>
 
         {/* Danger zone */}
-        <Card className="border-destructive/20">
+        <Card className="border-danger/20">
           <CardHeader>
             <CardTitle>Danger Zone</CardTitle>
           </CardHeader>

@@ -39,7 +39,7 @@ export default async function BrandsPage() {
           ))}
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground">No brands yet.</p>
+        <p className="text-sm text-meta">No brands yet.</p>
       )}
     </Main>
   )

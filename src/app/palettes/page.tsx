@@ -84,7 +84,7 @@ export default async function PalettesCatalogPage({
               >
                 ← Previous
               </Link>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-meta">
                 Page {pageNum} of {totalPages}
               </span>
               <Link
@@ -99,7 +99,7 @@ export default async function PalettesCatalogPage({
         </>
       ) : (
         <div className="card card-body items-center justify-center py-16 text-center">
-          <p className="text-muted-foreground">
+          <p className="text-meta">
             No public palettes yet — sign in and share the first one.
           </p>
           <Link

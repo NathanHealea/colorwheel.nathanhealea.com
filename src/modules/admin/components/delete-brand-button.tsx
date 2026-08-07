@@ -55,17 +55,17 @@ export function DeleteBrandButton({ brandId, brandName }: DeleteBrandButtonProps
         Delete
       </Button>
 
-      <dialog ref={dialogRef} className="m-auto w-full max-w-md rounded-lg border border-border bg-background p-0 shadow-lg backdrop:bg-black/50">
+      <dialog ref={dialogRef} className="m-auto w-full max-w-md rounded-lg border border-rule bg-canvas p-0 shadow-lg backdrop:bg-black/50">
         <div className="p-6 flex flex-col gap-4">
           <h3 className="text-lg font-semibold">Delete Brand</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-meta">
             Are you sure you want to delete <strong>{brandName}</strong>? This will permanently
             remove the brand along with all its product lines and paints. This action cannot
             be undone.
           </p>
 
           {state?.error && (
-            <p className="text-sm text-destructive">{state.error}</p>
+            <p className="text-sm text-danger">{state.error}</p>
           )}
 
           <div className="flex justify-end gap-2">

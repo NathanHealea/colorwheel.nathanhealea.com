@@ -56,7 +56,7 @@ export function AdminEditProfileForm({
           maxLength={20}
         />
         {state?.errors?.display_name && (
-          <p className="text-xs text-destructive">
+          <p className="text-xs text-danger">
             {state.errors.display_name}
           </p>
         )}
@@ -72,7 +72,7 @@ export function AdminEditProfileForm({
           rows={10}
         />
         {state?.errors?.bio && (
-          <p className="text-xs text-destructive">{state.errors.bio}</p>
+          <p className="text-xs text-danger">{state.errors.bio}</p>
         )}
       </div>
 

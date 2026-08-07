@@ -97,7 +97,7 @@ export default async function HuePage({
 
         <div className="mb-8 flex items-center gap-4">
           <div
-            className="size-10 shrink-0 rounded-full border border-border"
+            className="size-10 shrink-0 rounded-full border border-rule"
             style={{ backgroundColor: hue.hex_code }}
             aria-hidden="true"
           />
@@ -153,13 +153,13 @@ export default async function HuePage({
 
       <div className="mb-8 flex items-center gap-4">
         <div
-          className="size-10 shrink-0 rounded-full border border-border"
+          className="size-10 shrink-0 rounded-full border border-rule"
           style={{ backgroundColor: hue.hex_code }}
           aria-hidden="true"
         />
         <div>
           <PageTitle>{hue.name}</PageTitle>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-meta">
             {totalCount} {totalCount === 1 ? 'paint' : 'paints'}
           </p>
         </div>

@@ -165,7 +165,7 @@ export function RecipePhotoGrid({
     <>
       <div className="flex flex-col gap-2">
         {photos.length === 0 && (
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-meta">
             {emptyLabel ?? 'No photos yet — drop or click below to upload.'}
           </p>
         )}

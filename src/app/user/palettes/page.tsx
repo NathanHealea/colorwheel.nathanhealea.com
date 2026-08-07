@@ -44,7 +44,7 @@ export default async function UserPalettesPage() {
         <PaletteCardGrid summaries={summaries} canEditAll />
       ) : (
         <div className="card card-body items-center justify-center py-16 text-center">
-          <p className="text-muted-foreground">
+          <p className="text-meta">
             You don&apos;t have any palettes yet.
           </p>
           <form action="/user/palettes/new" method="post" className="mt-4">

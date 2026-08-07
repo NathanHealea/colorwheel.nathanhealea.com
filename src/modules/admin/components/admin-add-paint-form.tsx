@@ -101,35 +101,35 @@ export function AdminAddPaintForm({
         onChange={(e) => setInputValue(e.target.value)}
       />
       {showSuggestions && (
-        <ul className="rounded-md border border-border bg-popover shadow-md">
+        <ul className="rounded-md border border-rule bg-panel shadow-md">
           {paints.map((paint) => {
             const isAdded = addedIds.has(paint.id)
             return (
               <li key={paint.id}>
                 <button
                   type="button"
-                  className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-accent disabled:opacity-50"
+                  className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-inset disabled:opacity-50"
                   onClick={() => handleSelect(paint)}
                   disabled={isPending || isAdded}
                 >
                   <span
-                    className="size-5 shrink-0 rounded border border-border"
+                    className="size-5 shrink-0 rounded border border-rule"
                     style={{ backgroundColor: paint.hex }}
                     aria-hidden="true"
                   />
                   <span className="flex-1 truncate font-medium">{paint.name}</span>
                   {paint.paint_type && (
-                    <span className="shrink-0 text-xs text-muted-foreground">
+                    <span className="shrink-0 text-xs text-meta">
                       {paint.paint_type}
                     </span>
                   )}
-                  <span className="shrink-0 text-xs text-muted-foreground">
+                  <span className="shrink-0 text-xs text-meta">
                     {paint.product_lines.brands.name}
                   </span>
                   {isAdded ? (
                     <Check className="size-3.5 shrink-0 text-green-600" />
                   ) : (
-                    <Plus className="size-3.5 shrink-0 text-muted-foreground" />
+                    <Plus className="size-3.5 shrink-0 text-meta" />
                   )}
                 </button>
               </li>

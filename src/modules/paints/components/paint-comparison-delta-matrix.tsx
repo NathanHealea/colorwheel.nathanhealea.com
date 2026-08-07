@@ -47,7 +47,7 @@ export function PaintComparisonDeltaMatrix({
     >
       <header className="flex flex-col gap-1">
         <h2 className="text-sm font-semibold">Pairwise ΔE (CIE76)</h2>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-meta">
           Lower values mean colors are perceptually closer. Below {DELTA_E_IMPERCEPTIBLE} is
           imperceptible to most viewers; above {DELTA_E_DISTINCT} is clearly distinct.
         </p>
@@ -57,16 +57,16 @@ export function PaintComparisonDeltaMatrix({
         <table className="min-w-full border-collapse text-sm">
           <thead>
             <tr>
-              <th className="border border-border bg-muted/50 p-2 text-left text-xs font-medium text-muted-foreground" />
+              <th className="border border-rule bg-inset/50 p-2 text-left text-xs font-medium text-meta" />
               {paints.map((p) => (
                 <th
                   key={p.id}
                   scope="col"
-                  className="border border-border bg-muted/50 p-2 text-left text-xs font-medium"
+                  className="border border-rule bg-inset/50 p-2 text-left text-xs font-medium"
                 >
                   <div className="flex items-center gap-2">
                     <span
-                      className="inline-block size-3 shrink-0 rounded-full border border-border"
+                      className="inline-block size-3 shrink-0 rounded-full border border-rule"
                       style={paintSwatchBackground(p.hex, p.paint_type, p.is_metallic)}
                       aria-hidden="true"
                     />
@@ -81,11 +81,11 @@ export function PaintComparisonDeltaMatrix({
               <tr key={rowPaint.id}>
                 <th
                   scope="row"
-                  className="border border-border bg-muted/50 p-2 text-left text-xs font-medium"
+                  className="border border-rule bg-inset/50 p-2 text-left text-xs font-medium"
                 >
                   <div className="flex items-center gap-2">
                     <span
-                      className="inline-block size-3 shrink-0 rounded-full border border-border"
+                      className="inline-block size-3 shrink-0 rounded-full border border-rule"
                       style={paintSwatchBackground(rowPaint.hex, rowPaint.paint_type, rowPaint.is_metallic)}
                       aria-hidden="true"
                     />
@@ -97,7 +97,7 @@ export function PaintComparisonDeltaMatrix({
                     return (
                       <td
                         key={colPaint.id}
-                        className="border border-border bg-muted/30 p-2"
+                        className="border border-rule bg-inset/30 p-2"
                         aria-hidden="true"
                       />
                     )
@@ -110,13 +110,13 @@ export function PaintComparisonDeltaMatrix({
                   const toneClass = isClose
                     ? 'bg-green-500/10 text-green-700 dark:text-green-400 font-medium'
                     : isDistinct
-                      ? 'text-muted-foreground'
+                      ? 'text-meta'
                       : ''
 
                   return (
                     <td
                       key={colPaint.id}
-                      className={`border border-border p-2 text-center font-mono text-xs ${toneClass}`}
+                      className={`border border-rule p-2 text-center font-mono text-xs ${toneClass}`}
                     >
                       {delta.toFixed(1)}
                     </td>

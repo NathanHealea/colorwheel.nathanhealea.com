@@ -67,7 +67,7 @@ export function DeleteAccountDialog({
       <DialogContent className="w-full max-w-sm p-6">
         <DialogHeader>
           <DialogTitle>Delete your account?</DialogTitle>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-sm text-meta">
             This action is permanent and cannot be undone. Your account, profile,
             and all associated data will be deleted.
           </p>
@@ -88,7 +88,7 @@ export function DeleteAccountDialog({
           />
         </div>
 
-        {error && <p className="text-sm text-destructive">{error}</p>}
+        {error && <p className="text-sm text-danger">{error}</p>}
 
         <DialogFooter className="mt-2">
           <Button

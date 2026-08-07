@@ -123,8 +123,8 @@ export function RecipeSectionCard({
       ref={setNodeRef}
       style={style}
       className={[
-        'flex flex-col gap-3 rounded-xl border border-border p-4',
-        isDragging ? 'shadow-lg bg-muted' : '',
+        'flex flex-col gap-3 rounded-xl border border-rule p-4',
+        isDragging ? 'shadow-lg bg-inset' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -136,7 +136,7 @@ export function RecipeSectionCard({
           {...attributes}
           {...listeners}
         />
-        <span className="mt-1 text-sm font-semibold tabular-nums text-muted-foreground">
+        <span className="mt-1 text-sm font-semibold tabular-nums text-meta">
           {label}.
         </span>
         <Input
@@ -153,7 +153,7 @@ export function RecipeSectionCard({
           type="button"
           onClick={handleDelete}
           disabled={isPending}
-          className="btn-sm btn-ghost text-destructive hover:text-destructive"
+          className="btn-sm btn-ghost text-danger hover:text-danger"
           aria-label={`Delete section ${label}`}
         >
           <Trash2 className="size-4" aria-hidden />

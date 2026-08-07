@@ -58,7 +58,7 @@ export function PaletteGroupForm({ paletteId }: { paletteId: string }) {
         aria-label="New group name"
       />
       {nameError && (
-        <p className="text-xs text-destructive" aria-live="polite">
+        <p className="text-xs text-danger" aria-live="polite">
           {nameError}
         </p>
       )}

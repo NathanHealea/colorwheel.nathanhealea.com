@@ -38,18 +38,18 @@ export function RecipeCard({
         ) : (
           <div
             aria-hidden
-            className="aspect-video w-full rounded-md bg-muted"
+            className="aspect-video w-full rounded-md bg-inset"
           />
         )}
         <div>
           <h3 className="card-title text-base">{summary.title}</h3>
           {summary.ownerDisplayName && (
-            <p className="mt-0.5 text-xs text-muted-foreground">
+            <p className="mt-0.5 text-xs text-meta">
               by {summary.ownerDisplayName}
             </p>
           )}
           <div className="mt-1 flex flex-wrap items-center gap-2">
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-meta">
               {summary.stepCount} {summary.stepCount === 1 ? 'step' : 'steps'}
             </span>
             {summary.isPublic ? (
@@ -57,7 +57,7 @@ export function RecipeCard({
             ) : (
               <span className="badge badge-soft badge-sm">Private</span>
             )}
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-meta">
               {formatRecipeUpdatedLabel(summary.updatedAt)}
             </span>
           </div>

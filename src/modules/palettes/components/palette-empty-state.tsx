@@ -6,7 +6,7 @@
 export function PaletteEmptyState({ variant }: { variant: 'owner' | 'guest' }) {
   return (
     <div className="card card-body items-center justify-center py-12 text-center">
-      <p className="text-muted-foreground">
+      <p className="text-meta">
         {variant === 'owner'
           ? 'No paints yet — add some from any paint card or the scheme explorer.'
           : 'This palette is empty.'}

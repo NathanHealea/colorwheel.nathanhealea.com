@@ -27,15 +27,15 @@ export default function SignUpPage() {
           <SignUpForm />
         </TurnstileProvider>
         <OAuthButtons />
-        <p className="mt-4 text-center text-xs text-muted-foreground">
+        <p className="mt-4 text-center text-xs text-meta">
           By signing up, you agree to our{' '}
-          <Link href="/terms" className="underline underline-offset-4 hover:text-foreground">
+          <Link href="/terms" className="underline underline-offset-4 hover:text-copy">
             Terms of Use
           </Link>{' '}
           and{' '}
           <Link
             href="/code-of-conduct"
-            className="underline underline-offset-4 hover:text-foreground"
+            className="underline underline-offset-4 hover:text-copy"
           >
             Code of Conduct
           </Link>
@@ -43,9 +43,9 @@ export default function SignUpPage() {
         </p>
       </CardContent>
       <CardFooter className="justify-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-meta">
           Already have an account?{' '}
-          <Link href="/sign-in" className="text-primary underline-offset-4 hover:underline">
+          <Link href="/sign-in" className="text-signal-on underline-offset-4 hover:underline">
             Sign in
           </Link>
         </p>

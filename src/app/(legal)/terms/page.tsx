@@ -19,10 +19,10 @@ export default function TermsOfUsePage() {
       <article className="space-y-6">
         <header className="space-y-2">
         <PageTitle className="font-semibold tracking-tight">Terms of Use</PageTitle>
-        <p className="text-sm text-muted-foreground">Last updated: {lastUpdated}</p>
+        <p className="text-sm text-meta">Last updated: {lastUpdated}</p>
       </header>
 
-      <p className="text-muted-foreground">
+      <p className="text-meta">
         Grimify is a hobbyist project for miniature painters. These terms are written in plain
         language; they are not legal advice. By using Grimify you agree to the terms below.
       </p>
@@ -31,7 +31,7 @@ export default function TermsOfUsePage() {
         <h2 className="text-xl font-semibold tracking-tight">1. Acceptance of Terms</h2>
         <p>
           Using Grimify means you agree to these Terms of Use and our{' '}
-          <Link href="/code-of-conduct" className="text-primary underline-offset-4 hover:underline">
+          <Link href="/code-of-conduct" className="text-signal-on underline-offset-4 hover:underline">
             Code of Conduct
           </Link>
           . If you do not agree, please do not use the app.
@@ -137,7 +137,7 @@ export default function TermsOfUsePage() {
           For questions, takedown requests, or rights-holder concerns, please open an issue on our{' '}
           <a
             href="https://github.com/NathanHealea/grimify.app/issues"
-            className="text-primary underline-offset-4 hover:underline"
+            className="text-signal-on underline-offset-4 hover:underline"
             target="_blank"
             rel="noreferrer"
           >

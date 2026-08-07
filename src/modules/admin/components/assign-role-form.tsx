@@ -60,7 +60,7 @@ export function AssignRoleForm({
 
   if (availableUsers.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-meta">
         All users already have this role.
       </p>
     )

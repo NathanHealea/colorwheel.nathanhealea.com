@@ -6,7 +6,7 @@ export default function UserPaletteEditLoading() {
       <Skeleton className="mb-6 h-4 w-32" />
       <Skeleton className="mb-8 h-9 w-48" />
 
-      <div className="flex flex-col gap-6 rounded-lg border border-border p-6">
+      <div className="flex flex-col gap-6 rounded-lg border border-rule p-6">
         <div className="flex flex-col gap-2">
           <Skeleton className="h-4 w-20" />
           <Skeleton className="h-10 w-full" />

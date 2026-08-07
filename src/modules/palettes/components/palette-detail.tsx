@@ -41,11 +41,11 @@ export function PaletteDetail({
             <PageTitle size="md">{palette.name}</PageTitle>
             <MarkdownRenderer
               content={palette.description}
-              className="mt-1 text-muted-foreground"
+              className="mt-1 text-meta"
             />
             <div className="mt-2 flex flex-wrap items-center gap-2">
               {ownerDisplayName && (
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-meta">
                   by {ownerDisplayName}
                 </span>
               )}
@@ -53,7 +53,7 @@ export function PaletteDetail({
                 {palette.isPublic ? 'Public' : 'Private'}
               </span>
               {palette.army && (
-                <span className="flex items-center gap-1 text-sm text-muted-foreground">
+                <span className="flex items-center gap-1 text-sm text-meta">
                   {palette.army.icon_url && (
                     <img
                       src={palette.army.icon_url}

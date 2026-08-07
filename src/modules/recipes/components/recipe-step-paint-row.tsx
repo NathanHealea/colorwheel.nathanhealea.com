@@ -134,8 +134,8 @@ export function RecipeStepPaintRow({
       ref={setNodeRef}
       style={style}
       className={[
-        'flex items-start gap-3 rounded-lg border border-border p-3',
-        isDragging ? 'shadow-lg bg-muted' : '',
+        'flex items-start gap-3 rounded-lg border border-rule p-3',
+        isDragging ? 'shadow-lg bg-inset' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -155,7 +155,7 @@ export function RecipeStepPaintRow({
           title={data.hex}
         />
       ) : (
-        <div className="mt-0.5 size-6 shrink-0 rounded-sm border border-dashed border-border" />
+        <div className="mt-0.5 size-6 shrink-0 rounded-sm border border-dashed border-rule" />
       )}
       <div className="min-w-0 flex-1 space-y-2">
         <div>
@@ -168,13 +168,13 @@ export function RecipeStepPaintRow({
             )}
           </div>
           {brandLine && (
-            <p className="text-xs text-muted-foreground">{brandLine}</p>
+            <p className="text-xs text-meta">{brandLine}</p>
           )}
         </div>
         {canEdit ? (
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <label className="flex flex-col gap-1 text-xs">
-              <span className="text-muted-foreground">Ratio</span>
+              <span className="text-meta">Ratio</span>
               <Input
                 type="text"
                 value={ratio}
@@ -187,7 +187,7 @@ export function RecipeStepPaintRow({
               />
             </label>
             <label className="flex flex-col gap-1 text-xs">
-              <span className="text-muted-foreground">Note</span>
+              <span className="text-meta">Note</span>
               <Input
                 type="text"
                 value={note}
@@ -205,13 +205,13 @@ export function RecipeStepPaintRow({
             <div className="space-y-0.5 text-xs">
               {paint.ratio && (
                 <p>
-                  <span className="text-muted-foreground">Ratio: </span>
+                  <span className="text-meta">Ratio: </span>
                   {paint.ratio}
                 </p>
               )}
               {paint.note && (
                 <p>
-                  <span className="text-muted-foreground">Note: </span>
+                  <span className="text-meta">Note: </span>
                   {paint.note}
                 </p>
               )}
@@ -224,7 +224,7 @@ export function RecipeStepPaintRow({
           type="button"
           onClick={handleRemove}
           disabled={isRemoving}
-          className="btn-sm btn-ghost text-destructive hover:text-destructive"
+          className="btn-sm btn-ghost text-danger hover:text-danger"
           aria-label={`Remove ${data?.name ?? 'paint'}`}
         >
           {isRemoving ? 'Removing…' : 'Remove'}

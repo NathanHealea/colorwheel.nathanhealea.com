@@ -58,7 +58,7 @@ export function RecipeBuilder({
         />
       </div>
 
-      <div className="flex justify-end border-t border-border pt-4">
+      <div className="flex justify-end border-t border-rule pt-4">
         <DeleteRecipeButton recipe={recipe} />
       </div>
     </div>

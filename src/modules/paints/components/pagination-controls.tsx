@@ -52,12 +52,12 @@ export function PaginationControls({
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-meta">
           Showing {rangeStart.toLocaleString()}–{rangeEnd.toLocaleString()} of{' '}
           {totalCount.toLocaleString()}
         </p>
         <div className="flex items-center gap-2">
-          <label htmlFor="page-size-select" className="text-sm text-muted-foreground">
+          <label htmlFor="page-size-select" className="text-sm text-meta">
             Per page:
           </label>
           <Select
@@ -97,7 +97,7 @@ export function PaginationControls({
 
           {visiblePages.map((page, i) =>
             page === null ? (
-              <span key={`ellipsis-${i}`} className="px-1 text-sm text-muted-foreground">
+              <span key={`ellipsis-${i}`} className="px-1 text-sm text-meta">
                 &hellip;
               </span>
             ) : (

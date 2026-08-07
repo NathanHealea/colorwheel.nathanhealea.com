@@ -116,7 +116,7 @@ export function RecipeSectionList({
   return (
     <div className="flex flex-col gap-4">
       {orderedSections.length === 0 ? (
-        <p className="rounded-md border border-dashed border-border p-4 text-sm text-muted-foreground">
+        <p className="rounded-md border border-dashed border-rule p-4 text-sm text-meta">
           No sections yet. Add the first section to start outlining this recipe.
         </p>
       ) : (

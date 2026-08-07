@@ -14,7 +14,7 @@ export default function AdminUserEditLoading() {
 
       <div className="space-y-6">
         {Array.from({ length: 3 }, (_, i) => (
-          <div key={i} className="rounded-lg border border-border p-6">
+          <div key={i} className="rounded-lg border border-rule p-6">
             <div className="mb-6 flex flex-col gap-2">
               <Skeleton className="h-6 w-32" />
               <Skeleton className="h-4 w-64" />

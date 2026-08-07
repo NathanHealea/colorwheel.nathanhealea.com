@@ -36,7 +36,7 @@ export function PaletteSortConfirmDialog({
       <DialogContent className="w-full max-w-sm p-6">
         <DialogHeader>
           <DialogTitle>Reorder paints?</DialogTitle>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-sm text-meta">
             Applying this sort will replace your current paint order. You can still drag and drop
             paints after sorting.
           </p>

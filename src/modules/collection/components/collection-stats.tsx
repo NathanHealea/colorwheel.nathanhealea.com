@@ -17,7 +17,7 @@ export function CollectionStats({ stats }: { stats: CollectionStats }) {
     return (
       <Card>
         <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
-          <p className="text-muted-foreground">Your collection is empty.</p>
+          <p className="text-meta">Your collection is empty.</p>
           <Link href="/paints" className="btn btn-primary btn-sm">
             Browse paints
           </Link>
@@ -35,7 +35,7 @@ export function CollectionStats({ stats }: { stats: CollectionStats }) {
         </CardHeader>
         <CardContent>
           <p className="text-4xl font-bold">{stats.total.toLocaleString()}</p>
-          <p className="mt-1 text-sm text-muted-foreground">paints in your collection</p>
+          <p className="mt-1 text-sm text-meta">paints in your collection</p>
         </CardContent>
       </Card>
 
@@ -46,13 +46,13 @@ export function CollectionStats({ stats }: { stats: CollectionStats }) {
         </CardHeader>
         <CardContent>
           {stats.byBrand.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No brand data</p>
+            <p className="text-sm text-meta">No brand data</p>
           ) : (
             <ul className="space-y-1">
               {stats.byBrand.map(({ brand, count }) => (
                 <li key={brand} className="flex items-center justify-between text-sm">
                   <span>{brand}</span>
-                  <span className="tabular-nums text-muted-foreground">{count}</span>
+                  <span className="tabular-nums text-meta">{count}</span>
                 </li>
               ))}
             </ul>
@@ -67,13 +67,13 @@ export function CollectionStats({ stats }: { stats: CollectionStats }) {
         </CardHeader>
         <CardContent>
           {stats.byType.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No type data</p>
+            <p className="text-sm text-meta">No type data</p>
           ) : (
             <ul className="space-y-1">
               {stats.byType.map(({ type, count }) => (
                 <li key={type} className="flex items-center justify-between text-sm">
                   <span>{type}</span>
-                  <span className="tabular-nums text-muted-foreground">{count}</span>
+                  <span className="tabular-nums text-meta">{count}</span>
                 </li>
               ))}
             </ul>

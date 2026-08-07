@@ -45,7 +45,7 @@ export function SchemeExplorer({
       ) : (
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
-            <p className="text-muted-foreground">Select a base color to generate a scheme.</p>
+            <p className="text-meta">Select a base color to generate a scheme.</p>
           </CardContent>
         </Card>
       )}

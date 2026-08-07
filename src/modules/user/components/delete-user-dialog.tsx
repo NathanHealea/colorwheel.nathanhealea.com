@@ -74,7 +74,7 @@ export function DeleteUserDialog({
       <DialogContent className="w-full max-w-sm p-6">
         <DialogHeader>
           <DialogTitle>Delete user?</DialogTitle>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-sm text-meta">
             Permanently delete{' '}
             <span className="font-medium">{displayName}</span>. This removes
             their account, profile, and all related data. This action cannot be

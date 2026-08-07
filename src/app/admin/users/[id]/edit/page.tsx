@@ -62,7 +62,7 @@ export default async function AdminEditUserPage({
       <div className="mb-6">
         <Link
           href={`/admin/users/${id}`}
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-sm text-meta hover:text-copy"
         >
           ← Back to user
         </Link>
@@ -108,7 +108,7 @@ export default async function AdminEditUserPage({
 
         {/* Danger zone — hidden when editing own account */}
         {!isSelf && (
-          <Card className="border-destructive/20">
+          <Card className="border-danger/20">
             <CardHeader>
               <CardTitle>Danger Zone</CardTitle>
               <CardDescription>

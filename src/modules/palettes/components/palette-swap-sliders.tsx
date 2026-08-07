@@ -62,8 +62,8 @@ function SliderControl({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-muted-foreground">{label}</span>
-        <span className="text-xs text-muted-foreground">
+        <span className="text-xs font-medium text-meta">{label}</span>
+        <span className="text-xs text-meta">
           {min}–{max}
         </span>
       </div>
@@ -72,7 +72,7 @@ function SliderControl({
       <div className="relative">
         {/* Tick mark for the source paint's current value */}
         <div
-          className="absolute top-1/2 h-3 w-0.5 -translate-y-1/2 rounded-full bg-primary/50 pointer-events-none z-10"
+          className="absolute top-1/2 h-3 w-0.5 -translate-y-1/2 rounded-full bg-signal/50 pointer-events-none z-10"
           style={{ left: `${currentValue}%` }}
           aria-hidden
         />

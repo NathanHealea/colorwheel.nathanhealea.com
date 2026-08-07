@@ -104,7 +104,7 @@ export function ArmyForm({ mode, army, armies, action }: ArmyFormProps) {
       {army?.id && <input type="hidden" name="id" value={army.id} />}
 
       {state?.error && (
-        <p className="text-sm text-destructive">{state.error}</p>
+        <p className="text-sm text-danger">{state.error}</p>
       )}
 
       {state?.success && (
@@ -114,7 +114,7 @@ export function ArmyForm({ mode, army, armies, action }: ArmyFormProps) {
       {/* Name */}
       <div className="flex flex-col gap-1">
         <label htmlFor="army-name" className="form-label text-sm">
-          Name <span className="text-destructive">*</span>
+          Name <span className="text-danger">*</span>
         </label>
         <Input
           id="army-name"
@@ -127,14 +127,14 @@ export function ArmyForm({ mode, army, armies, action }: ArmyFormProps) {
           placeholder="e.g. Space Marines"
         />
         {state?.errors?.name && (
-          <p className="text-xs text-destructive">{state.errors.name}</p>
+          <p className="text-xs text-danger">{state.errors.name}</p>
         )}
       </div>
 
       {/* Slug */}
       <div className="flex flex-col gap-1">
         <label htmlFor="army-slug" className="form-label text-sm">
-          Slug <span className="text-destructive">*</span>
+          Slug <span className="text-danger">*</span>
         </label>
         <Input
           id="army-slug"
@@ -147,7 +147,7 @@ export function ArmyForm({ mode, army, armies, action }: ArmyFormProps) {
           placeholder="e.g. space-marines"
         />
         {state?.errors?.slug && (
-          <p className="text-xs text-destructive">{state.errors.slug}</p>
+          <p className="text-xs text-danger">{state.errors.slug}</p>
         )}
       </div>
 
@@ -161,7 +161,7 @@ export function ArmyForm({ mode, army, armies, action }: ArmyFormProps) {
           excludeId={army?.id}
         />
         {state?.errors?.parent_id && (
-          <p className="text-xs text-destructive">{state.errors.parent_id}</p>
+          <p className="text-xs text-danger">{state.errors.parent_id}</p>
         )}
       </div>
 
@@ -181,7 +181,7 @@ export function ArmyForm({ mode, army, armies, action }: ArmyFormProps) {
           placeholder="0"
         />
         {state?.errors?.sort_order && (
-          <p className="text-xs text-destructive">{state.errors.sort_order}</p>
+          <p className="text-xs text-danger">{state.errors.sort_order}</p>
         )}
       </div>
 
@@ -195,7 +195,7 @@ export function ArmyForm({ mode, army, armies, action }: ArmyFormProps) {
             <img
               src={previewUrl}
               alt="Army icon preview"
-              className="h-12 w-12 rounded border border-border object-contain"
+              className="h-12 w-12 rounded border border-rule object-contain"
             />
           )}
           <input

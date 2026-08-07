@@ -51,7 +51,7 @@ export function PaintSubstitutes({
       <header className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold">Substitutes</h2>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-meta">
             Closest current paints across brands by CIE76 ΔE.
           </p>
         </div>
@@ -76,13 +76,13 @@ export function PaintSubstitutes({
       </header>
 
       {error && (
-        <p className="text-sm text-destructive">{error.message}</p>
+        <p className="text-sm text-danger">{error.message}</p>
       )}
 
       {isPending && matches.length === 0 ? (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {Array.from({ length: 5 }, (_, i) => (
-            <div key={i} className="flex flex-col items-center gap-2 rounded-lg border border-border p-3">
+            <div key={i} className="flex flex-col items-center gap-2 rounded-lg border border-rule p-3">
               <Skeleton className="size-16" />
               <Skeleton className="h-4 w-3/4" />
               <Skeleton className="h-3 w-1/2" />
@@ -90,7 +90,7 @@ export function PaintSubstitutes({
           ))}
         </div>
       ) : matches.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-border bg-muted/30 p-4 text-sm text-muted-foreground">
+        <p className="rounded-lg border border-dashed border-rule bg-inset/30 p-4 text-sm text-meta">
           No substitutes found{selectedBrandIds.length > 0 ? ' for the selected brand' : ''}.
         </p>
       ) : (

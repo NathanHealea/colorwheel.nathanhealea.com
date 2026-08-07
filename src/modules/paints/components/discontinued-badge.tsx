@@ -24,7 +24,7 @@ export function DiscontinuedBadge({
 
   return (
     <span
-      className={`inline-flex items-center rounded-full bg-destructive/10 font-medium text-destructive ${sizeClass}`}
+      className={`inline-flex items-center rounded-full bg-danger/10 font-medium text-danger ${sizeClass}`}
     >
       Discontinued
     </span>

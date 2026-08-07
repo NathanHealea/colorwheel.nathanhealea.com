@@ -17,13 +17,13 @@ export function ColorGroupCard({ group }: { group: ColorGroup }) {
       <Card className="card-compact transition-shadow hover:shadow-md">
         <CardContent className="flex items-center gap-4 p-4">
           <div
-            className="size-12 shrink-0 rounded-full border border-border"
+            className="size-12 shrink-0 rounded-full border border-rule"
             style={{ backgroundColor: group.hex }}
             aria-hidden="true"
           />
           <div className="min-w-0 text-center">
             <h3 className="font-semibold">{group.name}</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-meta">
               {group.count} {group.count === 1 ? 'Paint' : 'Paints'}
             </p>
           </div>

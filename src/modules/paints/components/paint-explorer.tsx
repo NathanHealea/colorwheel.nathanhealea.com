@@ -491,7 +491,7 @@ export function PaintExplorer({
 
       {paints.length === 0 && !isLoading ? (
         <div className="flex flex-col items-start gap-2">
-          <p className="rounded-lg border border-dashed border-border bg-muted/30 p-4 text-sm text-muted-foreground">
+          <p className="rounded-lg border border-dashed border-rule bg-inset/30 p-4 text-sm text-meta">
             No paints match the current filters.
           </p>
           {hasActiveFilters && (

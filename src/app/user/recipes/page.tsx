@@ -41,7 +41,7 @@ export default async function UserRecipesPage() {
         <RecipeCardGrid summaries={summaries} canEditAll />
       ) : (
         <div className="card card-body items-center justify-center py-16 text-center">
-          <p className="text-muted-foreground">
+          <p className="text-meta">
             You don&apos;t have any recipes yet.
           </p>
           <form action="/user/recipes/new" method="post" className="mt-4">

@@ -73,7 +73,7 @@ export function HueSelector({
         <div className="flex items-center gap-2">
           {selectedParent && (
             <span
-              className="inline-block h-5 w-5 flex-shrink-0 rounded border border-border"
+              className="inline-block h-5 w-5 flex-shrink-0 rounded border border-rule"
               style={{ backgroundColor: selectedParent.hex_code }}
               aria-hidden="true"
             />
@@ -102,7 +102,7 @@ export function HueSelector({
         <div className="flex items-center gap-2">
           {selectedChild && (
             <span
-              className="inline-block h-5 w-5 flex-shrink-0 rounded border border-border"
+              className="inline-block h-5 w-5 flex-shrink-0 rounded border border-rule"
               style={{ backgroundColor: selectedChild.hex_code }}
               aria-hidden="true"
             />
@@ -123,7 +123,7 @@ export function HueSelector({
           </select>
         </div>
         {!parentId && (
-          <p className="text-xs text-muted-foreground">Select a parent hue first.</p>
+          <p className="text-xs text-meta">Select a parent hue first.</p>
         )}
       </div>
     </div>

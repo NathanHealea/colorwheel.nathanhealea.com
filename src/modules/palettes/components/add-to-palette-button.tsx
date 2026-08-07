@@ -71,8 +71,8 @@ export function AddToPaletteButton({
           onClick={handleTriggerClick}
           className={cn(
             variant === 'icon'
-              ? 'btn-ghost btn-square btn-sm text-muted-foreground hover:text-foreground'
-              : 'btn-soft btn-primary btn-md',
+              ? 'btn-ghost btn-square btn-sm text-meta hover:text-copy'
+              : 'btn-primary btn-md',
             className,
           )}
         >

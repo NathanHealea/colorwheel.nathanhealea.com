@@ -71,15 +71,15 @@ export function DeleteHueButton({ hueId, hueName, childCount, paintCount, trigge
         Delete
       </Button>
 
-      <dialog ref={dialogRef} className="m-auto w-full max-w-md rounded-lg border border-border bg-background p-0 shadow-lg backdrop:bg-black/50">
+      <dialog ref={dialogRef} className="m-auto w-full max-w-md rounded-lg border border-rule bg-canvas p-0 shadow-lg backdrop:bg-black/50">
         <div className="p-6 flex flex-col gap-4">
           <h3 className="text-lg font-semibold">Delete Hue</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-meta">
             Are you sure you want to delete <strong>{hueName}</strong>?
           </p>
 
           {hasCascade && (
-            <ul className="text-sm text-destructive list-disc list-inside space-y-1">
+            <ul className="text-sm text-danger list-disc list-inside space-y-1">
               {(childCount ?? 0) > 0 && (
                 <li>
                   {childCount} child {childCount === 1 ? 'hue' : 'hues'} will also be deleted.
@@ -94,10 +94,10 @@ export function DeleteHueButton({ hueId, hueName, childCount, paintCount, trigge
             </ul>
           )}
 
-          <p className="text-sm text-muted-foreground">This action cannot be undone.</p>
+          <p className="text-sm text-meta">This action cannot be undone.</p>
 
           {state?.error && (
-            <p className="text-sm text-destructive">{state.error}</p>
+            <p className="text-sm text-danger">{state.error}</p>
           )}
 
           <div className="flex justify-end gap-2">

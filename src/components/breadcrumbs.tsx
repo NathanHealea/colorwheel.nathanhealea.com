@@ -13,7 +13,7 @@ export type BreadcrumbItem = {
  */
 export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
   return (
-    <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted-foreground">
+    <nav aria-label="Breadcrumb" className="mb-4 text-sm text-meta">
       <ol className="flex flex-wrap items-center gap-1">
         {items.map((item, index) => {
           const isLast = index === items.length - 1
@@ -22,9 +22,9 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
             <li key={index} className="flex items-center gap-1">
               {index > 0 && <span aria-hidden="true">/</span>}
               {isLast || !item.href ? (
-                <span className="text-foreground font-medium">{item.label}</span>
+                <span className="text-copy font-medium">{item.label}</span>
               ) : (
-                <Link href={item.href} className="hover:text-foreground transition-colors">
+                <Link href={item.href} className="hover:text-copy transition-colors">
                   {item.label}
                 </Link>
               )}

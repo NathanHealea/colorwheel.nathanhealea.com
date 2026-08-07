@@ -160,8 +160,8 @@ export function RecipeNoteCard({
       ref={setNodeRef}
       style={style}
       className={cn(
-        'flex flex-col overflow-hidden rounded-md border border-border bg-base-100',
-        'focus-within:border-primary',
+        'flex flex-col overflow-hidden rounded-md border border-rule bg-base-100',
+        'focus-within:border-signal-on',
         isDragging && 'shadow-lg',
       )}
     >
@@ -171,7 +171,7 @@ export function RecipeNoteCard({
             ref={setActivatorNodeRef}
             type="button"
             aria-label="Reorder note"
-            className="flex w-7 shrink-0 cursor-grab touch-none items-center justify-center border-r border-border/50 text-muted-foreground hover:bg-muted active:cursor-grabbing"
+            className="flex w-7 shrink-0 cursor-grab touch-none items-center justify-center border-r border-rule/50 text-meta hover:bg-inset active:cursor-grabbing"
             {...attributes}
             {...listeners}
           >
@@ -179,7 +179,7 @@ export function RecipeNoteCard({
           </button>
         ) : (
           <div
-            className="flex w-7 shrink-0 items-center justify-center border-r border-border/50 text-muted-foreground/30"
+            className="flex w-7 shrink-0 items-center justify-center border-r border-rule/50 text-meta/30"
             aria-hidden
           >
             <GripVertical className="size-4" />
@@ -197,13 +197,13 @@ export function RecipeNoteCard({
           disabled={isPending || isDeleting}
         />
       </div>
-      <div className="flex items-center justify-between gap-2 border-t border-border/50 bg-base-200/40 px-2 py-1">
+      <div className="flex items-center justify-between gap-2 border-t border-rule/50 bg-base-200/40 px-2 py-1">
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={handleSave}
             disabled={!canSave}
-            className="inline-flex h-[26px] items-center gap-1 rounded px-2 text-xs font-medium text-foreground hover:bg-muted disabled:opacity-50 disabled:hover:bg-transparent"
+            className="inline-flex h-[26px] items-center gap-1 rounded px-2 text-xs font-medium text-copy hover:bg-inset disabled:opacity-50 disabled:hover:bg-transparent"
           >
             <Save className="size-3.5" aria-hidden />
             <span>Save</span>
@@ -212,13 +212,13 @@ export function RecipeNoteCard({
             type="button"
             onClick={handleDelete}
             disabled={isDeleting}
-            className="inline-flex h-[26px] items-center gap-1 rounded px-2 text-xs font-medium text-destructive hover:bg-muted disabled:opacity-50 disabled:hover:bg-transparent"
+            className="inline-flex h-[26px] items-center gap-1 rounded px-2 text-xs font-medium text-danger hover:bg-inset disabled:opacity-50 disabled:hover:bg-transparent"
           >
             <Trash2 className="size-3.5" aria-hidden />
             <span>Delete</span>
           </button>
         </div>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <div className="flex items-center gap-2 text-xs text-meta">
           <span aria-live="polite">
             {isPending ? 'Saving…' : isDeleting ? 'Deleting…' : ''}
           </span>

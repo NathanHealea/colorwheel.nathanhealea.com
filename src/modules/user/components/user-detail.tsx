@@ -120,7 +120,7 @@ export function UserDetail({
               <span className="badge badge-destructive text-xs">Banned</span>
             )}
           </div>
-          <p className="text-sm text-muted-foreground">{profile.email ?? 'No email'}</p>
+          <p className="text-sm text-meta">{profile.email ?? 'No email'}</p>
         </div>
       </div>
 
@@ -165,7 +165,7 @@ export function UserDetail({
         </CardHeader>
         <CardContent>
           {roles.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No roles assigned.</p>
+            <p className="text-sm text-meta">No roles assigned.</p>
           ) : (
             <div className="flex flex-wrap gap-2">
               {roles.map((role) => (
@@ -231,7 +231,7 @@ export function UserDetail({
 
       {/* Actions section — hidden for own account or owner account */}
       {!isSelf && !isOwner && (
-        <Card className="border-destructive/20">
+        <Card className="border-danger/20">
           <CardHeader>
             <CardTitle>Account Actions</CardTitle>
             <CardDescription>
@@ -270,7 +270,7 @@ export function UserDetail({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-4">
-      <span className="w-32 shrink-0 text-muted-foreground">{label}</span>
+      <span className="w-32 shrink-0 text-meta">{label}</span>
       <span className="flex-1 break-all">{value}</span>
     </div>
   )

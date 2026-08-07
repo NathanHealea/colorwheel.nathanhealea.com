@@ -33,10 +33,10 @@ export function PaletteSwapCandidateCard({
     <button
       type="button"
       onClick={() => onSelect(paint.id)}
-      className="relative flex flex-col items-start gap-1.5 rounded-lg border border-border p-2 text-left hover:bg-muted transition-colors w-full"
+      className="relative flex flex-col items-start gap-1.5 rounded-lg border border-rule p-2 text-left hover:bg-inset transition-colors w-full"
     >
       {/* ΔE badge — top right */}
-      <span className="absolute right-1.5 top-1.5 rounded bg-base-200 px-1 py-0.5 text-[10px] font-mono leading-none text-muted-foreground">
+      <span className="absolute right-1.5 top-1.5 rounded bg-base-200 px-1 py-0.5 text-[10px] font-mono leading-none text-meta">
         ΔE {deltaE.toFixed(1)}
       </span>
 
@@ -51,7 +51,7 @@ export function PaletteSwapCandidateCard({
       <div className="w-full min-w-0">
         <p className="truncate text-xs font-medium leading-snug">{paint.name}</p>
         {brandLine && (
-          <p className="truncate text-[10px] text-muted-foreground leading-snug">{brandLine}</p>
+          <p className="truncate text-[10px] text-meta leading-snug">{brandLine}</p>
         )}
       </div>
 

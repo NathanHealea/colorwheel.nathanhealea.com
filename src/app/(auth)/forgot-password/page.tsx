@@ -25,8 +25,8 @@ export default function ForgotPasswordPage() {
         </TurnstileProvider>
       </CardContent>
       <CardFooter className="justify-center">
-        <p className="text-sm text-muted-foreground">
-          <Link href="/sign-in" className="text-primary underline-offset-4 hover:underline">
+        <p className="text-sm text-meta">
+          <Link href="/sign-in" className="text-signal-on underline-offset-4 hover:underline">
             Back to sign in
           </Link>
         </p>

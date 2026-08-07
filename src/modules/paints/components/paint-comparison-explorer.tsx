@@ -44,9 +44,9 @@ export function PaintComparisonExplorer({
       </div>
 
       {isEmpty ? (
-        <div className="rounded-xl border border-dashed border-border bg-muted/30 p-8 text-center">
+        <div className="rounded-xl border border-dashed border-rule bg-inset/30 p-8 text-center">
           <h2 className="text-base font-semibold">Compare paints side by side</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-sm text-meta">
             Search for a paint above to start a comparison. Add up to six paints and
             see their pairwise color difference in CIE76 ΔE.
           </p>
@@ -64,7 +64,7 @@ export function PaintComparisonExplorer({
             />
           ))}
           {isHydrating && (
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-background/50 text-sm text-muted-foreground">
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-canvas/50 text-sm text-meta">
               Loading…
             </div>
           )}

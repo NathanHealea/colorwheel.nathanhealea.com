@@ -33,12 +33,12 @@ export default async function AdminBrandsPage() {
       </PageHeader>
 
       {brands.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No brands found.</p>
+        <p className="text-sm text-meta">No brands found.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-left">
+              <tr className="border-b border-rule text-left">
                 <th className="pb-2 pr-4 font-medium">Name</th>
                 <th className="pb-2 pr-4 font-medium">Slug</th>
                 <th className="pb-2 pr-4 font-medium">Website</th>
@@ -48,9 +48,9 @@ export default async function AdminBrandsPage() {
             </thead>
             <tbody>
               {brands.map((brand) => (
-                <tr key={brand.id} className="border-b border-border/50">
+                <tr key={brand.id} className="border-b border-rule/50">
                   <td className="py-2 pr-4 font-medium">{brand.name}</td>
-                  <td className="py-2 pr-4 font-mono text-xs text-muted-foreground">
+                  <td className="py-2 pr-4 font-mono text-xs text-meta">
                     {brand.slug}
                   </td>
                   <td className="py-2 pr-4">
@@ -59,12 +59,12 @@ export default async function AdminBrandsPage() {
                         href={brand.website_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary hover:underline"
+                        className="text-signal-on hover:underline"
                       >
                         {new URL(brand.website_url).hostname}
                       </a>
                     ) : (
-                      <span className="text-muted-foreground">—</span>
+                      <span className="text-meta">—</span>
                     )}
                   </td>
                   <td className="py-2 pr-4 text-right tabular-nums">{brand.paint_count}</td>

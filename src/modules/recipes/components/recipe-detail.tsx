@@ -38,7 +38,7 @@ export function RecipeDetail({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="flex flex-col gap-1">
             <PageTitle size="md">{recipe.title}</PageTitle>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-meta">
               {recipe.isPublic ? 'Public recipe' : 'Private recipe'}
             </p>
           </div>
@@ -74,7 +74,7 @@ export function RecipeDetail({
       )}
 
       {recipe.sections.length === 0 ? (
-        <p className="rounded-md border border-dashed border-border p-4 text-sm text-muted-foreground">
+        <p className="rounded-md border border-dashed border-rule p-4 text-sm text-meta">
           This recipe has no sections yet.
         </p>
       ) : (
@@ -82,14 +82,14 @@ export function RecipeDetail({
           {recipe.sections.map((section, sectionIndex) => (
             <section key={section.id} className="flex flex-col gap-3">
               <h2 className="text-lg font-semibold">
-                <span className="tabular-nums text-muted-foreground">
+                <span className="tabular-nums text-meta">
                   {sectionIndex + 1}.
                 </span>{' '}
                 {section.title}
               </h2>
 
               {section.steps.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No steps yet.</p>
+                <p className="text-sm text-meta">No steps yet.</p>
               ) : (
                 <ol className="flex flex-col gap-3">
                   {section.steps.map((step, stepIndex) => {
@@ -97,10 +97,10 @@ export function RecipeDetail({
                     return (
                       <li
                         key={step.id}
-                        className="flex flex-col gap-2 rounded-lg border border-border p-3"
+                        className="flex flex-col gap-2 rounded-lg border border-rule p-3"
                       >
                         <div className="flex flex-wrap items-baseline gap-2">
-                          <span className="text-sm font-medium tabular-nums text-muted-foreground">
+                          <span className="text-sm font-medium tabular-nums text-meta">
                             {label}
                           </span>
                           {step.title && (
@@ -125,7 +125,7 @@ export function RecipeDetail({
                         <RecipeNoteDisplay notes={step.notes} compact />
 
                         {step.paints.length === 0 ? (
-                          <p className="text-xs italic text-muted-foreground">
+                          <p className="text-xs italic text-meta">
                             No paints recorded for this step.
                           </p>
                         ) : (
