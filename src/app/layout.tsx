@@ -5,11 +5,37 @@ import { Footer } from '@/components/footer'
 import { Navbar } from '@/components/navbar'
 import { cn } from '@/lib/utils'
 import { siteUrl } from '@/modules/seo/utils/site-url'
-import { Geist } from 'next/font/google'
+import { IBM_Plex_Mono, IBM_Plex_Sans, Space_Grotesk } from 'next/font/google'
 import { Toaster } from 'sonner'
 import './globals.css'
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
+/*
+ * next/font exposes each family under a `*-face` variable, which the
+ * `@theme inline` block in globals.css then wraps into the `--font-display`
+ * / `--font-sans` / `--font-mono` theme tokens along with its fallback stack.
+ * The names must differ — `--font-sans: var(--font-sans)` is a reference
+ * cycle and resolves to nothing.
+ */
+
+/** Display face — headings and the brand wordmark. */
+const display = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-display-face',
+})
+
+/** Body face — default for all prose and UI text. */
+const sans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-sans-face',
+})
+
+/** Mono face — micro-labels, data chips, ΔE values, prices. Tabular numerals. */
+const mono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono-face',
+})
 
 const description =
   'Search Citadel, Vallejo, Army Painter, Scale75 and 10+ other brands in one place. Build palettes, track your shelf, and share painting recipes — free to browse, no account needed.'
@@ -71,8 +97,9 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#fafafa' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+    // Matches --color-surface / --color-ink in src/styles/variables.css
+    { media: '(prefers-color-scheme: light)', color: '#f4f5f7' },
+    { media: '(prefers-color-scheme: dark)', color: '#0e1013' },
   ],
 }
 
@@ -94,7 +121,10 @@ export default function RootLayout({
   children: ReactNode
 }>) {
   return (
-    <html lang="en" className={cn('font-sans', geist.variable)}>
+    <html
+      lang="en"
+      className={cn('font-sans', display.variable, sans.variable, mono.variable)}
+    >
       <body className="flex min-h-dvh flex-col">
         <script
           type="application/ld+json"
