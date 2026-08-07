@@ -1,8 +1,10 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
+import type { KeyboardEvent } from 'react'
 import { X } from 'lucide-react'
 
+import { cn } from '@/lib/utils'
 import type { Army } from '@/modules/armies/types/army'
 
 /**
@@ -54,6 +56,11 @@ type ArmyComboboxProps = {
  * the `name` prop. If the army has an `icon_url`, a 16×16 thumbnail is shown
  * next to the label.
  *
+ * @remarks
+ * Arrow keys move the highlight, Enter commits it, Escape closes the panel. The
+ * "None" entry is folded into the same indexed row list as the armies so it is
+ * reachable by keyboard like any other option rather than being a special case.
+ *
  * @param props - {@link ArmyComboboxProps}
  */
 export function ArmyCombobox({ armies, defaultValue, name = 'army_id' }: ArmyComboboxProps) {
@@ -69,16 +76,49 @@ export function ArmyCombobox({ armies, defaultValue, name = 'army_id' }: ArmyCom
   const [selected, setSelected] = useState<ArmyOption | null>(initialArmy)
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(-1)
   const containerRef = useRef<HTMLDivElement>(null)
+  const listboxId = useId()
 
   const filtered = query.length > 0
     ? options.filter((o) => o.label.toLowerCase().includes(query.toLowerCase()))
     : options
 
+  // "None" is row 0 so keyboard navigation covers it without a separate branch.
+  const rows: (ArmyOption | null)[] = [null, ...filtered]
+
   function handleSelect(option: ArmyOption | null) {
     setSelected(option)
     setQuery('')
     setOpen(false)
+    setActiveIndex(-1)
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Escape') {
+      setOpen(false)
+      setActiveIndex(-1)
+      return
+    }
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault()
+      setOpen(true)
+      setActiveIndex((current) => (current + 1 >= rows.length ? 0 : current + 1))
+      return
+    }
+
+    if (event.key === 'ArrowUp') {
+      event.preventDefault()
+      setOpen(true)
+      setActiveIndex((current) => (current <= 0 ? rows.length - 1 : current - 1))
+      return
+    }
+
+    if (event.key === 'Enter' && activeIndex >= 0) {
+      event.preventDefault()
+      handleSelect(rows[activeIndex])
+    }
   }
 
   useEffect(() => {
@@ -92,18 +132,18 @@ export function ArmyCombobox({ armies, defaultValue, name = 'army_id' }: ArmyCom
   }, [])
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="combobox">
       {/* Hidden input carries the selected army ID for form submission */}
       <input type="hidden" name={name} value={selected?.id ?? ''} />
 
       {selected ? (
         /* Selected state — show the selected army with a clear button */
-        <div className="flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm">
+        <div className="combobox-chip">
           {selected.icon_url && (
             <img
               src={selected.icon_url}
               alt={selected.name}
-              className="h-4 w-4 shrink-0 rounded object-contain"
+              className="h-4 w-4 shrink-0 rounded-swatch object-contain"
             />
           )}
           <span className="flex-1 truncate">{selected.label}</span>
@@ -111,7 +151,7 @@ export function ArmyCombobox({ armies, defaultValue, name = 'army_id' }: ArmyCom
             type="button"
             aria-label="Clear army selection"
             onClick={() => handleSelect(null)}
-            className="ml-auto shrink-0 text-muted-foreground hover:text-foreground"
+            className="ml-auto shrink-0 cursor-pointer text-meta transition-colors hover:text-copy"
           >
             <X className="size-3.5" />
           </button>
@@ -124,50 +164,59 @@ export function ArmyCombobox({ armies, defaultValue, name = 'army_id' }: ArmyCom
           value={query}
           autoComplete="off"
           className="input input-sm w-full"
+          role="combobox"
+          aria-expanded={open}
+          aria-controls={listboxId}
+          aria-activedescendant={activeIndex >= 0 ? `${listboxId}-${activeIndex}` : undefined}
           onChange={(e) => {
             setQuery(e.target.value)
             setOpen(true)
+            setActiveIndex(-1)
           }}
           onFocus={() => setOpen(true)}
+          onKeyDown={handleKeyDown}
         />
       )}
 
       {/* Dropdown list */}
       {open && !selected && (
-        <ul className="absolute top-full z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-border bg-popover text-popover-foreground shadow-md">
-          {/* None option */}
-          <li>
-            <button
-              type="button"
-              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-muted-foreground transition-colors hover:bg-muted"
-              onClick={() => handleSelect(null)}
-            >
-              — None —
-            </button>
-          </li>
-          {filtered.length === 0 && query.length > 0 ? (
-            <li className="px-3 py-2 text-sm text-muted-foreground">No armies found.</li>
-          ) : (
-            filtered.map((option) => (
-              <li key={option.id}>
-                <button
-                  type="button"
-                  className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-muted"
-                  onClick={() => handleSelect(option)}
-                >
-                  {option.icon_url && (
-                    <img
-                      src={option.icon_url}
-                      alt={option.name}
-                      className="h-4 w-4 shrink-0 rounded object-contain"
-                    />
-                  )}
-                  <span className="truncate">{option.label}</span>
-                </button>
+        <div className="combobox-panel">
+          <ul className="combobox-list" id={listboxId} role="listbox">
+            {rows.map((option, index) => (
+              <li
+                key={option?.id ?? 'none'}
+                id={`${listboxId}-${index}`}
+                role="option"
+                aria-selected={index === activeIndex}
+                className={cn(
+                  'combobox-item',
+                  index === activeIndex && 'combobox-item-active',
+                  option === null && 'text-meta',
+                )}
+                onClick={() => handleSelect(option)}
+                onMouseMove={() => setActiveIndex(index)}
+              >
+                {option === null ? (
+                  '— None —'
+                ) : (
+                  <>
+                    {option.icon_url && (
+                      <img
+                        src={option.icon_url}
+                        alt={option.name}
+                        className="h-4 w-4 shrink-0 rounded-swatch object-contain"
+                      />
+                    )}
+                    <span className="truncate">{option.label}</span>
+                  </>
+                )}
               </li>
-            ))
-          )}
-        </ul>
+            ))}
+            {filtered.length === 0 && query.length > 0 && (
+              <li className="combobox-empty">No armies found.</li>
+            )}
+          </ul>
+        </div>
       )}
     </div>
   )

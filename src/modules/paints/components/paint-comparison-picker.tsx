@@ -39,7 +39,7 @@ export function PaintComparisonPicker({
 
   if (!canAddMore) {
     return (
-      <div className="rounded-lg border border-dashed border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
+      <div className="rounded-card border border-dashed border-rule bg-inset/30 px-3 py-2 text-body text-meta">
         You can compare up to {MAX_COMPARE_PAINTS} paints at once. Remove a paint to add another.
       </div>
     )

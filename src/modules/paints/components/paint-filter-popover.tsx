@@ -55,7 +55,7 @@ export function PaintFilterPopover({
       </PopoverTrigger>
       <PopoverContent className="w-64 max-h-64 overflow-auto p-2">
         {options.length === 0 ? (
-          <p className="px-2 py-1 text-xs text-muted-foreground">{emptyMessage}</p>
+          <p className="px-2 py-1 text-small text-meta">{emptyMessage}</p>
         ) : (
           <ul className="flex flex-col gap-1">
             {options.map((option) => {
@@ -63,14 +63,15 @@ export function PaintFilterPopover({
               const count = counts[option.id] ?? 0
               return (
                 <li key={option.id}>
-                  <label className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-sm hover:bg-accent">
+                  <label className="flex cursor-pointer items-center gap-2 rounded-control px-2 py-1 text-body hover:bg-inset">
                     <input
                       type="checkbox"
+                      className="checkbox checkbox-sm"
                       checked={checked}
                       onChange={() => onToggle(option.id)}
                     />
                     <span className="flex-1 capitalize">{option.name}</span>
-                    <span className="text-xs text-muted-foreground">{count}</span>
+                    <span className="text-small text-meta">{count}</span>
                   </label>
                 </li>
               )

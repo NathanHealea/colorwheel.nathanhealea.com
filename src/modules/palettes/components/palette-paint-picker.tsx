@@ -87,7 +87,7 @@ export function PalettePaintPicker({
           ownedIds={ownedSet}
         />
       </div>
-      <label className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground sm:whitespace-nowrap">
+      <label className="flex cursor-pointer items-center gap-2 text-body text-meta sm:whitespace-nowrap">
         <input
           type="checkbox"
           className="checkbox checkbox-sm"

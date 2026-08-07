@@ -89,7 +89,7 @@ export function PaintColorSchemesSection({
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
             <h2 className="text-xl font-semibold">Color schemes</h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-body text-meta">
               Complementary, analogous, triadic, and tetradic harmonies of {paint.name}, matched to catalog paints.
             </p>
           </div>
@@ -110,9 +110,10 @@ export function PaintColorSchemesSection({
                     const checked = selectedBrandIds.includes(id)
                     return (
                       <li key={id}>
-                        <label className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-sm hover:bg-accent">
+                        <label className="flex cursor-pointer items-center gap-2 rounded-control px-2 py-1 text-body hover:bg-inset">
                           <input
                             type="checkbox"
+                            className="checkbox checkbox-sm"
                             checked={checked}
                             onChange={() => toggleBrand(id)}
                           />
