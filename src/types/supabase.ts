@@ -871,6 +871,45 @@ export type Database = {
           },
         ]
       }
+      user_purchase_list: {
+        Row: {
+          added_at: string
+          notes: string | null
+          paint_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          added_at?: string
+          notes?: string | null
+          paint_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          added_at?: string
+          notes?: string | null
+          paint_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_purchase_list_paint_id_fkey"
+            columns: ["paint_id"]
+            isOneToOne: false
+            referencedRelation: "paints"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_purchase_list_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           assigned_at: string
