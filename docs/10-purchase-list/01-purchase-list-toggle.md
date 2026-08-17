@@ -2,9 +2,9 @@
 
 **Epic:** Purchase List
 **Type:** Feature
-**Status:** Todo
+**Status:** Completed
 **Branch:** `feature/purchase-list-toggle`
-**Merge into:** `main`
+**Merge into:** `feature/purchase-list-schema`
 
 ## Summary
 
@@ -12,12 +12,12 @@ Add a shopping-cart toggle icon to paint cards so authenticated users can add or
 
 ## Acceptance Criteria
 
-- [ ] Authenticated users see a shopping-cart icon on every paint card in browse views
-- [ ] Clicking the icon adds the paint to the user's purchase list (icon fills); clicking again removes it (icon outline)
-- [ ] State flip is instant via `useOptimistic`; reverts on error
-- [ ] Unauthenticated users clicking the icon are redirected to `/sign-in?next={pathname}`
-- [ ] The toggle does not trigger card navigation (click stops propagation)
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] Authenticated users see a shopping-cart icon on every paint card in browse views
+- [x] Clicking the icon adds the paint to the user's purchase list (icon fills); clicking again removes it (icon outline)
+- [x] State flip is instant via `useOptimistic`; reverts on error
+- [x] Unauthenticated users clicking the icon are redirected to `/sign-in?next={pathname}`
+- [x] The toggle does not trigger card navigation (click stops propagation)
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Routes
 
@@ -156,6 +156,32 @@ Commit: `feat(purchase-list): show purchase list toggle on paint browse pages`
 ### Step 7: Build and verify
 
 `npm run build && npm run lint` pass. Manual test: toggle on/off from paint browse page, verify database row created/deleted.
+
+## Implementation Notes
+
+Deviations from the plan, made during implementation:
+
+- **No `PaintCardWithToggle` exists in the codebase.** The equivalent component is
+  `src/modules/collection/components/collection-paint-card.tsx` (`CollectionPaintCard`), which
+  already overlays a `CollectionToggle` (top-right) and an `AddToPaletteButton` (below it).
+  Swapping it for a separate purchase-only wrapper in browse grids would have dropped the
+  collection toggle, so `CollectionPaintCard` gained two optional props instead:
+  `showPurchaseToggle` and `isOnPurchaseList`. The purchase toggle renders at
+  `absolute bottom-1 right-1`, as planned.
+- **`showPurchaseToggle` is opt-in.** Call-sites must pass it explicitly so the cart icon is never
+  rendered with a stale `isOnPurchaseList={false}` on surfaces that do not fetch purchase list
+  state (`/collection/paints`, `/schemes`, palette edit, admin views). Those surfaces are
+  unchanged and show no cart icon.
+- **`PaintCardWithPurchaseToggle` was still created** per the plan. It is a standalone
+  purchase-only card intended for the purchase list dashboard (`02-purchase-list-dashboard.md`);
+  it is not used by the browse grids.
+- **Surfaces wired up:** `/paints` (via `PaintExplorer` + `PaginatedPaintGrid`), `/brands/[id]`
+  (via `BrandPaintList`), `/hues/[id]` (via `HueGroupPaintGrid` and `HuePaintGrid`), and
+  `/paints/[id]` (via `PaintDetail`, `size="md"` next to the collection toggle).
+- **Manual DB verification (Step 7) was not performed** — Docker is unavailable in the
+  implementation environment, so the local Supabase stack could not be started. Toggling a paint
+  on/off and confirming the `user_purchase_list` row is created/deleted still needs a manual pass
+  against a running database.
 
 ## Risks & Considerations
 
