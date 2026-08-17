@@ -2,9 +2,9 @@
 
 **Epic:** Purchase List
 **Type:** Feature
-**Status:** Todo
+**Status:** Completed
 **Branch:** `feature/purchase-list-dashboard`
-**Merge into:** `main`
+**Merge into:** `feature/purchase-list-toggle`
 
 ## Summary
 
@@ -12,13 +12,13 @@ A user-facing dashboard at `/purchase-list` that mirrors the collection dashboar
 
 ## Acceptance Criteria
 
-- [ ] `/purchase-list` requires authentication; unauthenticated users are redirected to `/sign-in`
-- [ ] Dashboard shows total paint count, top brands, and paints-by-type stats
-- [ ] Dashboard shows the 10 most recently added paints when no search query is active
-- [ ] Search input debounces at 250 ms and filters by paint name, hex, brand, and type
-- [ ] `/purchase-list/paints` shows the full paginated purchase list with configurable page sizes
-- [ ] Navbar includes a "Purchase List" link visible to authenticated users
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] `/purchase-list` requires authentication; unauthenticated users are redirected to `/sign-in`
+- [x] Dashboard shows total paint count, top brands, and paints-by-type stats
+- [x] Dashboard shows the 10 most recently added paints when no search query is active
+- [x] Search input debounces at 250 ms and filters by paint name, hex, brand, and type
+- [x] `/purchase-list/paints` shows the full paginated purchase list with configurable page sizes
+- [x] Navbar includes a "Purchase List" link visible to authenticated users
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Routes
 
@@ -175,3 +175,22 @@ Commit: `feat(purchase-list): add purchase list link to navbar`
 - **Navbar location.** The navbar component path may differ; find the file by searching for "Collection" nav link in the navbar area before modifying.
 - **Stats aggregation performance.** Identical concern to collection: fine for < 500 paints per user. No optimization needed now.
 - **Empty purchase list.** Ensure empty state cards render and the "Browse paints" CTA is accessible.
+
+## Implementation Notes
+
+Deviations from the plan, all in the direction of reusing work already on
+`feature/purchase-list-toggle`:
+
+- `getPurchaseListPaints` and `getPurchaseListCount` already existed on the service from the
+  toggle branch, so only `getStats` and `searchPurchaseList` were added. The count method keeps
+  its existing name (`getPurchaseListCount`, not `getPurchaseListPaintCount`).
+- `PurchaseListPaintGrid` wraps `PaginatedPaintGrid` and passes its existing `purchaseListIds`
+  prop (added on the toggle branch) plus `userPaintIds`, so each card renders both the collection
+  and purchase list toggles instead of duplicating grid/card logic.
+- `PurchaseListSearch` renders the previously unused `PaintCardWithPurchaseToggle` from the
+  toggle branch.
+- There is no single `navbar.tsx`; the authenticated "Mine" links live in
+  `src/modules/user/components/user-menu.tsx` (desktop dropdown) and
+  `src/components/navbar-mobile-menu.tsx` (mobile drawer). "My purchase list" was added to both.
+- `/purchase-list` was added to `KNOWN_ROUTES` in `src/middleware.ts` so signed-out visitors are
+  redirected to `/sign-in?next=/purchase-list` rather than falling through to the 404 page.

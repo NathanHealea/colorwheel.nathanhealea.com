@@ -22,6 +22,7 @@ type OwnedItem = {
 /** Owned-content destinations shown in the user dropdown under the "Mine" heading. */
 const OWNED_ITEMS: OwnedItem[] = [
   { label: 'My collection', href: '/collection' },
+  { label: 'My purchase list', href: '/purchase-list' },
   { label: 'My palettes', href: '/user/palettes' },
   { label: 'My recipes', href: '/user/recipes'},
 ]
@@ -33,8 +34,8 @@ const OWNED_ITEMS: OwnedItem[] = [
  * button. Opens a Radix dropdown with these sections: a profile link
  * (display name → `/users/{userId}`) and an `Edit profile` link
  * (`/profile/edit`), a separator, a "Mine" group of owned-content links
- * (My collection, My palettes, My recipes — all live routes), another
- * separator, and the sign-out action.
+ * (My collection, My purchase list, My palettes, My recipes — all live routes),
+ * another separator, and the sign-out action.
  *
  * @param props.userId - The user's ID, used to construct the profile details link.
  * @param props.displayName - The user's display name.

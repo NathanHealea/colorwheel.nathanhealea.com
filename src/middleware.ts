@@ -42,6 +42,7 @@ const KNOWN_ROUTES = [
   '/paints',
   '/palettes',
   '/profile',
+  '/purchase-list',
   '/recipes',
   '/reset-password',
   '/schemes',
