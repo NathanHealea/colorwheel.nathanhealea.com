@@ -11,8 +11,18 @@ import { Input } from '@/components/ui/input';
  * `?role=` param and resets `?page=` to 1 whenever the query changes.
  *
  * @param props.initialValue - The current search query from the URL (`?q=`).
+ * @param props.placeholder - Placeholder text for the input. Defaults to searching by display name.
+ * @param props.ariaLabel - Accessible label for the input. Defaults to `'Search users'`.
  */
-export function UserSearch({ initialValue }: { initialValue: string }) {
+export function UserSearch({
+  initialValue,
+  placeholder = 'Search by display name…',
+  ariaLabel = 'Search users',
+}: {
+  initialValue: string
+  placeholder?: string
+  ariaLabel?: string
+}) {
   const router = useRouter()
   const [value, setValue] = useState(initialValue)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -47,8 +57,8 @@ export function UserSearch({ initialValue }: { initialValue: string }) {
       type="search"
       value={value}
       onChange={(e) => setValue(e.target.value)}
-      placeholder="Search by display name…"
-      aria-label="Search users"
+      placeholder={placeholder}
+      aria-label={ariaLabel}
     />
   )
 }
