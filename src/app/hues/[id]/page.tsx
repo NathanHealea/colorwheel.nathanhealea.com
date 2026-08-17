@@ -11,6 +11,7 @@ import { getHueService } from '@/modules/hues/services/hue-service.server';
 import { HueGroupPaintGrid } from '@/modules/paints/components/hue-group-paint-grid';
 import { HuePaintGrid } from '@/modules/paints/components/hue-paint-grid';
 import { getPaintService } from '@/modules/paints/services/paint-service.server';
+import { getPurchaseListService } from '@/modules/purchase-list/services/purchase-list-service.server';
 import { buildOgUrl } from '@/modules/seo/utils/build-og-url';
 import { pageMetadata } from '@/modules/seo/utils/page-metadata';
 
@@ -75,9 +76,16 @@ export default async function HuePage({
   const isTopLevel = hue.parent_id === null
 
   let userPaintIds: Set<string> | undefined
+  let purchaseListIds: Set<string> | undefined
   if (user) {
-    const collectionService = await getCollectionService()
-    userPaintIds = await collectionService.getUserPaintIds(user.id)
+    const [collectionService, purchaseListService] = await Promise.all([
+      getCollectionService(),
+      getPurchaseListService(),
+    ]);
+    [userPaintIds, purchaseListIds] = await Promise.all([
+      collectionService.getUserPaintIds(user.id),
+      purchaseListService.getUserPurchaseListIds(user.id),
+    ])
   }
 
   if (isTopLevel) {
@@ -125,6 +133,7 @@ export default async function HuePage({
           initialPaints={paints}
           totalCount={totalCount}
           userPaintIds={userPaintIds}
+          purchaseListIds={purchaseListIds}
           isAuthenticated={user !== null}
         />
       </Main>
@@ -170,6 +179,7 @@ export default async function HuePage({
         initialPaints={paints}
         totalCount={totalCount}
         userPaintIds={userPaintIds}
+        purchaseListIds={purchaseListIds}
         isAuthenticated={user !== null}
       />
     </Main>

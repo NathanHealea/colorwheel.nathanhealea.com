@@ -11,6 +11,7 @@ import { FindSimilarButton } from '@/modules/paints/components/find-similar-butt
 import { GradientScale } from '@/modules/paints/components/gradient-scale'
 import { PaintSectionsToggle } from '@/modules/paints/components/paint-sections-toggle'
 import { PaintSubstitutes } from '@/modules/paints/components/paint-substitutes'
+import { PurchaseListToggle } from '@/modules/purchase-list/components/purchase-list-toggle'
 import type { PaintWithRelationsAndHue } from '@/modules/paints/services/paint-service'
 import type { PaintGradientGroup } from '@/modules/paints/types/paint-gradient-group'
 import type { Brand } from '@/types/paint'
@@ -22,8 +23,9 @@ import type { Brand } from '@/types/paint'
  * paint type, color values (hex, RGB, HSL), hue classification links,
  * and status badges for metallic or discontinued paints.
  *
- * Renders a {@link CollectionToggle} and {@link AddToPaletteButton} next to
- * the paint name when `isAuthenticated` is provided.
+ * Renders a {@link CollectionToggle}, {@link PurchaseListToggle}, and
+ * {@link AddToPaletteButton} next to the paint name when `isAuthenticated` is
+ * provided.
  *
  * @param props.paint - The paint record with joined product line, brand, and hue data.
  * @param props.parentHue - The parent Munsell principal hue, if the paint has a sub-hue.
@@ -31,6 +33,7 @@ import type { Brand } from '@/types/paint'
  *   rendered as a {@link GradientScale} below the hue classification. `null`
  *   when the paint belongs to no group.
  * @param props.isInCollection - Whether the paint is in the user's collection.
+ * @param props.isOnPurchaseList - Whether the paint is on the user's purchase list.
  * @param props.isAuthenticated - Whether the current user is signed in.
  * @param props.adminEditHref - When provided (admin users only), renders an edit link pointing to this URL.
  * @param props.brands - All brands, used by the substitutes brand filter when
@@ -49,6 +52,7 @@ export function PaintDetail({
   parentHue,
   gradientGroup = null,
   isInCollection = false,
+  isOnPurchaseList = false,
   isAuthenticated = false,
   adminEditHref,
   brands = [],
@@ -60,6 +64,7 @@ export function PaintDetail({
   parentHue: Hue | null
   gradientGroup?: PaintGradientGroup | null
   isInCollection?: boolean
+  isOnPurchaseList?: boolean
   isAuthenticated?: boolean
   adminEditHref?: string
   brands?: Brand[]
@@ -87,6 +92,14 @@ export function PaintDetail({
               paintId={paint.id}
               paintName={paint.name}
               isInCollection={isInCollection}
+              isAuthenticated={isAuthenticated}
+              size="md"
+              revalidatePath={`/paints/${paint.id}`}
+            />
+            <PurchaseListToggle
+              paintId={paint.id}
+              paintName={paint.name}
+              isOnPurchaseList={isOnPurchaseList}
               isAuthenticated={isAuthenticated}
               size="md"
               revalidatePath={`/paints/${paint.id}`}

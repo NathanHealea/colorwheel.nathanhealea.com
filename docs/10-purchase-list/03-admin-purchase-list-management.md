@@ -2,9 +2,9 @@
 
 **Epic:** Purchase List
 **Type:** Feature
-**Status:** Todo
+**Status:** Done
 **Branch:** `feature/admin-purchase-list-management`
-**Merge into:** `main`
+**Merge into:** `feature/purchase-list-dashboard`
 
 ## Summary
 
@@ -12,17 +12,17 @@ Admin interface for performing CRUD operations on every user's purchase list. Ad
 
 ## Acceptance Criteria
 
-- [ ] Admins can view a paginated list of all users with their purchase list size (paint count) and last-updated timestamp
-- [ ] Admins can search the list by display name or email (case-insensitive partial match), with URL-synced `?q=` state
-- [ ] Admins can filter the list to show only users with at least one paint, only users with empty purchase lists, or all users
-- [ ] Admins can open a user's purchase list detail page showing every paint with brand, paint type, hex swatch, added date, and notes
-- [ ] Admins can add a paint to any user's purchase list via a searchable paint picker
-- [ ] Admins can remove a single paint from a user's purchase list with an inline confirmation
-- [ ] Admins can edit the per-paint `notes` field inline
-- [ ] Admins can clear an entire user's purchase list with a type-to-confirm dialog (typing the user's display name)
-- [ ] Admin sidebar shows a "Purchase Lists" nav item alongside Dashboard / Users / Roles / Collections, with active-state highlighting
-- [ ] Admins cannot mutate their own purchase list through the admin UI (prevents accidental self-modification; admins use `/purchase-list` for their own list)
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] Admins can view a paginated list of all users with their purchase list size (paint count) and last-updated timestamp
+- [x] Admins can search the list by display name or email (case-insensitive partial match), with URL-synced `?q=` state
+- [x] Admins can filter the list to show only users with at least one paint, only users with empty purchase lists, or all users
+- [x] Admins can open a user's purchase list detail page showing every paint with brand, paint type, hex swatch, added date, and notes
+- [x] Admins can add a paint to any user's purchase list via a searchable paint picker
+- [x] Admins can remove a single paint from a user's purchase list with an inline confirmation
+- [x] Admins can edit the per-paint `notes` field inline
+- [x] Admins can clear an entire user's purchase list with a type-to-confirm dialog (typing the user's display name)
+- [x] Admin sidebar shows a "Purchase Lists" nav item alongside Dashboard / Users / Roles / Collections, with active-state highlighting
+- [x] Admins cannot mutate their own purchase list through the admin UI (prevents accidental self-modification; admins use `/purchase-list` for their own list)
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Routes
 
@@ -255,3 +255,15 @@ Commit: `feat(purchase-list): add Purchase Lists link to admin sidebar`
 - **Admin RLS on `user_purchase_list`.** Any bug in `get_user_roles` immediately affects access. Test: (a) admin can read/write any row, (b) non-admin cannot read/write another user's row, (c) non-admin can still read/write their own rows.
 - **Paint-picker performance.** Reuse `paintService.searchPaints()` which handles brand+name search efficiently.
 - **`Collections` sidebar item.** If `06-collection-management.md` is not yet implemented when this feature lands, omit the Collections item from the sidebar to avoid a broken link.
+
+## Implementation Notes (as built)
+
+Deviations from the plan above, recorded during implementation:
+
+1. **No `/admin/collections` to mirror.** `docs/08-user-management/06-collection-management.md` has not been implemented — there is no `/admin/collections` route, no `src/modules/admin/services/collection-service.ts` `listUserCollections`, and no `collections-list-table.tsx`. Admin collection editing lives at `/admin/users/[id]/collection` instead. Patterns were therefore mirrored from the files that do exist: `admin-users-table.tsx`, `user-role-filter.tsx`, `admin-add-paint-form.tsx`, and `delete-user-dialog.tsx`.
+2. **Collections sidebar item omitted.** Per the risk note above, only `Purchase Lists` was added to `NAV_ITEMS` (between `Roles` and `Brands`).
+3. **JS-side aggregation instead of PostgREST aggregates.** Purchase list counts and last-activity timestamps are computed by paging `user_purchase_list` in 1000-row batches inside `fetchPurchaseListAggregates()` rather than using `count()` / `max()` aggregate selects, which are disabled by default on Supabase PostgREST.
+4. **Self-contained admin purchase list service.** `src/modules/admin/services/purchase-list-service.ts` is new and standalone (exports `listUserPurchaseLists`, `getUserPurchaseList`, `countUserPurchaseListPaints`); the existing admin `collection-service.ts` only exports `getAdminCollectionPageData` and was not extended.
+5. **No middleware change required.** `/admin` is already in `KNOWN_ROUTES` and covered by `ADMIN_ROUTES`, so `/admin/purchase-lists` is gated automatically.
+6. **`user-search.tsx` extended, not duplicated.** `src/modules/user/components/user-search.tsx` gained optional `placeholder` and `ariaLabel` props (defaults preserve existing behaviour) so the purchase lists index can reuse it.
+7. **Types not regenerated.** `src/types/supabase.ts` already contains `user_purchase_list` Row/Insert/Update types from the schema feature, so `npm run db:types` was not run (Docker/local Supabase unavailable in the implementation environment). The new migration was not applied locally for the same reason — the admin RLS policies are unverified at runtime.

@@ -42,6 +42,8 @@ const MAX_VISIBLE_PAGES = 7
  * @param props.basePath - URL path prefix for pagination links (e.g., "/paints" or "/hues/abc").
  * @param props.fetchPaints - Optional custom fetch function. Defaults to fetching all paints.
  * @param props.userPaintIds - Set of paint IDs in the current user's collection.
+ * @param props.purchaseListIds - Set of paint IDs on the current user's purchase list.
+ *   When provided, each card also renders a purchase list toggle.
  * @param props.isAuthenticated - Whether the current user is signed in.
  */
 export function PaginatedPaintGrid({
@@ -50,6 +52,7 @@ export function PaginatedPaintGrid({
   basePath = '/paints',
   fetchPaints,
   userPaintIds,
+  purchaseListIds,
   isAuthenticated = false,
 }: {
   initialPaints: PaintWithBrand[]
@@ -57,6 +60,7 @@ export function PaginatedPaintGrid({
   basePath?: string
   fetchPaints?: (options: { limit: number; offset: number }) => Promise<PaintWithBrand[]>
   userPaintIds?: Set<string>
+  purchaseListIds?: Set<string>
   isAuthenticated?: boolean
 }) {
   const searchParams = useSearchParams()
@@ -202,6 +206,8 @@ export function PaginatedPaintGrid({
                   isMetallic={paint.is_metallic}
                   isInCollection={userPaintIds?.has(paint.id) ?? false}
                   isAuthenticated={isAuthenticated}
+                  showPurchaseToggle={purchaseListIds !== undefined}
+                  isOnPurchaseList={purchaseListIds?.has(paint.id) ?? false}
                   revalidatePath={basePath}
                 />
               ) : (

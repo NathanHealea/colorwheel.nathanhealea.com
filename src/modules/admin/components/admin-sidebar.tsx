@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { href: '/admin', label: 'Dashboard', exact: true },
   { href: '/admin/users', label: 'Users' },
   { href: '/admin/roles', label: 'Roles' },
+  { href: '/admin/purchase-lists', label: 'Purchase Lists' },
   { href: '/admin/brands', label: 'Brands' },
   { href: '/admin/hues', label: 'Hues' },
   { href: '/admin/paints', label: 'Paints' },

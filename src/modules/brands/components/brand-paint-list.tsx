@@ -14,6 +14,8 @@ import type { Paint, ProductLine } from '@/types/paint'
  * @param props.productLines - The brand's product lines, ordered by name.
  * @param props.paints - All paints belonging to the brand (across all product lines).
  * @param props.userPaintIds - Set of paint IDs in the current user's collection.
+ * @param props.purchaseListIds - Set of paint IDs on the current user's purchase list.
+ *   When provided, each card also renders a purchase list toggle.
  * @param props.isAuthenticated - Whether the current user is signed in.
  */
 export function BrandPaintList({
@@ -21,12 +23,14 @@ export function BrandPaintList({
   productLines,
   paints,
   userPaintIds,
+  purchaseListIds,
   isAuthenticated = false,
 }: {
   brandName: string
   productLines: ProductLine[]
   paints: Paint[]
   userPaintIds?: Set<string>
+  purchaseListIds?: Set<string>
   isAuthenticated?: boolean
 }) {
   const paintsByProductLine = new Map<number, Paint[]>()
@@ -64,6 +68,8 @@ export function BrandPaintList({
                       isMetallic={paint.is_metallic}
                       isInCollection={userPaintIds?.has(paint.id) ?? false}
                       isAuthenticated={isAuthenticated}
+                      showPurchaseToggle={purchaseListIds !== undefined}
+                      isOnPurchaseList={purchaseListIds?.has(paint.id) ?? false}
                     />
                   ) : (
                     <PaintCard key={paint.id} id={paint.id} name={paint.name} hex={paint.hex} brand={brandName} paintType={paint.paint_type} isMetallic={paint.is_metallic} isDiscontinued={paint.is_discontinued} />

@@ -219,9 +219,9 @@ Core functionality:
 **High-Level Scope:**
 
 - [ ] [Purchase list database schema](./10-purchase-list/00-purchase-list-schema.md)
-- [ ] [Purchase list toggle on paint cards](./10-purchase-list/01-purchase-list-toggle.md)
-- [ ] [Purchase list dashboard](./10-purchase-list/02-purchase-list-dashboard.md)
-- [ ] [Admin purchase list management](./10-purchase-list/03-admin-purchase-list-management.md)
+- [x] [Purchase list toggle on paint cards](./10-purchase-list/01-purchase-list-toggle.md)
+- [x] [Purchase list dashboard](./10-purchase-list/02-purchase-list-dashboard.md)
+- [x] [Admin purchase list management](./10-purchase-list/03-admin-purchase-list-management.md)
 
 ### Epic: Color Palettes
 
