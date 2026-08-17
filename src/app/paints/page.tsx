@@ -7,6 +7,7 @@ import { PaintExplorer } from '@/modules/paints/components/paint-explorer'
 import { parseSortDir, parseSortField } from '@/modules/paints/utils/parse-sort-params'
 import { getPaintService } from '@/modules/paints/services/paint-service.server'
 import type { PaintFilterState } from '@/modules/paints/types/paint-filter-state'
+import { getPurchaseListService } from '@/modules/purchase-list/services/purchase-list-service.server'
 import { pageMetadata } from '@/modules/seo/utils/page-metadata'
 
 export const metadata = pageMetadata({
@@ -154,14 +155,18 @@ export default async function PaintsPage({
       sortDir,
     })
 
-  // Fetch user's collection paint IDs for toggle state (authenticated users only)
+  // Fetch user's collection + purchase list paint IDs for toggle state
+  // (authenticated users only)
   let userPaintIds: Set<string> | undefined
+  let purchaseListIds: Set<string> | undefined
   if (user) {
-    const { data: userPaints } = await supabase
-      .from('user_paints')
-      .select('paint_id')
-      .eq('user_id', user.id)
+    const purchaseListService = await getPurchaseListService()
+    const [{ data: userPaints }, purchaseIds] = await Promise.all([
+      supabase.from('user_paints').select('paint_id').eq('user_id', user.id),
+      purchaseListService.getUserPurchaseListIds(user.id),
+    ])
     userPaintIds = new Set(userPaints?.map((r) => r.paint_id) ?? [])
+    purchaseListIds = purchaseIds
   }
 
   // Fetch paint counts per hue group and initial facet counts in parallel
@@ -213,6 +218,7 @@ export default async function PaintsPage({
         initialDir={sortDir}
         isAuthenticated={!!user}
         userPaintIds={userPaintIds}
+        purchaseListIds={purchaseListIds}
       />
     </Main>
   )

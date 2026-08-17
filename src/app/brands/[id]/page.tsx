@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getCollectionService } from '@/modules/collection/services/collection-service.server'
 import { BrandPaintList } from '@/modules/brands/components/brand-paint-list'
 import { getBrandService } from '@/modules/brands/services/brand-service.server'
+import { getPurchaseListService } from '@/modules/purchase-list/services/purchase-list-service.server'
 import { buildOgUrl } from '@/modules/seo/utils/build-og-url'
 import { pageMetadata } from '@/modules/seo/utils/page-metadata'
 
@@ -77,9 +78,16 @@ export default async function BrandDetailPage({ params }: { params: Promise<{ id
   ])
 
   let userPaintIds: Set<string> | undefined
+  let purchaseListIds: Set<string> | undefined
   if (user) {
-    const collectionService = await getCollectionService()
-    userPaintIds = await collectionService.getUserPaintIds(user.id)
+    const [collectionService, purchaseListService] = await Promise.all([
+      getCollectionService(),
+      getPurchaseListService(),
+    ])
+    ;[userPaintIds, purchaseListIds] = await Promise.all([
+      collectionService.getUserPaintIds(user.id),
+      purchaseListService.getUserPurchaseListIds(user.id),
+    ])
   }
 
   const jsonLd = {
@@ -123,6 +131,7 @@ export default async function BrandDetailPage({ params }: { params: Promise<{ id
         productLines={productLines}
         paints={paints}
         userPaintIds={userPaintIds}
+        purchaseListIds={purchaseListIds}
         isAuthenticated={user !== null}
       />
     </Main>

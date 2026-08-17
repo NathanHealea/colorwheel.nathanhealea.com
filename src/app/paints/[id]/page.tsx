@@ -10,6 +10,7 @@ import { getHueService } from '@/modules/hues/services/hue-service.server'
 import { PaintDetail } from '@/modules/paints/components/paint-detail'
 import { PaintReferences } from '@/modules/paints/components/paint-references'
 import { getPaintService } from '@/modules/paints/services/paint-service.server'
+import { getPurchaseListService } from '@/modules/purchase-list/services/purchase-list-service.server'
 import { buildOgUrl } from '@/modules/seo/utils/build-og-url'
 import { pageMetadata } from '@/modules/seo/utils/page-metadata'
 
@@ -71,23 +72,35 @@ export default async function PaintDetailPage({ params }: { params: Promise<{ id
     ? await supabase.rpc('get_user_roles', { user_uuid: user.id }).then(({ data }) => (data ?? []).includes('admin'))
     : false
 
-  const [references, gradientGroup, parentHue, isInCollection, brands, paintTypes, paints, collectionPaintIdsSet] =
-    await Promise.all([
-      paintService.getPaintReferences(id),
-      paintService.getGradientGroupForPaint(id),
-      paint.hues?.parent_id
-        ? (await getHueService()).getHueById(paint.hues.parent_id)
-        : null,
-      user
-        ? (await getCollectionService()).isInCollection(user.id, paint.id)
-        : false,
-      (await getBrandService()).getAllBrands(),
-      paintService.listDistinctPaintTypes(),
-      paintService.getColorWheelPaints(),
-      user
-        ? (await getCollectionService()).getUserPaintIds(user.id)
-        : new Set<string>(),
-    ])
+  const [
+    references,
+    gradientGroup,
+    parentHue,
+    isInCollection,
+    isOnPurchaseList,
+    brands,
+    paintTypes,
+    paints,
+    collectionPaintIdsSet,
+  ] = await Promise.all([
+    paintService.getPaintReferences(id),
+    paintService.getGradientGroupForPaint(id),
+    paint.hues?.parent_id
+      ? (await getHueService()).getHueById(paint.hues.parent_id)
+      : null,
+    user
+      ? (await getCollectionService()).isInCollection(user.id, paint.id)
+      : false,
+    user
+      ? (await getPurchaseListService()).isOnPurchaseList(user.id, paint.id)
+      : false,
+    (await getBrandService()).getAllBrands(),
+    paintService.listDistinctPaintTypes(),
+    paintService.getColorWheelPaints(),
+    user
+      ? (await getCollectionService()).getUserPaintIds(user.id)
+      : new Set<string>(),
+  ])
 
   const collectionPaintIds = [...collectionPaintIdsSet]
 
@@ -99,6 +112,7 @@ export default async function PaintDetailPage({ params }: { params: Promise<{ id
         parentHue={parentHue}
         gradientGroup={gradientGroup}
         isInCollection={isInCollection}
+        isOnPurchaseList={isOnPurchaseList}
         isAuthenticated={user !== null}
         adminEditHref={isAdmin ? `/admin/paints/${id}` : undefined}
         brands={brands}

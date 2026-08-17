@@ -16,6 +16,7 @@ import { getPaintService } from '@/modules/paints/services/paint-service.client'
  * @param props.initialPaints - First page of paints (server-rendered).
  * @param props.totalCount - Total number of paints in this hue group.
  * @param props.userPaintIds - Set of paint IDs in the current user's collection.
+ * @param props.purchaseListIds - Set of paint IDs on the current user's purchase list.
  * @param props.isAuthenticated - Whether the current user is signed in.
  */
 export function HueGroupPaintGrid({
@@ -23,12 +24,14 @@ export function HueGroupPaintGrid({
   initialPaints,
   totalCount,
   userPaintIds,
+  purchaseListIds,
   isAuthenticated,
 }: {
   hueId: string
   initialPaints: PaintWithBrand[]
   totalCount: number
   userPaintIds?: Set<string>
+  purchaseListIds?: Set<string>
   isAuthenticated?: boolean
 }) {
   const fetchPaints = useCallback(
@@ -46,6 +49,7 @@ export function HueGroupPaintGrid({
       basePath={`/hues/${hueId}`}
       fetchPaints={fetchPaints}
       userPaintIds={userPaintIds}
+      purchaseListIds={purchaseListIds}
       isAuthenticated={isAuthenticated}
     />
   )

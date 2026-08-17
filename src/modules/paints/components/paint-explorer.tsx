@@ -137,6 +137,8 @@ function parseTypes(raw: string): string[] {
  * @param props.initialDir - Server-parsed `dir` search param (default `'asc'`).
  * @param props.isAuthenticated - Whether the current user is signed in; shows collection toggles when true.
  * @param props.userPaintIds - Set of paint IDs already in the user's collection (used to set initial toggle state).
+ * @param props.purchaseListIds - Set of paint IDs already on the user's purchase list. When
+ *   provided, each card also renders a purchase list toggle.
  */
 export function PaintExplorer({
   initialPaints,
@@ -156,6 +158,7 @@ export function PaintExplorer({
   initialDir = 'asc',
   isAuthenticated = false,
   userPaintIds,
+  purchaseListIds,
 }: {
   initialPaints: PaintWithBrand[]
   initialTotalCount: number
@@ -174,6 +177,7 @@ export function PaintExplorer({
   initialDir?: PaintSortDirection
   isAuthenticated?: boolean
   userPaintIds?: Set<string>
+  purchaseListIds?: Set<string>
 }) {
   const { state, update } = useSearchUrlState<ExplorerUrlState>({
     keys: {
@@ -515,6 +519,8 @@ export function PaintExplorer({
                   isMetallic={paint.is_metallic}
                   isInCollection={userPaintIds?.has(paint.id) ?? false}
                   isAuthenticated
+                  showPurchaseToggle={purchaseListIds !== undefined}
+                  isOnPurchaseList={purchaseListIds?.has(paint.id) ?? false}
                   revalidatePath="/paints"
                 />
               ) : (
