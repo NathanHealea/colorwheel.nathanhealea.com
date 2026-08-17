@@ -2,7 +2,7 @@
 
 **Epic:** Purchase List
 **Type:** Feature
-**Status:** Todo
+**Status:** In Progress
 **Branch:** `feature/purchase-list-schema`
 **Merge into:** `main`
 
@@ -12,13 +12,13 @@ Create the `user_purchase_list` table that backs the purchase list feature. Esta
 
 ## Acceptance Criteria
 
-- [ ] `user_purchase_list` table exists with columns: `user_id`, `paint_id`, `added_at`, `notes`, `updated_at`
-- [ ] Composite primary key on `(user_id, paint_id)` prevents duplicate entries
-- [ ] Foreign keys reference `profiles.id` and `paints.id` with `ON DELETE CASCADE`
-- [ ] RLS is enabled; authenticated users can read, insert, update, and delete only their own rows
-- [ ] `updated_at` is maintained automatically by a trigger on row updates
-- [ ] `npm run db:types` regenerates types without errors
-- [ ] `npm run build` and `npm run lint` pass with no errors
+- [x] `user_purchase_list` table exists with columns: `user_id`, `paint_id`, `added_at`, `notes`, `updated_at`
+- [x] Composite primary key on `(user_id, paint_id)` prevents duplicate entries
+- [x] Foreign keys reference `profiles.id` and `paints.id` with `ON DELETE CASCADE`
+- [x] RLS is enabled; authenticated users can read, insert, update, and delete only their own rows
+- [x] `updated_at` is maintained automatically by a trigger on row updates
+- [ ] `npm run db:types` regenerates types without errors — types for `user_purchase_list` were added by hand; re-run `npm run db:reset` + `npm run db:types` on a machine with Docker to confirm the generated output matches
+- [x] `npm run build` and `npm run lint` pass with no errors
 
 ## Routes
 
