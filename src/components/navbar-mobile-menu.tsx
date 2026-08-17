@@ -133,6 +133,11 @@ export function NavbarMobileMenu({ viewer }: { viewer: Viewer }) {
                 </Link>
               </SheetClose>
               <SheetClose asChild>
+                <Link href="/purchase-list" className="btn btn-ghost w-full justify-center md:justify-start">
+                  My purchase list
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
                 <Link href="/user/palettes" className="btn btn-ghost w-full justify-center md:justify-start">
                   My palettes
                 </Link>
