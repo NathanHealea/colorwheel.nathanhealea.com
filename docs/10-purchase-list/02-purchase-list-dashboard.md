@@ -2,9 +2,9 @@
 
 **Epic:** Purchase List
 **Type:** Feature
-**Status:** Todo
+**Status:** In Progress
 **Branch:** `feature/purchase-list-dashboard`
-**Merge into:** `main`
+**Merge into:** `feature/purchase-list-toggle`
 
 ## Summary
 
